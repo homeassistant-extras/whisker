@@ -1,0 +1,74 @@
+name: Fast Forward Check
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  check-build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Run NPM build
+        uses: anna-money/github-actions-npm@master
+        with:
+          target: 'build'
+      - name: Run NPM test
+        uses: anna-money/github-actions-npm@master
+        with:
+          target: 'test'
+
+  check-fast-forward:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      # We appear to need write permission for both pull-requests and
+      # issues in order to post a comment to a pull request.
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: Checking if fast forwarding is possible
+        uses: sequoia-pgp/fast-forward@v1
+        with:
+          merge: false
+          # To reduce the workflow's verbosity, use 'on-error'
+          # to only post a comment when an error occurs, or 'never' to
+          # never post a comment.  (In all cases the information is
+          # still available in the step's summary.)
+          comment: 'on-error'
+
+  dependabot:
+    runs-on: ubuntu-latest
+
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Auto approve PR
+        run: gh pr review --approve "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@d7267f607e9d3fb96fc2fbe83e0af444713e90b7
+        with:
+          github-token: '${{ secrets.GITHUB_TOKEN }}'
+
+      - name: Enable auto-merge for Dependabot PRs
+        if: steps.metadata.outputs.update-type == 'version-update:semver-patch' || steps.metadata.outputs.update-type == 'version-update:semver-minor'
+        run: gh pr merge --auto --merge "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}

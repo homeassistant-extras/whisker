@@ -127,9 +127,16 @@ describe('card.ts', () => {
           attributes: {},
         },
       });
-      card.hass = mockHass;
-      expect(card.hasAttribute('cycling')).to.be.true;
-      await fixture(card.render() as TemplateResult);
+      // Reflected attributes flush only after connect; Lit update queue awaits enableUpdating from connectedCallback.
+      document.body.appendChild(card);
+      try {
+        card.hass = mockHass;
+        await card.updateComplete;
+        expect(card.hasAttribute('cycling')).to.be.true;
+        await fixture(card.render() as TemplateResult);
+      } finally {
+        card.remove();
+      }
     });
 
     it('should not set cycling on the card host when status is ready', async () => {

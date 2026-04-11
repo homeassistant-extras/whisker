@@ -8,8 +8,11 @@
 # You can whitelist files/folders with !, these will not be ignored.
 !*.json
 !*.ts
+!*.cjs
 !.prettierrc
 !.nycrc
+!.browserslistrc
+!.node-version
 !assets/**
 !dist/**
 !.github/**
@@ -17,6 +20,10 @@
 !*.md
 !LICENSE
 !sonar-project.properties
+!yarn.lock
+!docs/**
+!mkdocs.yml
+!*.avif
 
 # Ignore folders.
 node_modules

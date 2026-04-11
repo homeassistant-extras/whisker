@@ -3,6 +3,8 @@
     /* Base Options: */
     "skipLibCheck": true,
     "target": "es2022",
+    "lib": ["es2022", "dom"],
+    "module": "ESNext",
     "moduleResolution": "node",
     "isolatedModules": true,
     "experimentalDecorators": true,
@@ -19,11 +21,15 @@
     /* Paths */
     "baseUrl": ".",
     "paths": {
-      "@type/*": ["./src/types/*"],
+      "@/*": ["./src/*"],
+      "@cards/*": ["./src/cards/*"],
       "@common/*": ["./src/common/*"],
-      "@util/*": ["./src/util/*"],
+      "@delegates/*": ["./src/delegates/*"],
+      "@hass/*": ["./src/hass/*"],
+      "@html/*": ["./src/html/*"],
       "@test/*": ["./test/*"],
-      "@/*": ["./src/*"]
+      "@type/*": ["./src/types/*"],
+      "@util/*": ["./src/util/*"]
     }
   }
 }

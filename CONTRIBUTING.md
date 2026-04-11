@@ -47,27 +47,27 @@ If you have a suggestion for improving the project, we'd love to hear it. Please
 
 ### Prerequisites
 
-Before getting started with REPLACE-ME, ensure your runtime environment meets the following requirements:
+Before getting started with whisker-card, ensure your runtime environment meets the following requirements:
 
 - **Programming Language:** TypeScript
 - **Package Manager:** Npm
 
 ### Installation
 
-Install REPLACE-ME using one of the following methods:
+Install whisker-card using one of the following methods:
 
 **Build from source:**
 
-1. Clone the REPLACE-ME repository:
+1. Clone the whisker-card repository:
 
 ```sh
-❯ git clone https://github.com/homeassistant-extras/REPLACE-ME
+❯ git clone https://github.com/homeassistant-extras/whisker
 ```
 
 2. Navigate to the project directory:
 
 ```sh
-❯ cd REPLACE-ME
+❯ cd whisker
 ```
 
 3. Install the project dependencies:

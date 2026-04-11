@@ -1,5 +1,6 @@
 {
   "require": [
+    "./test/helpers/card-assets-stub.cjs",
     "ts-node/register",
     "tsconfig-paths/register",
     "./mocha.setup.ts"

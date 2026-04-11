@@ -15,7 +15,10 @@ const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', {
 // Set up browser environment globals
 global.window = dom.window as any;
 global.document = dom.window.document;
+global.HTMLElement = dom.window.HTMLElement;
+global.customElements = dom.window.customElements;
 global.requestAnimationFrame = (callback) => setTimeout(callback, 0);
+(globalThis as any).dispatchEvent = dom.window.dispatchEvent.bind(dom.window);
 
 // Add missing DOM features
 global.window.matchMedia =

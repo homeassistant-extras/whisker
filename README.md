@@ -1,9 +1,8 @@
-<p align="center"><h1 align="center">Whisker Card</h1></p>
-<p align="center">
-  <em>Litter-Robot status and controls in a single Lovelace card</em>
-</p>
+# Whisker Card
 
-<p align="center"><img src="assets/robot.png" align="center" width="50%" alt="Whisker Card preview"></p>
+_Litter-Robot status and controls in a single Lovelace card_
+
+![Whisker Card preview](assets/robot.png)
 
 ![Home Assistant](https://img.shields.io/badge/home%20assistant-%2341BDF5.svg?style=for-the-badge&logo=home-assistant&logoColor=white)
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge)](https://github.com/hacs/integration)

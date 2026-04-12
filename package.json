@@ -1,6 +1,6 @@
 {
   "name": "whisker-card",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "author": "Patrick Masters",
   "license": "ISC",
   "description": "Custom card Home Assistant which allows control of a Litter Robot device.",

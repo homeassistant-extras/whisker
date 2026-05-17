@@ -149,6 +149,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file.
 - Built with [Lit](https://lit.dev/).
 - Status mapping aligns with Home Assistant’s `litterrobot` **status_code** sensor options.
 - Thanks to all contributors!
+- Maintained by [Patrick Masters](https://github.com/warmfire540) / [Curious Cat Consulting](https://curiouscat.consulting/projects/ha-whisker?utm_source=github-whisker&utm_medium=readme&utm_campaign=oss-presence&utm_content=maintained-by)
 
 [![contributors](https://contrib.rocks/image?repo=homeassistant-extras/whisker)](https://github.com/homeassistant-extras/whisker/graphs/contributors)
 

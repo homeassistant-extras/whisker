@@ -1,9 +1,19 @@
 {
   "name": "whisker-card",
   "version": "0.1.0",
-  "author": "Patrick Masters",
+  "author": {
+    "name": "Patrick Masters",
+    "url": "https://curiouscat.consulting/projects/ha-whisker?utm_source=github-whisker&utm_medium=package-metadata&utm_campaign=oss-presence&utm_content=author-url"
+  },
   "license": "ISC",
   "description": "Custom card Home Assistant which allows control of a Litter Robot device.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/homeassistant-extras/whisker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/homeassistant-extras/whisker/issues"
+  },
   "source": "src/index.ts",
   "module": "dist/whisker.js",
   "targets": {

@@ -116,6 +116,7 @@ export class WhiskerCard extends LitElement {
                 .hass=${this._hass}
                 .resetEntity=${this._duty.reset}
                 .litterBoxEntity=${this._duty.litter_box ?? null}
+                .resetWasteDrawerEntity=${this._duty.reset_waste_drawer ?? null}
               ></whisker-status-panel>
             </div>
             <whisker-controls-entity

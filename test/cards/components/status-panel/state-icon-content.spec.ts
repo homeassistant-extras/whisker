@@ -82,6 +82,32 @@ describe('state-icon-content.ts (stateIconContent)', () => {
     expect(config.title).to.equal('lr reset');
   });
 
+  it('uses mdi:delete-variant for reset_waste_drawer panel items', async () => {
+    const entityState: EntityState = {
+      entity_id: 'button.lr_reset_waste_drawer',
+      state: 'unknown',
+      attributes: { friendly_name: 'Reset waste drawer' },
+    };
+
+    await stateIconContent(
+      mockHass,
+      'button.lr_reset_waste_drawer',
+      entityState,
+      'reset_waste_drawer',
+    );
+
+    const config = mockCreateHuiElement.firstCall.args[0] as Record<
+      string,
+      unknown
+    >;
+    expect(config.icon).to.equal('mdi:delete-variant');
+    expect(config.tap_action).to.deep.equal({
+      action: 'call-service',
+      service: 'button.press',
+      service_data: { entity_id: 'button.lr_reset_waste_drawer' },
+    });
+  });
+
   it('uses vacuum.start + target for vacuum entities', async () => {
     const entityState: EntityState = {
       entity_id: 'vacuum.r2_poop2_litter_box',
@@ -89,7 +115,12 @@ describe('state-icon-content.ts (stateIconContent)', () => {
       attributes: { friendly_name: 'Litter box' },
     };
 
-    await stateIconContent(mockHass, 'vacuum.r2_poop2_litter_box', entityState);
+    await stateIconContent(
+      mockHass,
+      'vacuum.r2_poop2_litter_box',
+      entityState,
+      'vacuum',
+    );
 
     const config = mockCreateHuiElement.firstCall.args[0] as Record<
       string,

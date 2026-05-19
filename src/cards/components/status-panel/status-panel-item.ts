@@ -2,10 +2,13 @@ import { SubscribeEntityStateMixin } from '@cards/mixins/subscribe-entity-state-
 import { Task } from '@lit/task';
 import { html, LitElement, nothing, type TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { stateIconContent } from './state-icon-content';
+import {
+  stateIconContent,
+  type StatusPanelItemType,
+} from './state-icon-content';
 import { statusPanelItemStyles as styles } from './styles';
 
-export type StatusPanelItemType = 'vacuum' | 'reset';
+export type { StatusPanelItemType };
 
 @customElement('whisker-status-panel-item')
 export class WhiskerStatusPanelItem extends SubscribeEntityStateMixin(
@@ -17,13 +20,13 @@ export class WhiskerStatusPanelItem extends SubscribeEntityStateMixin(
   itemType: StatusPanelItemType = 'reset';
 
   private readonly _stateIconTask = new Task(this, {
-    task: async ([entityId, hass, entityState]) => {
+    task: async ([entityId, hass, entityState, itemType]) => {
       if (!entityId || !hass) {
         return html``;
       }
-      return stateIconContent(hass, entityId, entityState);
+      return stateIconContent(hass, entityId, entityState, itemType);
     },
-    args: () => [this.entity, this.hass, this.state],
+    args: () => [this.entity, this.hass, this.state, this.itemType],
   });
 
   override render(): TemplateResult | typeof nothing {

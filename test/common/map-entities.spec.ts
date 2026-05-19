@@ -93,6 +93,19 @@ describe('map-entities.ts', () => {
       );
     });
 
+    it('should map reset_waste_drawer translation_key to reset_waste_drawer', () => {
+      const entity: EntityRegistryDisplayEntry = {
+        entity_id: 'button.lr_reset_waste_drawer',
+        device_id: 'd1',
+        area_id: '',
+        labels: [],
+        translation_key: 'reset_waste_drawer',
+      };
+
+      expect(mapEntitiesByTranslationKey(hass, entity, report)).to.be.true;
+      expect(report.reset_waste_drawer).to.equal('button.lr_reset_waste_drawer');
+    });
+
     it('should map reset translation_key to reset', () => {
       const entity: EntityRegistryDisplayEntry = {
         entity_id: 'button.lr_reset',

@@ -15,8 +15,11 @@ export interface DutyReport {
   /** Status code sensor (`translation_key` status_code), when present */
   status?: EntityState;
 
-  /** Entity id for reset button (LR4+) or reset waste drawer (LR3) */
+  /** Entity id for reset button (LR4+), when present */
   reset: string | null;
+
+  /** Reset waste drawer button (`translation_key` reset_waste_drawer), when enabled */
+  reset_waste_drawer?: string | null;
 
   /**
    * Main litter box vacuum entity (`translation_key` litter_box in Whisker integration).

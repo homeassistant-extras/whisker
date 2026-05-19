@@ -7,6 +7,7 @@ const entityIdKeyToProperty = {
   waste_drawer: 'waste_drawer',
   litter_level: 'litter_level',
   reset: 'reset',
+  reset_waste_drawer: 'reset_waste_drawer',
   litter_box: 'litter_box',
   pet_weight: 'pet_weight',
   globe_light: 'globe_light',

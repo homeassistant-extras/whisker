@@ -9,6 +9,7 @@ export class WhiskerStatusPanel extends LitElement {
   static override readonly styles = styles;
   resetEntity: string | null = null;
   litterBoxEntity: string | null = null;
+  resetWasteDrawerEntity: string | null = null;
   hass!: HomeAssistant;
 
   override render(): TemplateResult | typeof nothing {
@@ -23,6 +24,11 @@ export class WhiskerStatusPanel extends LitElement {
           item-type="reset"
           .hass=${this.hass}
           .entity=${this.resetEntity}
+        ></whisker-status-panel-item>
+        <whisker-status-panel-item
+          item-type="reset_waste_drawer"
+          .hass=${this.hass}
+          .entity=${this.resetWasteDrawerEntity}
         ></whisker-status-panel-item>
       </div>
     `;

@@ -3,6 +3,8 @@ import type { HomeAssistant } from '@hass/types';
 import type { EntityState } from '@type/entity';
 import { html, type TemplateResult } from 'lit';
 
+export type StatusPanelItemType = 'vacuum' | 'reset' | 'reset_waste_drawer';
+
 declare global {
   // eslint-disable-next-line no-var
   var loadCardHelpers: () => Promise<{
@@ -46,14 +48,27 @@ function tapActionForEntity(entityId: string): ActionConfig {
   };
 }
 
-function iconForEntity(entityId: string): string {
-  return entityId.startsWith('vacuum.') ? 'mdi:autorenew' : 'mdi:close';
+function iconForPanelItem(
+  itemType: StatusPanelItemType,
+  entityId: string,
+): string {
+  switch (itemType) {
+    case 'vacuum':
+      return 'mdi:autorenew';
+    case 'reset_waste_drawer':
+      return 'mdi:delete-variant';
+    case 'reset':
+      return 'mdi:close';
+    default:
+      return entityId.startsWith('vacuum.') ? 'mdi:autorenew' : 'mdi:close';
+  }
 }
 
 export async function stateIconContent(
   hass: HomeAssistant,
   entityId: string,
   entityState: EntityState | undefined,
+  itemType: StatusPanelItemType = 'reset',
 ): Promise<TemplateResult> {
   const helpers = await globalThis.loadCardHelpers();
   const title =
@@ -63,7 +78,7 @@ export async function stateIconContent(
   const config: StateIconPictureConfig = {
     type: 'state-icon',
     entity: entityId,
-    icon: iconForEntity(entityId),
+    icon: iconForPanelItem(itemType, entityId),
     title,
     state_color: true,
     tap_action: tapActionForEntity(entityId),

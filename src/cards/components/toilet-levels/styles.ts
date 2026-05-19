@@ -17,6 +17,13 @@ export const gaugeStyles = css`
     cursor: pointer;
   }
 
+  .label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+  }
+
   .label {
     font-size: 0.7rem;
     font-weight: 500;
@@ -24,6 +31,14 @@ export const gaugeStyles = css`
     line-height: 1;
     text-transform: uppercase;
     letter-spacing: 0.04em;
+  }
+
+  .pct {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--primary-text-color);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
   }
 
   .tooltip {

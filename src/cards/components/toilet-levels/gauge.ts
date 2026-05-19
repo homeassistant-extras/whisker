@@ -1,5 +1,7 @@
+import { hasFeature } from '@/config/feature';
 import { SubscribeEntityStateMixin } from '@cards/mixins/subscribe-entity-state-mixin';
 import { openEntityMoreInfo } from '@common/open-entity-more-info';
+import type { Config } from '@type/config';
 import { html, LitElement, nothing, type TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
@@ -10,6 +12,7 @@ import { wasteSeverityClass } from './waste-severity';
 @customElement('whisker-gauge')
 export class WhiskerGauge extends SubscribeEntityStateMixin(LitElement) {
   static override readonly styles = styles;
+  override config!: Config;
 
   @property({ type: String, reflect: true })
   kind: 'litter' | 'waste' = 'litter';
@@ -22,18 +25,23 @@ export class WhiskerGauge extends SubscribeEntityStateMixin(LitElement) {
     if (!this.entity) {
       return nothing;
     }
+
     const raw = numericLevelFromEntityState(this.state);
     const pct = Math.min(100, raw);
     const variant = this.kind === 'waste' ? wasteSeverityClass(raw) : '';
     const tip = this.kind === 'litter' ? `Litter: ${pct}%` : `Waste: ${pct}%`;
     const barClass =
       this.kind === 'litter' ? 'bar litter' : `bar waste ${variant}`.trim();
+    const label = this.kind === 'litter' ? 'Litter' : 'Waste';
 
     return html`
       <div class="hit" @click=${this._openMoreInfo}>
-        <span class="label"
-          >${this.kind === 'litter' ? 'Litter' : 'Waste'}</span
-        >
+        ${hasFeature(this.config, 'percentage')
+          ? html`<div class="label-row">
+              <span class="label">${label}</span>
+              <span class="pct">${pct}%</span>
+            </div>`
+          : html`<span class="label">${label}</span>`}
         <div class=${barClass} style=${styleMap({ '--fill': `${pct}%` })}></div>
         <span class="tooltip">${tip}</span>
       </div>

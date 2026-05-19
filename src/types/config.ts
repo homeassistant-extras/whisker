@@ -8,4 +8,10 @@ export interface Config {
 
   /** Optional display title */
   title?: string;
+
+  /** Options to enable or disable features **/
+  features?: Features[];
 }
+
+/** Features to enable or disable functionality */
+export type Features = 'percentage';

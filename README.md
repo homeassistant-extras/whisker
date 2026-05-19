@@ -39,7 +39,7 @@ The card has been **developed and tested with a Litter-Robot 5 Prop (LR5)**. Oth
 - **Quick actions** — Picture-style controls for the litter box **vacuum** and **reset** (see [Interactions](#interactions) below).
 - **Controls menu** — A menu button opens a dialog with standard Lovelace **entity rows** for globe light, globe brightness, panel brightness, and cycle delay when those entities exist.
 - **Pet weight** — A compact chip for the **pet weight** sensor (when present).
-- **Litter and waste gauges** — Visual fill levels; waste styling reflects severity as the drawer fills.
+- **Litter and waste gauges** — Visual fill levels; waste styling reflects severity as the drawer fills. Optionally show fill **percentages** on the gauge labels.
 - **Last seen** — Shown at the bottom when a **last_seen** entity is available.
 
 ## Interactions
@@ -80,10 +80,22 @@ device_id: YOUR_DEVICE_ID
 title: Cat HQ
 ```
 
-| Option      | Type   | Description                                                        |
-| ----------- | ------ | ------------------------------------------------------------------ |
-| `device_id` | string | **Required.** Home Assistant device id for the Litter-Robot.       |
-| `title`     | string | Optional. Overrides the card heading; defaults to the device name. |
+With gauge percentage labels:
+
+![percentages](assets/percentages.png)
+
+```yaml
+type: custom:whisker-card
+device_id: YOUR_DEVICE_ID
+features:
+  - percentage
+```
+
+| Option      | Type     | Description                                                                     |
+| ----------- | -------- | ------------------------------------------------------------------------------- |
+| `device_id` | string   | **Required.** Home Assistant device id for the Litter-Robot.                    |
+| `title`     | string   | Optional. Overrides the card heading; defaults to the device name.              |
+| `features`  | string[] | Optional. Feature flags. `percentage` — show fill % on litter and waste gauges. |
 
 ## Quick start
 
@@ -131,6 +143,7 @@ Clone the repository, install dependencies with **yarn**, then **`yarn build`** 
 - [x] **Controls dialog** with native entity rows
 - [x] **Lovelace card editor** (device selector + title)
 - [x] **Automated tests** (Mocha)
+- [x] **Gauge percentages** — optional percentage labels on litter/waste gauges - thanks reddit!
 
 ## Contributing
 

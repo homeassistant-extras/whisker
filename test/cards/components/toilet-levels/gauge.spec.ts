@@ -1,7 +1,7 @@
 import { WhiskerGauge } from '@cards/components/toilet-levels/gauge';
 import { fixture } from '@open-wc/testing-helpers';
 import { expect } from 'chai';
-import { nothing } from 'lit';
+import { nothing, type TemplateResult } from 'lit';
 import { stub } from 'sinon';
 
 describe('gauge.ts', () => {
@@ -14,6 +14,7 @@ describe('gauge.ts', () => {
   it('should render litter gauge with fill from entity state', async () => {
     const row = new WhiskerGauge();
     row.kind = 'litter';
+    row.config = { device_id: 'dev' };
     row['entity'] = 'sensor.litter';
     row['state'] = {
       entity_id: 'sensor.litter',
@@ -22,15 +23,20 @@ describe('gauge.ts', () => {
     };
 
     const tpl = row.render();
-    if (tpl === nothing) {
-      throw new Error('expected TemplateResult');
-    }
-    const el = await fixture(tpl);
+    const el = await fixture(tpl as TemplateResult);
     const bar = el.querySelector('.bar.litter');
 
     expect((bar as HTMLElement)?.style.getPropertyValue('--fill')).to.equal(
       '42%',
     );
+    expect(el.querySelector('.pct')).to.be.null;
+    expect(el.querySelector('.label-row')).to.be.null;
+
+    row.config = { device_id: 'dev', features: ['percentage'] };
+    const tplWithPct = row.render();
+    const withPct = await fixture(tplWithPct as TemplateResult);
+    expect(withPct.querySelector('.label-row')).to.exist;
+    expect(withPct.querySelector('.pct')?.textContent?.trim()).to.equal('42%');
   });
 
   it('should render waste gauge with variant classes from entity state', async () => {

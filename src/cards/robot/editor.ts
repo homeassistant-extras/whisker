@@ -23,6 +23,16 @@ const SCHEMA: HaFormSchema[] = [
     required: false,
     selector: { text: {} },
   },
+  {
+    name: 'features',
+    label: 'Features',
+    selector: {
+      select: {
+        options: [{ value: 'percentage', label: 'Show gauge percentages' }],
+        multiple: true,
+      },
+    },
+  },
 ];
 
 export class WhiskerCardEditor extends LitElement {

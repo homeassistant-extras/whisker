@@ -4,6 +4,7 @@ import '@/cards/components/status-panel/status-panel';
 import '@/cards/components/status/status';
 import { scoopDroppings } from '@/delegates/utils/scoop-droppings';
 import type { DutyReport } from '@/types/types';
+import type { EntityState } from '@/types/entity';
 import { styles } from '@cards/robot/styles';
 import { isLitterRobotCycling } from '@common/litterrobot-status';
 import type { HomeAssistant } from '@hass/types';
@@ -138,15 +139,34 @@ export class WhiskerCard extends LitElement {
           .litter_level=${this._duty.litter_level}
           .waste_drawer=${this._duty.waste_drawer}
         ></whisker-robot-levels>
-        <div class="last-seen-row">
-          ${this._duty.last_seen
-            ? html`<state-display
-                .hass=${this._hass}
-                .stateObj=${this._duty.last_seen}
-              ></state-display>`
-            : nothing}
-        </div>
+        ${this._renderCardFooter()}
       </ha-card>
     `;
+  }
+
+  private _renderCardFooter(): TemplateResult | typeof nothing {
+    const duty = this._duty;
+    if (!duty?.total_cycles && !duty?.last_seen) {
+      return nothing;
+    }
+
+    return html`
+      <div class="card-footer">
+        ${this._renderFooterStateDisplay(duty.total_cycles)}
+        ${this._renderFooterStateDisplay(duty.last_seen)}
+      </div>
+    `;
+  }
+
+  private _renderFooterStateDisplay(
+    stateObj: EntityState | undefined,
+  ): TemplateResult | typeof nothing {
+    if (!stateObj) {
+      return nothing;
+    }
+    return html`<state-display
+      .hass=${this._hass}
+      .stateObj=${stateObj}
+    ></state-display>`;
   }
 }

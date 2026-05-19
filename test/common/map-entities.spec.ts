@@ -144,6 +144,26 @@ describe('map-entities.ts', () => {
       expect(report.pet_weight).to.equal('sensor.lr_pet_weight');
     });
 
+    it('should map total_cycles to EntityState via getState', () => {
+      hass.states['sensor.lr_total_cycles'] = e(
+        'sensor',
+        'lr_total_cycles',
+        '1234',
+      );
+      const entity: EntityRegistryDisplayEntry = {
+        entity_id: 'sensor.lr_total_cycles',
+        device_id: 'd1',
+        area_id: '',
+        labels: [],
+        translation_key: 'total_cycles',
+      };
+
+      expect(mapEntitiesByTranslationKey(hass, entity, report)).to.be.true;
+      expect(report.total_cycles).to.deep.equal(
+        e('sensor', 'lr_total_cycles', '1234'),
+      );
+    });
+
     it('should map last_seen to EntityState via getState', () => {
       const entity: EntityRegistryDisplayEntry = {
         entity_id: 'sensor.lr_last_seen',

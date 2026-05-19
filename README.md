@@ -41,6 +41,7 @@ The card has been **developed and tested with a Litter-Robot 5 Prop (LR5)**. Oth
 - **Pet weight** — A compact chip for the **pet weight** sensor (when present).
 - **Litter and waste gauges** — Visual fill levels; waste styling reflects severity as the drawer fills. Optionally show fill **percentages** on the gauge labels.
 - **Last seen** — Shown at the bottom when a **last_seen** entity is available.
+- **Total cycles** — Shown in the card footer when the **total_cycles** diagnostic sensor is enabled in Home Assistant (hidden by default in the integration).
 
 ## Interactions
 

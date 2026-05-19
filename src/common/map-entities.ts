@@ -18,6 +18,7 @@ const entityIdKeyToProperty = {
 const stateKeyToProperty = {
   last_seen: 'last_seen',
   status_code: 'status',
+  total_cycles: 'total_cycles',
 } as const;
 
 type EntityIdTranslationKey = keyof typeof entityIdKeyToProperty;

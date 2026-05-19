@@ -23,7 +23,12 @@ export const styles = css`
     min-width: 0;
   }
 
-  .last-seen-row {
+  .card-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px 16px;
     padding: 12px 20px 14px;
     border-top: 1px solid var(--divider-color);
     font-size: 0.75rem;

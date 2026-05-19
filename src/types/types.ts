@@ -30,6 +30,9 @@ export interface DutyReport {
   /** Last seen sensor state (from translation_key last_seen), when present */
   last_seen?: EntityState;
 
+  /** Total cycles sensor state (translation_key total_cycles), when present */
+  total_cycles?: EntityState;
+
   /** Entity id for globe light select (`translation_key` globe_light) */
   globe_light?: string | null;
 

@@ -51,6 +51,11 @@ describe('scoop-droppings.ts', () => {
         device_id: deviceId,
         translation_key: 'last_seen',
       },
+      'sensor.lr_total_cycles': {
+        entity_id: 'sensor.lr_total_cycles',
+        device_id: deviceId,
+        translation_key: 'total_cycles',
+      },
       'sensor.lr_status': {
         entity_id: 'sensor.lr_status',
         device_id: deviceId,
@@ -67,6 +72,7 @@ describe('scoop-droppings.ts', () => {
         'lr_last_seen',
         '2024-06-01T12:00:00+00:00',
       ),
+      'sensor.lr_total_cycles': e('sensor', 'lr_total_cycles', '1234'),
       'sensor.lr_status': e('sensor', 'lr_status', 'rdy'),
     },
   } as unknown as HomeAssistant;
@@ -88,6 +94,11 @@ describe('scoop-droppings.ts', () => {
       last_seen: {
         entity_id: 'sensor.lr_last_seen',
         state: '2024-06-01T12:00:00+00:00',
+        attributes: {},
+      },
+      total_cycles: {
+        entity_id: 'sensor.lr_total_cycles',
+        state: '1234',
         attributes: {},
       },
     });

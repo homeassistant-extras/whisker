@@ -153,6 +153,22 @@ describe('card.ts', () => {
       await fixture(card.render() as TemplateResult);
     });
 
+    it('should render card footer with total cycles when mapped', async () => {
+      scoopStub.returns({
+        ...mockDuty,
+        total_cycles: {
+          entity_id: 'sensor.lr_total_cycles',
+          state: '1234',
+          attributes: {},
+        },
+      });
+      card.hass = mockHass;
+      const el = await fixture(card.render() as TemplateResult);
+      const footer = el.querySelector('.card-footer');
+      expect(footer).to.exist;
+      expect(footer?.querySelectorAll('state-display')).to.have.length(1);
+    });
+
     it('should use title from config when set', async () => {
       card.setConfig({ ...mockConfig, title: 'Custom' });
       card.hass = mockHass;

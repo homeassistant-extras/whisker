@@ -37,7 +37,7 @@ The card has been **developed and tested with a Litter-Robot 5 Prop (LR5)**. Oth
 - **Status header** — Friendly title (device name or optional override), human-readable status text, and a colored **status icon** derived from the `status_code` sensor.
 - **Cycle styling** — While the robot reports an active cycle (`ccp`, `ec`, `cst`), the card reflects **cycling** state for subtle visual emphasis.
 - **Quick actions** — Picture-style controls for the litter box **vacuum** and **reset** (see [Interactions](#interactions) below).
-- **Controls menu** — A menu button opens a dialog with standard Lovelace **entity rows** for globe light, globe brightness, panel brightness, and cycle delay when those entities exist.
+- **Controls menu** — A menu button opens a dialog with standard Lovelace **entity rows** for globe light, globe brightness, panel brightness, cycle delay, and panel lockout when those entities exist.
 - **Pet weight** — A compact chip for the **pet weight** sensor (when present).
 - **Litter and waste gauges** — Visual fill levels; waste styling reflects severity as the drawer fills. Optionally show fill **percentages** on the gauge labels.
 - **Last seen** — Shown at the bottom when a **last_seen** entity is available.

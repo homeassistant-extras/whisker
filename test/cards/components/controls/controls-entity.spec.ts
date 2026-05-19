@@ -31,7 +31,7 @@ describe('controls-entity.ts (WhiskerControlsEntity)', () => {
     expect(el.shadowRoot?.querySelector('.controls-menu-trigger')).to.be.null;
   });
 
-  it('renders menu trigger, dialog heading, and four entity rows with ids', async () => {
+  it('renders menu trigger, dialog heading, and five entity rows with ids', async () => {
     const el = await fixture<WhiskerControlsEntity>(
       html`<whisker-controls-entity
         .hass=${hass}
@@ -39,6 +39,7 @@ describe('controls-entity.ts (WhiskerControlsEntity)', () => {
         .globeBrightnessEntity=${'number.globe_b'}
         .panelBrightnessEntity=${'number.panel_b'}
         .cycleDelayEntity=${'number.cycle'}
+        .panelLockoutEntity=${'switch.panel_lockout'}
       ></whisker-controls-entity>`,
     );
     await el.updateComplete;
@@ -56,11 +57,12 @@ describe('controls-entity.ts (WhiskerControlsEntity)', () => {
     const rows = el.shadowRoot?.querySelectorAll(
       'whisker-controls-entity-row',
     );
-    expect(rows?.length).to.equal(4);
+    expect(rows?.length).to.equal(5);
     expect(rows?.item(0).entity).to.equal('select.globe');
     expect(rows?.item(1).entity).to.equal('number.globe_b');
     expect(rows?.item(2).entity).to.equal('number.panel_b');
     expect(rows?.item(3).entity).to.equal('number.cycle');
+    expect(rows?.item(4).entity).to.equal('switch.panel_lockout');
   });
 
   it('opens the dialog when the menu trigger is clicked', async () => {

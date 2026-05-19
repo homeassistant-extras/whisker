@@ -200,6 +200,7 @@ describe('map-entities.ts', () => {
         ['globe_brightness', 'select.lr_globe_brightness'],
         ['brightness_level', 'select.lr_panel_brightness'],
         ['cycle_delay', 'select.lr_cycle_delay'],
+        ['panel_lockout', 'switch.lr_panel_lockout'],
       ] as const;
 
       for (const [translation_key, entity_id] of keys) {

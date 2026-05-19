@@ -14,6 +14,7 @@ const entityIdKeyToProperty = {
   globe_brightness: 'globe_brightness',
   brightness_level: 'brightness_level',
   cycle_delay: 'cycle_delay',
+  panel_lockout: 'panel_lockout',
 } as const;
 
 const stateKeyToProperty = {

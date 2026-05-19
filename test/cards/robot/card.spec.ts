@@ -197,11 +197,12 @@ describe('card.ts', () => {
       const rows = panel?.shadowRoot?.querySelectorAll(
         'whisker-controls-entity-row',
       );
-      expect(rows?.length).to.equal(4);
+      expect(rows?.length).to.equal(5);
       expect(rows?.item(0).entity).to.equal('select.lr_globe_light');
       expect(rows?.item(1).entity ?? '').to.equal('');
       expect(rows?.item(2).entity).to.equal('select.lr_panel_brightness');
       expect(rows?.item(3).entity ?? '').to.equal('');
+      expect(rows?.item(4).entity ?? '').to.equal('');
     });
   });
 

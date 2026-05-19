@@ -65,6 +65,7 @@ export class WhiskerControlsEntity extends LitElement {
   globeBrightnessEntity = '';
   panelBrightnessEntity = '';
   cycleDelayEntity = '';
+  panelLockoutEntity = '';
 
   @state()
   private _dialogOpen = false;
@@ -75,6 +76,7 @@ export class WhiskerControlsEntity extends LitElement {
       this.globeBrightnessEntity,
       this.panelBrightnessEntity,
       this.cycleDelayEntity,
+      this.panelLockoutEntity,
     ].some((id) => typeof id === 'string' && id.length > 0);
   }
 
@@ -127,6 +129,10 @@ export class WhiskerControlsEntity extends LitElement {
           <whisker-controls-entity-row
             .hass=${this.hass}
             .entity=${this.cycleDelayEntity}
+          ></whisker-controls-entity-row>
+          <whisker-controls-entity-row
+            .hass=${this.hass}
+            .entity=${this.panelLockoutEntity}
           ></whisker-controls-entity-row>
         </div>
       </ha-dialog>

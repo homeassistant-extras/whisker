@@ -47,4 +47,7 @@ export interface DutyReport {
 
   /** Entity id for cycle delay select (`translation_key` cycle_delay) */
   cycle_delay?: string | null;
+
+  /** Panel lockout switch (`translation_key` panel_lockout), when enabled */
+  panel_lockout?: string | null;
 }

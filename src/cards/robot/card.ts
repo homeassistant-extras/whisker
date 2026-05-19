@@ -125,6 +125,7 @@ export class WhiskerCard extends LitElement {
               .globeBrightnessEntity=${this._duty.globe_brightness}
               .panelBrightnessEntity=${this._duty.brightness_level}
               .cycleDelayEntity=${this._duty.cycle_delay}
+              .panelLockoutEntity=${this._duty.panel_lockout}
             ></whisker-controls-entity>
           </div>
           <whisker-chonk

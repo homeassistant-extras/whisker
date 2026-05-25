@@ -5,13 +5,14 @@
     "target": "es2022",
     "lib": ["es2022", "dom"],
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "isolatedModules": true,
     "experimentalDecorators": true,
     "useDefineForClassFields": false,
     "resolveJsonModule": true,
     "moduleDetection": "force",
     "verbatimModuleSyntax": true,
+    "allowSyntheticDefaultImports": true,
 
     /* Strictness */
     "strict": true,
@@ -19,7 +20,6 @@
     "noImplicitOverride": true,
 
     /* Paths */
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
       "@cards/*": ["./src/cards/*"],

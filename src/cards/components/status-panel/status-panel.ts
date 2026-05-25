@@ -15,21 +15,27 @@ export class WhiskerStatusPanel extends LitElement {
   override render(): TemplateResult | typeof nothing {
     return html`
       <div class="panel">
-        <whisker-status-panel-item
-          item-type="vacuum"
-          .hass=${this.hass}
-          .entity=${this.litterBoxEntity}
-        ></whisker-status-panel-item>
-        <whisker-status-panel-item
-          item-type="reset"
-          .hass=${this.hass}
-          .entity=${this.resetEntity}
-        ></whisker-status-panel-item>
-        <whisker-status-panel-item
-          item-type="reset_waste_drawer"
-          .hass=${this.hass}
-          .entity=${this.resetWasteDrawerEntity}
-        ></whisker-status-panel-item>
+        ${this.litterBoxEntity
+          ? html`<whisker-status-panel-item
+              item-type="vacuum"
+              .hass=${this.hass}
+              .entity=${this.litterBoxEntity}
+            ></whisker-status-panel-item>`
+          : nothing}
+        ${this.resetEntity
+          ? html`<whisker-status-panel-item
+              item-type="reset"
+              .hass=${this.hass}
+              .entity=${this.resetEntity}
+            ></whisker-status-panel-item>`
+          : nothing}
+        ${this.resetWasteDrawerEntity
+          ? html`<whisker-status-panel-item
+              item-type="reset_waste_drawer"
+              .hass=${this.hass}
+              .entity=${this.resetWasteDrawerEntity}
+            ></whisker-status-panel-item>`
+          : nothing}
       </div>
     `;
   }

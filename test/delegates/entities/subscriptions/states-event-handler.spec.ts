@@ -27,6 +27,7 @@ describe('StatesEventHandler', () => {
           s: 'on',
           a: { brightness: 255 },
           c: '',
+          lc: 0,
         },
       },
       c: {},

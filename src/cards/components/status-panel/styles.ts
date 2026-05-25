@@ -19,46 +19,20 @@ export const statusPanelItemStyles = css`
     display: inline-block;
   }
 
-  .item {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    width: 40px;
-    height: 40px;
+  hui-state-icon-element {
     display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    font-family: inherit;
-    line-height: 0;
     cursor: pointer;
-    color: var(--primary-text-color);
-    background: color-mix(
-      in srgb,
-      var(--card-background-color, #fff) 88%,
-      transparent
-    );
     border: 1px solid var(--divider-color);
     border-radius: 50%;
-    box-shadow: 0 1px 3px rgb(0 0 0 / 12%);
-  }
-
-  .item hui-state-icon-element {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-    --mdc-icon-size: 22px;
   }
 
   /**
-   * Spin the vacuum (cycle) icon while the parent whisker-card has reflected cycling.
+   * Spin the vacuum icon while cycling; play-state is set on ha-card in card styles
+   * and inherits through shadow boundaries.
    */
-  :host-context(whisker-card[cycling]):host([item-type='vacuum'])
-    .item
-    hui-state-icon-element {
-    animation: whisker-status-icon-spin 1.1s linear infinite;
+  :host([item-type='vacuum']) hui-state-icon-element {
+    animation: whisker-status-icon-spin 4s linear infinite;
+    animation-play-state: var(--whisker-cycling-play-state, paused);
     transform-origin: center center;
   }
 
@@ -72,9 +46,7 @@ export const statusPanelItemStyles = css`
   }
 
   @media (prefers-reduced-motion: reduce) {
-    :host-context(whisker-card[cycling]):host([item-type='vacuum'])
-      .item
-      hui-state-icon-element {
+    :host([item-type='vacuum']) hui-state-icon-element {
       animation: none;
     }
   }

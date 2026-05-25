@@ -47,7 +47,7 @@ describe('status-panel.ts (WhiskerStatusPanel)', () => {
     expect(items![2]!.getAttribute('item-type')).to.equal('reset_waste_drawer');
   });
 
-  it('still renders .panel when panel button entities are null', async () => {
+  it('renders .panel but no items when all entities are null', async () => {
     const el = await fixture<WhiskerStatusPanel>(
       html`<whisker-status-panel
         .resetEntity=${null}
@@ -58,12 +58,6 @@ describe('status-panel.ts (WhiskerStatusPanel)', () => {
 
     expect(el.shadowRoot?.querySelector('.panel')).to.not.be.null;
     const items = el.shadowRoot?.querySelectorAll('whisker-status-panel-item');
-    expect(items).to.have.length(3);
-    const litterBoxProps = items![0] as unknown as { entity?: string | null };
-    const resetProps = items![1] as unknown as { entity?: string | null };
-    const wasteDrawerProps = items![2] as unknown as { entity?: string | null };
-    expect(litterBoxProps.entity == null).to.be.true;
-    expect(resetProps.entity == null).to.be.true;
-    expect(wasteDrawerProps.entity == null).to.be.true;
+    expect(items).to.have.length(0);
   });
 });

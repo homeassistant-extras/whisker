@@ -1,11 +1,14 @@
+import { resolvePoatCardHelpers } from '@/helpers/card-helpers';
 import '@cards/components/toilet-levels/gauge';
 import '@cards/components/toilet-levels/levels';
 import { WhiskerCard } from '@cards/robot/card';
 import { WhiskerCardEditor } from '@cards/robot/editor';
 import { version } from '../package.json';
 
+// Kick off HA card helper resolution once when the bundle loads
+void resolvePoatCardHelpers(globalThis.loadCardHelpers);
+
 declare global {
-  // eslint-disable-next-line no-var
   var customCards: Array<{
     type: string;
     name: string;

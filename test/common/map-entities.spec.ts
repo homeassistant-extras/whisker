@@ -1,14 +1,15 @@
 import type { EntityRegistryDisplayEntry } from '@/hass/data/entity_registry';
-import type { EntityState } from '@/types/entity';
+import type { HassEntity } from '@/hass/ws/types';
 import type { DutyReport } from '@/types/types';
 import { mapEntitiesByTranslationKey } from '@common/map-entities';
 import type { HomeAssistant } from '@hass/types';
 import { expect } from 'chai';
 
-const e = (domain: string, name: string, state: string): EntityState => ({
+const e = (domain: string, name: string, state: string): HassEntity => ({
   entity_id: `${domain}.${name}`,
   state,
   attributes: {},
+  last_changed: '2024-01-01T00:00:00+00:00',
 });
 
 describe('map-entities.ts', () => {
@@ -32,6 +33,7 @@ describe('map-entities.ts', () => {
             entity_id: 'sensor.lr_last_seen',
             state: '2024-01-15T10:00:00+00:00',
             attributes: { device_class: 'timestamp' },
+            last_changed: '2024-01-15T10:00:00+00:00',
           },
           'sensor.lr_status': e('sensor', 'lr_status', 'rdy'),
         },
@@ -88,9 +90,7 @@ describe('map-entities.ts', () => {
       };
 
       expect(mapEntitiesByTranslationKey(hass, entity, report)).to.be.true;
-      expect(report.status).to.deep.equal(
-        e('sensor', 'lr_status', 'rdy'),
-      );
+      expect(report.status).to.equal('sensor.lr_status');
     });
 
     it('should map reset_waste_drawer translation_key to reset_waste_drawer', () => {
@@ -103,7 +103,9 @@ describe('map-entities.ts', () => {
       };
 
       expect(mapEntitiesByTranslationKey(hass, entity, report)).to.be.true;
-      expect(report.reset_waste_drawer).to.equal('button.lr_reset_waste_drawer');
+      expect(report.reset_waste_drawer).to.equal(
+        'button.lr_reset_waste_drawer',
+      );
     });
 
     it('should map reset translation_key to reset', () => {
@@ -172,9 +174,7 @@ describe('map-entities.ts', () => {
       };
 
       expect(mapEntitiesByTranslationKey(hass, entity, report)).to.be.true;
-      expect(report.total_cycles).to.deep.equal(
-        e('sensor', 'lr_total_cycles', '1234'),
-      );
+      expect(report.total_cycles).to.equal('sensor.lr_total_cycles');
     });
 
     it('should map last_seen to EntityState via getState', () => {
@@ -187,11 +187,7 @@ describe('map-entities.ts', () => {
       };
 
       expect(mapEntitiesByTranslationKey(hass, entity, report)).to.be.true;
-      expect(report.last_seen).to.deep.equal({
-        entity_id: 'sensor.lr_last_seen',
-        state: '2024-01-15T10:00:00+00:00',
-        attributes: { device_class: 'timestamp' },
-      });
+      expect(report.last_seen).to.equal('sensor.lr_last_seen');
     });
 
     it('should map control selects by translation_key to duty fields', () => {

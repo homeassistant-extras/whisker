@@ -2,18 +2,9 @@ import { WhiskerStatusPanelItem } from '@cards/components/status-panel/status-pa
 import type { HomeAssistant } from '@hass/types';
 import { fixture } from '@open-wc/testing-helpers';
 import type { Config } from '@type/config';
-import type { EntityState } from '@type/entity';
 import { expect } from 'chai';
-import { html } from 'lit';
+import { html, nothing } from 'lit';
 import { stub } from 'sinon';
-
-async function flushStateIconTask(el: WhiskerStatusPanelItem): Promise<void> {
-  await el.updateComplete;
-  await new Promise<void>((r) => queueMicrotask(r));
-  await el.updateComplete;
-  await new Promise<void>((r) => setTimeout(r, 0));
-  await el.updateComplete;
-}
 
 describe('status-panel-item.ts (WhiskerStatusPanelItem)', () => {
   const config: Config = { device_id: 'd1' };
@@ -33,34 +24,32 @@ describe('status-panel-item.ts (WhiskerStatusPanelItem)', () => {
 
   let mockElement: MockHui;
   let mockCreateHuiElement: sinon.SinonStub;
-  let mockLoadCardHelpers: sinon.SinonStub;
 
   beforeEach(() => {
     mockElement = document.createElement('div') as MockHui;
     mockCreateHuiElement = stub().returns(mockElement);
-    mockLoadCardHelpers = stub().resolves({
+    globalThis.poatCardHelpers = {
+      createRowElement: stub(),
       createHuiElement: mockCreateHuiElement,
-    });
-    globalThis.loadCardHelpers = mockLoadCardHelpers;
+    };
   });
 
   afterEach(() => {
-    Reflect.deleteProperty(globalThis, 'loadCardHelpers');
+    Reflect.deleteProperty(globalThis, 'poatCardHelpers');
   });
 
-  it('renders nothing when entity is not set', async () => {
-    const el = await fixture<WhiskerStatusPanelItem>(
-      html`<whisker-status-panel-item
-        .hass=${hass()}
-        .config=${config}
-      ></whisker-status-panel-item>`,
-    );
+  it('renders nothing if card helpers are not resolved yet', () => {
+    Reflect.deleteProperty(globalThis, 'poatCardHelpers');
 
-    expect(el.shadowRoot?.querySelector('.item')).to.be.null;
-    expect(mockLoadCardHelpers.called).to.be.false;
+    const el = new WhiskerStatusPanelItem();
+    el.hass = hass();
+    el.config = config;
+    el.entity = 'button.lr_reset';
+
+    expect(el.render()).to.equal(nothing);
   });
 
-  it('runs Task + stateIconContent: helpers, createHuiElement config, hass, .item wrapper', async () => {
+  it('creates state-icon with reset button config and hass assignment', async () => {
     const el = await fixture<WhiskerStatusPanelItem>(
       html`<whisker-status-panel-item
         .hass=${hass()}
@@ -69,16 +58,6 @@ describe('status-panel-item.ts (WhiskerStatusPanelItem)', () => {
       ></whisker-status-panel-item>`,
     );
 
-    const entityState: EntityState = {
-      entity_id: 'button.lr_reset',
-      state: 'unknown',
-      attributes: { friendly_name: 'Reset' },
-    };
-    el['state'] = entityState;
-    el.requestUpdate();
-    await flushStateIconTask(el);
-
-    expect(mockLoadCardHelpers.called).to.be.true;
     expect(mockCreateHuiElement.called).to.be.true;
 
     const cfg = mockCreateHuiElement.lastCall.args[0] as Record<
@@ -87,41 +66,61 @@ describe('status-panel-item.ts (WhiskerStatusPanelItem)', () => {
     >;
     expect(cfg.type).to.equal('state-icon');
     expect(cfg.entity).to.equal('button.lr_reset');
-    expect(cfg.title).to.equal('Reset');
+    expect(cfg.state_color).to.equal(true);
     expect(cfg.icon).to.equal('mdi:close');
     expect(cfg.tap_action).to.deep.equal({
       action: 'call-service',
       service: 'button.press',
       service_data: { entity_id: 'button.lr_reset' },
     });
+    expect(cfg.hold_action).to.deep.equal({ action: 'more-info' });
 
     expect(mockElement.hass).to.equal(el.hass);
-
-    const item = el.shadowRoot?.querySelector('.item');
-    expect(item).to.not.be.null;
-    expect(item!.contains(mockElement)).to.be.true;
+    expect(el.shadowRoot?.contains(mockElement)).to.be.true;
   });
 
-  it('still builds state-icon via helpers when HA reports unavailable', async () => {
-    const el = await fixture<WhiskerStatusPanelItem>(
+  it('uses mdi:delete-variant for reset_waste_drawer panel items', async () => {
+    await fixture<WhiskerStatusPanelItem>(
       html`<whisker-status-panel-item
+        item-type="reset_waste_drawer"
         .hass=${hass()}
         .config=${config}
-        .entity=${'button.lr_reset'}
+        .entity=${'button.lr_reset_waste_drawer'}
       ></whisker-status-panel-item>`,
     );
 
-    el['state'] = {
-      entity_id: 'button.lr_reset',
-      state: 'unavailable',
-      attributes: {},
-    };
-    el.requestUpdate();
-    await flushStateIconTask(el);
+    const cfg = mockCreateHuiElement.lastCall.args[0] as Record<
+      string,
+      unknown
+    >;
+    expect(cfg.icon).to.equal('mdi:delete-variant');
+    expect(cfg.tap_action).to.deep.equal({
+      action: 'call-service',
+      service: 'button.press',
+      service_data: { entity_id: 'button.lr_reset_waste_drawer' },
+    });
+  });
 
-    expect(mockCreateHuiElement.called).to.be.true;
-    expect(el.shadowRoot?.querySelector('.item')?.contains(mockElement)).to.be
-      .true;
+  it('uses vacuum.start + target for vacuum panel items', async () => {
+    await fixture<WhiskerStatusPanelItem>(
+      html`<whisker-status-panel-item
+        item-type="vacuum"
+        .hass=${hass()}
+        .config=${config}
+        .entity=${'vacuum.r2_poop2_litter_box'}
+      ></whisker-status-panel-item>`,
+    );
+
+    const cfg = mockCreateHuiElement.lastCall.args[0] as Record<
+      string,
+      unknown
+    >;
+    expect(cfg.icon).to.equal('mdi:autorenew');
+    expect(cfg.tap_action).to.deep.equal({
+      action: 'call-service',
+      service: 'vacuum.start',
+      target: { entity_id: 'vacuum.r2_poop2_litter_box' },
+    });
   });
 
   it('reflects item-type attribute', async () => {

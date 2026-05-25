@@ -17,6 +17,8 @@ export const scoopDroppings = (
 
   const litterRobotState: Partial<DutyReport> = {
     name: device.name ?? 'Litter Robot',
+    model: device.model ?? null,
+    serial_number: device.serial_number ?? null,
   };
 
   Object.values(hass.entities).forEach((entity) => {

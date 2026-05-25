@@ -15,14 +15,14 @@ export const getState = (
 ): EntityState | undefined => {
   if (!entityId) return undefined;
 
-  const state = (hass.states as { [key: string]: any })[entityId];
-
+  const state = hass.states[entityId];
   if (!state) return undefined;
 
   return {
     state: state.state,
     attributes: state.attributes,
     entity_id: state.entity_id,
+    last_changed: state.last_changed,
   };
 };
 

@@ -1,10 +1,10 @@
+import type { EntityState } from '@/types/entity';
 import {
   applyDiff,
   compressedToEntityState,
   isMeaningfulChange,
 } from '@delegates/entities/subscribe-entities';
-import type { EntityDiff, EntityState as HassEntityState } from '@hass/ws/entities';
-import type { EntityState } from '@/types/entity';
+import type { EntityState as HassEntityState } from '@hass/ws/entities';
 import { expect } from 'chai';
 
 describe('subscribe-entities', () => {
@@ -14,6 +14,7 @@ describe('subscribe-entities', () => {
         s: 'on',
         a: { brightness: 128 },
         c: '',
+        lc: 0,
       });
       expect(result.entity_id).to.equal('light.kitchen');
       expect(result.state).to.equal('on');
@@ -24,6 +25,7 @@ describe('subscribe-entities', () => {
       const result = compressedToEntityState('sensor.x', {
         s: '42',
         c: '',
+        lc: 0,
       } as HassEntityState);
       expect(result.attributes).to.deep.equal({});
     });
@@ -47,9 +49,7 @@ describe('subscribe-entities', () => {
     });
 
     it('is false when add only has unrelated keys', () => {
-      expect(
-        isMeaningfulChange({ '+': { c: '' } } as EntityDiff),
-      ).to.be.false;
+      expect(isMeaningfulChange({ '+': { c: '' } })).to.be.false;
     });
 
     it('is false when remove has empty attribute list', () => {

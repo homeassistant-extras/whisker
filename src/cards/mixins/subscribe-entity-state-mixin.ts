@@ -6,7 +6,8 @@ import type { EntityState } from '@type/entity';
 import type { LitElement } from 'lit';
 import { state } from 'lit/decorators.js';
 
-export type Constructor<T = {}> = new (...args: any[]) => T;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- mixin constructor
+export type Constructor<T = object> = new (...args: any[]) => T;
 
 export interface SubscribeEntityStateElement {
   /**

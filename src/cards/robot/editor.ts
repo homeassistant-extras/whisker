@@ -2,7 +2,7 @@ import { fireEvent } from '@hass/common/dom/fire_event';
 import type { HaFormSchema } from '@hass/components/ha-form/types';
 import '@hass/panels/lovelace/editor/hui-element-editor';
 import type { HomeAssistant } from '@hass/types';
-import type { Config } from '@type/config';
+import { type Config } from '@type/config';
 import { html, LitElement, nothing, type TemplateResult } from 'lit';
 import { state } from 'lit/decorators.js';
 
@@ -22,6 +22,36 @@ const SCHEMA: HaFormSchema[] = [
     label: 'Card Title',
     required: false,
     selector: { text: {} },
+  },
+  {
+    name: 'color',
+    label: 'Robot color',
+    selector: {
+      select: {
+        options: [
+          { value: 'white', label: 'White' },
+          { value: 'black', label: 'Black' },
+        ],
+      },
+    },
+  },
+  {
+    name: 'footer',
+    label: 'Footer items',
+    selector: {
+      select: {
+        options: [
+          { value: 'total_cycles', label: 'Total cycles' },
+          { value: 'status_changed', label: 'Status last changed' },
+          { value: 'last_seen', label: 'Last seen' },
+          { value: 'pet_weight', label: 'Pet weight' },
+          { value: 'status', label: 'Status' },
+          { value: 'litter_level', label: 'Litter level' },
+          { value: 'waste_drawer', label: 'Waste drawer' },
+        ],
+        multiple: true,
+      },
+    },
   },
   {
     name: 'features',

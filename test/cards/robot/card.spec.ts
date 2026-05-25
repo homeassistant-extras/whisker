@@ -1,9 +1,11 @@
+import * as scoopModule from '@/delegates/utils/scoop-droppings';
+import * as cardHelpersModule from '@/helpers/card-helpers';
 import { WhiskerCard } from '@cards/robot/card';
 import { styles } from '@cards/robot/styles';
-import * as scoopModule from '@/delegates/utils/scoop-droppings';
 import type { HomeAssistant } from '@hass/types';
 import { fixture } from '@open-wc/testing-helpers';
 import type { Config } from '@type/config';
+import type { CardHelpers } from '@type/lovelace';
 import type { DutyReport } from '@type/types';
 import { expect } from 'chai';
 import { nothing, type TemplateResult } from 'lit';
@@ -15,6 +17,7 @@ describe('card.ts', () => {
   let mockConfig: Config;
   let mockDuty: DutyReport;
   let scoopStub: sinon.SinonStub;
+  let resolvePoatCardHelpersStub: sinon.SinonStub;
 
   beforeEach(() => {
     scoopStub = stub(scoopModule, 'scoopDroppings');
@@ -25,6 +28,7 @@ describe('card.ts', () => {
       waste_drawer: 'sensor.waste',
       litter_level: 'sensor.litter',
       reset: 'button.lr_reset',
+      status: 'sensor.lr_status',
     };
 
     mockHass = {
@@ -38,7 +42,20 @@ describe('card.ts', () => {
           identifiers: [['litterrobot', 'serial']] as [string, string][],
         },
       },
+      states: {
+        'sensor.lr_status': {
+          entity_id: 'sensor.lr_status',
+          state: 'ccp',
+          attributes: {},
+          last_changed: '2024-06-01T10:00:00+00:00',
+        },
+      },
     } as unknown as HomeAssistant;
+
+    resolvePoatCardHelpersStub = stub(
+      cardHelpersModule,
+      'resolvePoatCardHelpers',
+    );
 
     scoopStub.returns(mockDuty);
 
@@ -52,6 +69,7 @@ describe('card.ts', () => {
   });
 
   afterEach(() => {
+    resolvePoatCardHelpersStub.restore();
     scoopStub.restore();
   });
 
@@ -87,7 +105,36 @@ describe('card.ts', () => {
     });
   });
 
+  describe('connectedCallback', () => {
+    it('should resolve and store card helpers', async () => {
+      (card as any)._cardHelpers = undefined;
+      const helpers = {} as CardHelpers;
+      resolvePoatCardHelpersStub.resolves(helpers);
+      (globalThis as any).loadCardHelpers = () => Promise.resolve(helpers);
+
+      // Avoid Lit style adoption in jsdom; test only helper resolution.
+      (card as any).createRenderRoot = () => document.createElement('div');
+      card.connectedCallback();
+      await Promise.resolve();
+
+      expect(resolvePoatCardHelpersStub.calledOnce).to.be.true;
+      expect((card as any)._cardHelpers).to.equal(helpers);
+    });
+  });
+
   describe('rendering', () => {
+    beforeEach(() => {
+      (card as unknown as { _cardHelpers: CardHelpers })._cardHelpers =
+        {} as CardHelpers;
+    });
+
+    it('should render nothing when card helpers are not resolved yet', () => {
+      (
+        card as unknown as { _cardHelpers: CardHelpers | undefined }
+      )._cardHelpers = undefined;
+      expect(card.render()).to.equal(nothing);
+    });
+
     it('should render nothing when there is no duty report', () => {
       scoopStub.returns(undefined);
       card.hass = mockHass;
@@ -103,6 +150,7 @@ describe('card.ts', () => {
       expect(el.querySelectorAll('whisker-robot-levels')).to.have.length(1);
       expect(el.querySelector('whisker-status-panel')).to.not.be.null;
       expect(el.querySelector('whisker-chonk')).to.not.be.null;
+      expect(el.querySelector('whisker-card-footer')).to.not.be.null;
     });
 
     it('should pass litter_box vacuum entity to the status panel', async () => {
@@ -118,55 +166,20 @@ describe('card.ts', () => {
       expect(panel.litterBoxEntity).to.equal('vacuum.r2_poop2_litter_box');
     });
 
-    it('should reflect cycling on the card host when status_code is ccp', async () => {
+    it('should resolve the robot image from duty model/serial and config color', async () => {
       scoopStub.returns({
         ...mockDuty,
-        status: {
-          entity_id: 'sensor.lr_status',
-          state: 'ccp',
-          attributes: {},
-        },
+        model: 'Litter-Robot 5 Pro',
+        serial_number: 'LR5-02-40',
       });
-      // Reflected attributes flush only after connect; Lit update queue awaits enableUpdating from connectedCallback.
-      document.body.appendChild(card);
-      try {
-        card.hass = mockHass;
-        await card.updateComplete;
-        expect(card.hasAttribute('cycling')).to.be.true;
-        await fixture(card.render() as TemplateResult);
-      } finally {
-        card.remove();
-      }
-    });
-
-    it('should not set cycling on the card host when status is ready', async () => {
-      scoopStub.returns({
-        ...mockDuty,
-        status: {
-          entity_id: 'sensor.lr_status',
-          state: 'rdy',
-          attributes: {},
-        },
-      });
-      card.hass = mockHass;
-      expect(card.hasAttribute('cycling')).to.be.false;
-      await fixture(card.render() as TemplateResult);
-    });
-
-    it('should render card footer with total cycles when mapped', async () => {
-      scoopStub.returns({
-        ...mockDuty,
-        total_cycles: {
-          entity_id: 'sensor.lr_total_cycles',
-          state: '1234',
-          attributes: {},
-        },
-      });
+      card.setConfig({ ...mockConfig, color: 'black' });
       card.hass = mockHass;
       const el = await fixture(card.render() as TemplateResult);
-      const footer = el.querySelector('.card-footer');
-      expect(footer).to.exist;
-      expect(footer?.querySelectorAll('state-display')).to.have.length(1);
+      const img = el.querySelector('img');
+      // Stub echoes the args passed to resolveRobotImage (model|serial|color).
+      expect(img?.getAttribute('src')).to.equal(
+        'img:Litter-Robot 5 Pro|LR5-02-40|black',
+      );
     });
 
     it('should use title from config when set', async () => {

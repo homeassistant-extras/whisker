@@ -1,24 +1,70 @@
 import { SubscribeEntityStateMixin } from '@cards/mixins/subscribe-entity-state-mixin';
-import { litterRobotStatusPresentation } from '@common/litterrobot-status';
-import { html, LitElement, nothing, type TemplateResult } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import {
+  isLitterRobotCycling,
+  litterRobotStatusPresentation,
+} from '@common/litterrobot-status';
+import { openEntityMoreInfo } from '@common/open-entity-more-info';
+import { computeTooltip } from '@hass/panels/lovelace/common/compute-tooltip';
+import { stateLabel } from '@html/state-icon-label';
+import {
+  html,
+  LitElement,
+  nothing,
+  type PropertyValues,
+  type TemplateResult,
+} from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { statusStyles as styles } from './styles';
 
 @customElement('whisker-litter-status')
 export class WhiskerLitterStatus extends SubscribeEntityStateMixin(LitElement) {
+  static override readonly styles = styles;
+
+  /**
+   * Reflected while `status_code` indicates a running cycle (ccp / ec / cst).
+   * Parent card CSS uses `:has(whisker-litter-status[cycling])` for cycle styling.
+   */
+  @property({ type: Boolean, reflect: true })
+  cycling = false;
+
+  protected override willUpdate(
+    _changedProperties: PropertyValues<this>,
+  ): void {
+    super.willUpdate(_changedProperties);
+    this.cycling = isLitterRobotCycling(this.state?.state);
+  }
+
+  private _onIconClick(): void {
+    openEntityMoreInfo(this, this.entity);
+  }
+
   override render(): TemplateResult | typeof nothing {
-    if (!this.state) {
+    if (!this.state || !this.hass) {
       return nothing;
     }
 
     const { icon, color } = litterRobotStatusPresentation(this.state.state);
+    const tooltip = computeTooltip(this.hass, {
+      entity: this.entity,
+      tap_action: { action: 'more-info' },
+      hold_action: { action: 'none' },
+    });
 
     return html`
-      <state-display .hass=${this.hass} .stateObj=${this.state}></state-display>
-      <ha-icon
-        class="status-icon"
-        icon=${icon}
-        style="color: ${color}; padding-left: 3px;"
-      ></ha-icon>
+      ${stateLabel(this.hass, this.entity)}
+      <span
+        class="status-icon-wrap"
+        role="button"
+        tabindex="0"
+        title=${tooltip}
+        @click=${this._onIconClick}
+      >
+        <ha-icon
+          class="status-icon"
+          icon=${icon}
+          style="color: ${color};"
+        ></ha-icon>
+      </span>
     `;
   }
 }

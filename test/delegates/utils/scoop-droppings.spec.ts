@@ -13,6 +13,7 @@ const e = (
   entity_id: `${domain}.${name}`,
   state,
   attributes,
+  last_changed: '2024-06-01T12:00:00+00:00',
 });
 
 describe('scoop-droppings.ts', () => {
@@ -87,20 +88,14 @@ describe('scoop-droppings.ts', () => {
     const report = scoopDroppings(mockHass, config);
     expect(report).to.deep.equal({
       name: 'Living Room LR',
+      model: null,
+      serial_number: null,
       waste_drawer: 'sensor.lr_waste',
       litter_level: 'sensor.lr_litter',
-      status: e('sensor', 'lr_status', 'rdy'),
+      status: 'sensor.lr_status',
       pet_weight: 'sensor.lr_pet_weight',
-      last_seen: {
-        entity_id: 'sensor.lr_last_seen',
-        state: '2024-06-01T12:00:00+00:00',
-        attributes: {},
-      },
-      total_cycles: {
-        entity_id: 'sensor.lr_total_cycles',
-        state: '1234',
-        attributes: {},
-      },
+      last_seen: 'sensor.lr_last_seen',
+      total_cycles: 'sensor.lr_total_cycles',
     });
   });
 });

@@ -1,14 +1,22 @@
 import { SubscribeEntityStateMixin } from '@cards/mixins/subscribe-entity-state-mixin';
 import type { HomeAssistant } from '@hass/types';
+import type { EntityState } from '@type/entity';
 import { expect } from 'chai';
 import { LitElement } from 'lit';
 import { stub, useFakeTimers } from 'sinon';
 
 const RESUBSCRIBE_DEBOUNCE_MS = 50;
 
+type MixinTestElement = LitElement & {
+  hass?: HomeAssistant;
+  config?: { device_id: string };
+  entity?: string;
+  state?: EntityState;
+};
+
 describe('SubscribeEntityStateMixin', () => {
   let TestElement: ReturnType<typeof SubscribeEntityStateMixin>;
-  let element: InstanceType<typeof TestElement>;
+  let element: MixinTestElement;
   let hass: HomeAssistant;
   let unsubscribeSpy: ReturnType<typeof stub>;
   let capturedCallback: ((ev: unknown) => void) | null;
@@ -29,7 +37,7 @@ describe('SubscribeEntityStateMixin', () => {
       customElements.define(elementName, TestElement);
     }
 
-    element = new TestElement();
+    element = new TestElement() as unknown as MixinTestElement;
     hass = {
       language: 'en',
       localize: (key: string) => key,
@@ -46,14 +54,14 @@ describe('SubscribeEntityStateMixin', () => {
   });
 
   it('should have _subscribedEntityState undefined initially', () => {
-    expect(element['state']).to.be.undefined;
+    expect(element.state).to.be.undefined;
   });
 
   it('should subscribe when connected with entityId and hass set', async () => {
     const clock = useFakeTimers();
     try {
       element.hass = hass;
-      element['entity'] = 'light.bedroom';
+      element.entity = 'light.bedroom';
 
       element.connectedCallback();
       clock.tick(RESUBSCRIBE_DEBOUNCE_MS);
@@ -69,7 +77,7 @@ describe('SubscribeEntityStateMixin', () => {
     const clock = useFakeTimers();
     try {
       element.hass = hass;
-      element['entity'] = 'light.bedroom';
+      element.entity = 'light.bedroom';
 
       element.connectedCallback();
       clock.tick(RESUBSCRIBE_DEBOUNCE_MS);
@@ -90,10 +98,11 @@ describe('SubscribeEntityStateMixin', () => {
         c: {},
       });
 
-      expect(element['state']).to.deep.equal({
+      expect(element.state).to.deep.equal({
         entity_id: 'light.bedroom',
         state: 'on',
         attributes: { friendly_name: 'Bedroom Light' },
+        last_changed: '1970-01-01T00:00:00.000Z',
       });
     } finally {
       clock.restore();
@@ -109,7 +118,7 @@ describe('SubscribeEntityStateMixin', () => {
   });
 
   it('should not subscribe without hass', () => {
-    element['entity'] = 'light.bedroom';
+    element.entity = 'light.bedroom';
 
     element.connectedCallback();
 

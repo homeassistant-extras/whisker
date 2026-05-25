@@ -21,6 +21,7 @@ export const e = (
     entity_id: `${domain}.${name}`,
     state: state,
     attributes: attributes,
+    last_changed: new Date().toISOString(),
   };
 };
 
@@ -88,6 +89,7 @@ describe('state.ts', () => {
       const state = getState(mockHass, 'light.test');
       expect(state).to.exist;
       expect(state?.state).to.equal('on');
+      expect(state?.last_changed).to.exist;
     });
   });
 

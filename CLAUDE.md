@@ -2,11 +2,11 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-> Cross-agent instructions and the rule for diagnosing `yarn test` failures live in [AGENTS.md](./AGENTS.md) and per-folder `AGENTS.md` files (under `src/cards`, `src/delegates`, `src/hass`, `src/html`, `src/common`, `src/types`, `test`). Read the nearest one before editing files in a subdirectory.
+> Cross-agent instructions and the rule for diagnosing `yarn test` failures live in [AGENTS.md](./AGENTS.md) and per-folder `AGENTS.md` files (`test/`, `src/cards/` (+ `mixins/`), `src/delegates/`, `src/hass/`, `src/html/`, `src/common/`, `src/config/`, `src/types/`). Read the nearest one before editing files in a subdirectory.
 
 ## Project
 
-**Whisker Card** is a Home Assistant custom Lovelace card that surfaces Litter-Robot status and controls. It depends on the official Home Assistant `litterrobot` integration and is configured with a single `device_id` (plus optional `title`). Developed and tested against a Litter-Robot 5 (LR5).
+**Whisker Card** is a Home Assistant custom Lovelace card that surfaces Litter-Robot status and controls. It depends on the official Home Assistant `litterrobot` integration and is configured with a `device_id` plus optional `title`, `color`, `footer`, and `features`. Supports LR4, LR5, LR5 Pro, and Litter-Robot Evo artwork (auto-detected from device serial/model). Developed and tested against a Litter-Robot 5 (LR5).
 
 The bundled output is a single ES module at `dist/whisker.js`, intended to be loaded as a Lovelace resource.
 
@@ -21,7 +21,11 @@ Yarn project — use `yarn`, not `npm`.
 - `yarn test` — Mocha test suite (uses `tsconfig.test.json` via `ts-node`)
 - `yarn test:coverage` — Mocha + NYC coverage
 - `yarn test:watch` — Mocha watch mode
+- `yarn lint` — ESLint (TypeScript + Lit + web component best practices)
+- `yarn lint:fix` — ESLint with auto-fix where safe
+- `yarn typecheck` — `tsc` against `tsconfig.test.json`
 - `yarn format` — Prettier (with import-sort plugins)
+- `yarn pass` — format + typecheck + lint + test (run before shipping)
 - `yarn update` — `npx npm-check-updates -u && yarn install`
 
 ### Single test
@@ -50,7 +54,7 @@ Fix the type errors first, then rerun `yarn test`. Do not investigate path alias
 
 ### Layered structure under `src/`
 
-- **`cards/`** — Lit components. `cards/robot/` holds the main card ([card.ts](src/cards/robot/card.ts)), visual editor ([editor.ts](src/cards/robot/editor.ts)), shared `styles.ts`, and `assets.ts`. `cards/components/` contains focused sub-components (`status`, `status-panel`, `controls`, `toilet-levels`, `chonk`). `cards/mixins/` holds Lit mixins shared across components.
+- **`cards/`** — Lit components. `cards/robot/` holds the main card ([card.ts](src/cards/robot/card.ts)), visual editor ([editor.ts](src/cards/robot/editor.ts)), shared `styles.ts`, bundled artwork ([assets.ts](src/cards/robot/assets.ts)), and model detection ([detect-model.ts](src/cards/robot/detect-model.ts)). `cards/components/` contains focused sub-components (`status`, `status-panel`, `controls`, `footer`, `toilet-levels`, `chonk`). `cards/mixins/` holds Lit mixins shared across components.
 - **`delegates/`** — Business logic, kept independent of Lit rendering: `retrievers/` for reading HASS state/entities, `entities/` for entity selection/mapping, `utils/` for pure transforms and action handlers. Cards call into delegates; delegates do not import from cards.
 - **`hass/`** — Vendored / adapted Home Assistant frontend types and helpers (`common`, `components`, `data`, `dialogs`, `panels`, `state`, `ws`, plus `types.ts`). Treat these as upstream code; keep them matching upstream unless a divergence is documented.
 - **`html/`** — Small, side-effect-free helpers that return Lit templates (state displays, icons, sections, rows). No business logic.
@@ -59,11 +63,12 @@ Fix the type errors first, then rerun `yarn test`. Do not investigate path alias
 
 ### Data flow
 
-1. HA dashboard hands the card a config (`device_id`, optional `title`).
-2. Delegates resolve the device's entities from HA's area/entity/device registries and current state.
-3. Status is derived from the `status_code` sensor; an active cycle (`ccp`, `ec`, `cst`) triggers "cycling" visual emphasis.
-4. The card and its sub-components render gauges (litter/waste), pet weight chip, last-seen, status header, and quick actions.
-5. Interactions: litter-box tap → `vacuum.start`, reset tap → `button.press`; hold on either opens the standard HA more-info dialog. The hamburger menu opens a dialog of native Lovelace entity rows for globe light, brightness, panel brightness, and cycle delay (when present).
+1. HA dashboard hands the card a config (`device_id`, optional `title`, `color`, `footer`, `features`).
+2. Delegates resolve the device's entities from HA's entity/device registries and current state; `scoop-droppings` also reads `model` and `serial_number` from the device registry.
+3. Robot artwork is selected from bundled AVIFs via serial-prefix detection (`detect-model.ts`) and config `color`.
+4. Status is derived from the `status_code` sensor; an active cycle (`ccp`, `ec`, `cst`) triggers "cycling" visual emphasis.
+5. The card and its sub-components render gauges (litter/waste), configurable footer metrics, pet weight chip, status header, and quick actions.
+6. Interactions: litter-box tap → `vacuum.start`, reset tap → `button.press`; hold on either opens the standard HA more-info dialog. The hamburger menu opens a dialog of native Lovelace entity rows for globe light, brightness, panel brightness, and cycle delay (when present).
 
 ### TypeScript path aliases
 

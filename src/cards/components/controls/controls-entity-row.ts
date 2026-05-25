@@ -1,5 +1,5 @@
-import type { HomeAssistant } from '@hass/types';
-import { Task } from '@lit/task';
+import { HassConfigMixin } from '@/cards/mixins/hass-config-mixin';
+import { getPoatCardHelpers } from '@/helpers/card-helpers';
 import { css, html, LitElement, nothing, type TemplateResult } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
@@ -17,49 +17,32 @@ const styles = css`
   }
 `;
 
-interface RowHost extends HTMLElement {
-  hass?: HomeAssistant;
-}
-
 /**
  * Hosts a single Lovelace entity row via HA’s `loadCardHelpers().createRowElement`.
  */
 @customElement('whisker-controls-entity-row')
-export class WhiskerControlsEntityRow extends LitElement {
+export class WhiskerControlsEntityRow extends HassConfigMixin(LitElement) {
   static override readonly styles = styles;
-  hass!: HomeAssistant;
   entity = '';
 
-  private readonly _rowTask = new Task(this, {
-    task: async ([entityId]: [string]) => {
-      if (!entityId) {
-        return null;
-      }
-      const helpers = (await globalThis.loadCardHelpers()) as unknown as {
-        createRowElement: (config: { entity: string }) => RowHost;
-      };
-      return helpers.createRowElement({ entity: entityId });
-    },
-    args: (): [string] => [this.entity],
-  });
+  /**
+   * Resolved once from {@link globalThis.loadCardHelpers}; used via global helper accessor.
+   */
 
   override render(): TemplateResult | typeof nothing {
     if (!this.entity) {
       return nothing;
     }
 
-    return html`${this._rowTask.render({
-      initial: () => nothing,
-      pending: () => nothing,
-      error: () => nothing,
-      complete: (row) => {
-        if (!row) {
-          return nothing;
-        }
-        row.hass = this.hass;
-        return html`<div class="row-host">${row}</div>`;
-      },
-    })}`;
+    const helpers = getPoatCardHelpers();
+    if (!helpers) {
+      return nothing;
+    }
+
+    const row = helpers.createRowElement({ entity: this.entity });
+    row.hass = this.hass;
+
+    return html`<div class="row-host">${row}</div>`;
   }
 }
 

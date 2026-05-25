@@ -1,18 +1,25 @@
 import '@/cards/components/chonk/chonk';
 import '@/cards/components/controls/controls-entity';
+import '@/cards/components/footer/footer';
 import '@/cards/components/status-panel/status-panel';
 import '@/cards/components/status/status';
 import { scoopDroppings } from '@/delegates/utils/scoop-droppings';
+import { resolvePoatCardHelpers } from '@/helpers/card-helpers';
+import type { CardHelpers } from '@/types/lovelace';
 import type { DutyReport } from '@/types/types';
-import type { EntityState } from '@/types/entity';
 import { styles } from '@cards/robot/styles';
-import { isLitterRobotCycling } from '@common/litterrobot-status';
 import type { HomeAssistant } from '@hass/types';
 import type { Config } from '@type/config';
-import { CSSResult, html, LitElement, nothing, type TemplateResult } from 'lit';
-import { property, state } from 'lit/decorators.js';
-import { robotImageSrc } from './assets';
-const equal = require('fast-deep-equal');
+import equal from 'fast-deep-equal';
+import {
+  type CSSResult,
+  html,
+  LitElement,
+  nothing,
+  type TemplateResult,
+} from 'lit';
+import { state } from 'lit/decorators.js';
+import { resolveRobotImage } from './assets';
 
 export class WhiskerCard extends LitElement {
   /**
@@ -21,17 +28,16 @@ export class WhiskerCard extends LitElement {
   private _config!: Config;
 
   /**
-   * Reflected while `status_code` indicates a running cycle (ccp / ec / cst).
-   * Drives CSS on the card and in descendant panel items (`:host-context`).
-   */
-  @property({ type: Boolean, reflect: true })
-  cycling = false;
-
-  /**
    * Duty report object
    */
   @state()
   private _duty: DutyReport | undefined;
+
+  /**
+   * Resolved once from {@link globalThis.loadCardHelpers}; used via global helper accessor.
+   */
+  @state()
+  private _cardHelpers?: CardHelpers;
 
   /**
    * Home Assistant instance
@@ -62,7 +68,6 @@ export class WhiskerCard extends LitElement {
   set hass(hass: HomeAssistant) {
     this._hass = hass;
     const scoopedDuty = scoopDroppings(hass, this._config);
-    this.cycling = isLitterRobotCycling(scoopedDuty?.status?.state);
 
     if (!equal(scoopedDuty, this._duty)) {
       this._duty = scoopedDuty;
@@ -78,7 +83,7 @@ export class WhiskerCard extends LitElement {
    * Returns a stub configuration for the card
    * @param {HomeAssistant} hass - The Home Assistant instance
    */
-  static async getStubConfig(hass: HomeAssistant): Promise<Config> {
+  static getStubConfig(hass: HomeAssistant): Config {
     const bot = Object.values(hass.devices).find((d) =>
       d.identifiers?.some(
         ([domain]: [string, string]) => domain === 'litterrobot',
@@ -91,22 +96,37 @@ export class WhiskerCard extends LitElement {
   }
 
   /**
+   * Resolves the card helpers once for every sub element
+   */
+  override connectedCallback(): void {
+    super.connectedCallback();
+    void resolvePoatCardHelpers(globalThis.loadCardHelpers).then((helpers) => {
+      this._cardHelpers = helpers;
+    });
+  }
+
+  /**
    * renders the lit element card
    * @returns {TemplateResult} The rendered HTML template
    */
   override render(): TemplateResult | typeof nothing {
-    if (!this._duty) {
+    if (!this._duty || !this._cardHelpers) {
       return nothing;
     }
 
     const title = this._config?.title ?? this._duty.name;
+    const robotImage = resolveRobotImage(
+      this._duty.model,
+      this._duty.serial_number,
+      this._config?.color,
+    );
     return html`
       <ha-card>
         <div class="card-title-row">
           <h2 class="card-title">${title}</h2>
           <whisker-litter-status
             .hass=${this._hass}
-            .entity=${this._duty.status?.entity_id}
+            .entity=${this._duty.status}
           ></whisker-litter-status>
         </div>
         <div class="robot-image-stack">
@@ -133,7 +153,7 @@ export class WhiskerCard extends LitElement {
             .hass=${this._hass}
             .entity=${this._duty.pet_weight}
           ></whisker-chonk>
-          <img src=${robotImageSrc} alt="Litter Robot" loading="lazy" />
+          <img src=${robotImage} alt="Litter Robot" loading="lazy" />
         </div>
         <whisker-robot-levels
           .hass=${this._hass}
@@ -141,34 +161,12 @@ export class WhiskerCard extends LitElement {
           .litter_level=${this._duty.litter_level}
           .waste_drawer=${this._duty.waste_drawer}
         ></whisker-robot-levels>
-        ${this._renderCardFooter()}
+        <whisker-card-footer
+          .hass=${this._hass}
+          .config=${this._config}
+          .duty=${this._duty}
+        ></whisker-card-footer>
       </ha-card>
     `;
-  }
-
-  private _renderCardFooter(): TemplateResult | typeof nothing {
-    const duty = this._duty;
-    if (!duty?.total_cycles && !duty?.last_seen) {
-      return nothing;
-    }
-
-    return html`
-      <div class="card-footer">
-        ${this._renderFooterStateDisplay(duty.total_cycles)}
-        ${this._renderFooterStateDisplay(duty.last_seen)}
-      </div>
-    `;
-  }
-
-  private _renderFooterStateDisplay(
-    stateObj: EntityState | undefined,
-  ): TemplateResult | typeof nothing {
-    if (!stateObj) {
-      return nothing;
-    }
-    return html`<state-display
-      .hass=${this._hass}
-      .stateObj=${stateObj}
-    ></state-display>`;
   }
 }

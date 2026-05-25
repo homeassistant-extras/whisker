@@ -11,9 +11,5 @@ export interface HomeAssistant {
   states: HassEntities;
   entities: Record<string, EntityRegistryDisplayEntry>;
   devices: Record<string, DeviceRegistryEntry>;
-  callService?(
-    domain: string,
-    service: string,
-    serviceData?: Record<string, unknown>,
-  ): Promise<unknown>;
+  localize?: (key: string, values?: Record<string, unknown>) => string;
 }

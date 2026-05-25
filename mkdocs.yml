@@ -1,0 +1,77 @@
+site_name: Whisker Card
+site_description: Litter-Robot status and controls in a single Lovelace card
+site_url: https://homeassistant-extras.github.io/whisker/
+repo_name: homeassistant-extras/whisker
+repo_url: https://github.com/homeassistant-extras/whisker
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    - media: '(prefers-color-scheme: light)'
+      scheme: default
+      primary: blue
+      accent: light-blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: '(prefers-color-scheme: dark)'
+      scheme: slate
+      primary: blue
+      accent: light-blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+  icon:
+    repo: fontawesome/brands/github
+  logo: assets/robot.png
+  favicon: assets/robot.png
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Installation: INSTALLATION.md
+  - Features: FEATURES.md
+  - Configuration:
+      - Overview: CONFIGURATION.md
+      - Options: configuration/OPTIONS.md
+      - Interactions: configuration/INTERACTIONS.md
+      - Footer: configuration/FOOTER.md
+      - Feature flags: configuration/FEATURE-FLAGS.md
+      - Examples: configuration/EXAMPLES.md
+  - Troubleshooting: TROUBLESHOOTING.md
+  - Build: BUILD.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/homeassistant-extras/whisker
+    - icon: fontawesome/brands/discord
+      link: https://discord.gg/NpH4Pt8Jmr
+    - icon: fontawesome/solid/cat
+      link: https://curiouscat.consulting/projects/ha-whisker?utm_source=github-whisker&utm_medium=docs-site&utm_campaign=oss-presence&utm_content=nav-link
+      name: Maintained by Curious Cat Consulting

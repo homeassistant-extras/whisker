@@ -32,6 +32,7 @@ export type HassEntityAttributeBase = {
 
 export type HassEntity = HassEntityBase & {
   attributes: { [key: string]: unknown };
+  last_changed: string;
 };
 
 export type HassEntities = { [entity_id: string]: HassEntity };

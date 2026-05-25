@@ -11,5 +11,6 @@ export interface DeviceRegistryEntry extends RegistryEntry {
   model_id: string | null;
   name: string | null;
   manufacturer: string | null;
+  serial_number: string | null;
   area_id?: string;
 }

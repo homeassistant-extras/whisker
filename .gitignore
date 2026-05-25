@@ -10,6 +10,7 @@
 !*.ts
 !*.cjs
 !.prettierrc
+!eslint.config.mjs
 !.nycrc
 !.browserslistrc
 !.node-version

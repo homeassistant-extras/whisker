@@ -9,8 +9,7 @@ import type { StatesUpdates } from '@/hass/ws/entities';
 import type { EntityState } from '@/types/entity';
 import type { HomeAssistant } from '@hass/types';
 import { ResubscribeScheduler } from './resubscribe-scheduler';
-import type { Listener } from './states-event-handler';
-import { StatesEventHandler } from './states-event-handler';
+import { StatesEventHandler, type Listener } from './states-event-handler';
 
 type Connection = HomeAssistant['connection'];
 
@@ -90,7 +89,7 @@ export class EntitySubscriptionManager {
     }
 
     const version = ++this._resubscribeVersion;
-    this._hass.connection
+    void this._hass.connection
       .subscribeMessage((ev: StatesUpdates) => this._handleEvent(ev), {
         type: 'subscribe_entities',
         entity_ids: entityIds,

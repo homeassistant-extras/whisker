@@ -23,18 +23,6 @@ export const styles = css`
     min-width: 0;
   }
 
-  .card-footer {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    gap: 8px 16px;
-    padding: 12px 20px 14px;
-    border-top: 1px solid var(--divider-color);
-    font-size: 0.75rem;
-    color: var(--secondary-text-color);
-  }
-
   .status-panel-row {
     position: relative;
     z-index: 2;
@@ -67,8 +55,24 @@ export const styles = css`
     vertical-align: top;
   }
 
-  /** While status_code is a running cycle (ccp / ec / cst); cycling is on :host */
-  :host([cycling]) .robot-image-stack img {
+  /**
+   * :host(:has()) only sees light-DOM descendants, not shadow content.
+   * ha-card:has() matches within this shadow tree; the custom property
+   * inherits into nested component shadows (e.g. status-panel vacuum spin).
+   */
+  ha-card {
+    --whisker-cycling-play-state: paused;
+  }
+
+  /** While status_code is a running cycle (ccp / ec / cst) */
+  ha-card:has(whisker-litter-status[cycling]) {
+    --whisker-cycling-play-state: running;
+    box-shadow:
+      var(--ha-card-box-shadow, none),
+      inset 0 0 0 1px color-mix(in srgb, var(--primary-color) 35%, transparent);
+  }
+
+  ha-card:has(whisker-litter-status[cycling]) .robot-image-stack img {
     animation: whisker-cycle-glow 2.4s ease-in-out infinite;
     will-change: filter, transform;
   }
@@ -90,7 +94,11 @@ export const styles = css`
   }
 
   @media (prefers-reduced-motion: reduce) {
-    :host([cycling]) .robot-image-stack img {
+    ha-card:has(whisker-litter-status[cycling]) {
+      --whisker-cycling-play-state: paused;
+    }
+
+    ha-card:has(whisker-litter-status[cycling]) .robot-image-stack img {
       animation: none;
       filter: drop-shadow(
         0 0 8px color-mix(in srgb, var(--primary-color) 35%, transparent)
@@ -98,11 +106,5 @@ export const styles = css`
       transform: none;
       will-change: auto;
     }
-  }
-
-  :host([cycling]) ha-card {
-    box-shadow:
-      var(--ha-card-box-shadow, none),
-      inset 0 0 0 1px color-mix(in srgb, var(--primary-color) 35%, transparent);
   }
 `;

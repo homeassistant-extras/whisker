@@ -1,5 +1,4 @@
 import type { EntityRegistryDisplayEntry } from '@/hass/data/entity_registry';
-import { getState } from '@delegates/retrievers/state';
 import type { DutyReport } from '@/types/types';
 import type { HomeAssistant } from '@hass/types';
 
@@ -15,16 +14,12 @@ const entityIdKeyToProperty = {
   brightness_level: 'brightness_level',
   cycle_delay: 'cycle_delay',
   panel_lockout: 'panel_lockout',
-} as const;
-
-const stateKeyToProperty = {
+  total_cycles: 'total_cycles',
   last_seen: 'last_seen',
   status_code: 'status',
-  total_cycles: 'total_cycles',
 } as const;
 
 type EntityIdTranslationKey = keyof typeof entityIdKeyToProperty;
-type StateTranslationKey = keyof typeof stateKeyToProperty;
 
 /**
  * Fills {@link DutyReport} fields from entity translation keys.
@@ -38,15 +33,6 @@ export const mapEntitiesByTranslationKey = (
   const key = entity.translation_key;
   if (!key) {
     return false;
-  }
-
-  if (key in stateKeyToProperty) {
-    const prop = stateKeyToProperty[key as StateTranslationKey];
-    const st = getState(hass, entity.entity_id);
-    if (st) {
-      report[prop] = st;
-    }
-    return true;
   }
 
   if (key in entityIdKeyToProperty) {

@@ -12,6 +12,8 @@ export interface EntityState {
   a: { [key: string]: any };
   /** context */
   c: Context | string;
+  /** last_changed; if set, also applies to lu */
+  lc: number;
 }
 
 interface EntityStateRemove {

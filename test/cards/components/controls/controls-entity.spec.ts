@@ -3,7 +3,6 @@ import type { HomeAssistant } from '@hass/types';
 import { fixture } from '@open-wc/testing-helpers';
 import { expect } from 'chai';
 import { html } from 'lit';
-import { stub } from 'sinon';
 
 describe('controls-entity.ts (WhiskerControlsEntity)', () => {
   const hass = {
@@ -11,16 +10,6 @@ describe('controls-entity.ts (WhiskerControlsEntity)', () => {
       subscribeMessage: () => Promise.resolve(() => {}),
     },
   } as unknown as HomeAssistant;
-
-  beforeEach(() => {
-    globalThis.loadCardHelpers = stub().resolves({
-      createRowElement: stub().callsFake(() => document.createElement('div')),
-    });
-  });
-
-  afterEach(() => {
-    Reflect.deleteProperty(globalThis, 'loadCardHelpers');
-  });
 
   it('renders nothing when no control entity ids are set', async () => {
     const el = await fixture<WhiskerControlsEntity>(
@@ -54,9 +43,7 @@ describe('controls-entity.ts (WhiskerControlsEntity)', () => {
       'All controls',
     );
 
-    const rows = el.shadowRoot?.querySelectorAll(
-      'whisker-controls-entity-row',
-    );
+    const rows = el.shadowRoot?.querySelectorAll('whisker-controls-entity-row');
     expect(rows?.length).to.equal(5);
     expect(rows?.item(0).entity).to.equal('select.globe');
     expect(rows?.item(1).entity).to.equal('number.globe_b');

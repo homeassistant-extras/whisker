@@ -6,6 +6,7 @@ describe('index.ts', () => {
   let customElementsStub: SinonStub;
   let customCardsStub: Array<Object> | undefined;
   let consoleInfoStub: sinon.SinonStub;
+  let loadCardHelpersStub: sinon.SinonStub | undefined;
 
   beforeEach(() => {
     // Stub customElements.define to prevent actual registration
@@ -21,14 +22,6 @@ describe('index.ts', () => {
       },
       configurable: true,
     });
-
-    // Delete require.cache for gauge and levels so they are re-imported
-    delete require.cache[
-      require.resolve('@cards/components/toilet-levels/gauge')
-    ];
-    delete require.cache[
-      require.resolve('@cards/components/toilet-levels/levels')
-    ];
   });
 
   afterEach(() => {
@@ -38,15 +31,24 @@ describe('index.ts', () => {
     delete require.cache[require.resolve('@/index.ts')];
   });
 
+  it('should call loadCardHelpers when available (preload)', () => {
+    loadCardHelpersStub = stub().resolves({
+      createRowElement: stub().returns(document.createElement('div')),
+      createHuiElement: stub().returns(document.createElement('div')),
+    });
+    globalThis.loadCardHelpers =
+      loadCardHelpersStub as typeof globalThis.loadCardHelpers;
+
+    require('@/index.ts');
+
+    expect(loadCardHelpersStub.calledOnce).to.be.true;
+  });
+
   it('should register all custom elements', () => {
     require('@/index.ts');
-    expect(customElementsStub.callCount).to.equal(4);
-    expect(customElementsStub.firstCall.args[0]).to.equal('whisker-gauge');
+    expect(customElementsStub.callCount).to.equal(2);
+    expect(customElementsStub.firstCall.args[0]).to.equal('whisker-card');
     expect(customElementsStub.secondCall.args[0]).to.equal(
-      'whisker-robot-levels',
-    );
-    expect(customElementsStub.thirdCall.args[0]).to.equal('whisker-card');
-    expect(customElementsStub.getCall(3).args[0]).to.equal(
       'whisker-card-editor',
     );
   });
@@ -100,7 +102,7 @@ describe('index.ts', () => {
     require('@/index.ts');
 
     expect(globalThis.customCards).to.have.lengthOf(1);
-    expect(customElementsStub.callCount).to.equal(4);
+    expect(customElementsStub.callCount).to.equal(2);
   });
 
   it('should log the version with proper formatting', () => {

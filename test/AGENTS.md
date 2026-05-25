@@ -3,9 +3,10 @@
 This is a Yarn project. Use `yarn`, not `npm`.
 
 ```bash
-yarn test            # full suite
-yarn test:coverage   # with NYC coverage
-yarn test:watch      # watch mode
+yarn pass           # format + typecheck + lint + test (run before shipping)
+yarn test           # full suite
+yarn test:coverage  # with NYC coverage
+yarn test:watch     # watch mode
 ```
 
 ## Single Test Execution
@@ -15,6 +16,12 @@ To run a specific test file, prefer the repo's Mocha setup and test TypeScript c
 ```bash
 TS_NODE_PROJECT='./tsconfig.test.json' npx mocha test/path/to/specific.spec.ts
 ```
+
+## Asset module stub
+
+`.mocharc.json` requires `test/helpers/card-assets-stub.cjs` before ts-node. It intercepts imports of `src/cards/robot/assets.ts` so `import.meta.url` never runs under the CommonJS test tsconfig. Robot image tests assert against the stub's `resolveRobotImage` return value instead of bundled AVIF URLs.
+
+When changing `assets.ts` or adding model/color variants, update `test/cards/robot/detect-model.spec.ts`, `test/cards/robot/card.spec.ts`, and the stub if its contract changes.
 
 ## `yarn test` failing with `ERR_MODULE_NOT_FOUND`
 

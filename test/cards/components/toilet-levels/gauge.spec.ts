@@ -15,12 +15,14 @@ describe('gauge.ts', () => {
     const row = new WhiskerGauge();
     row.kind = 'litter';
     row.config = { device_id: 'dev' };
-    row['entity'] = 'sensor.litter';
-    row['state'] = {
+    row['hass'] = {} as never;
+    const state = {
       entity_id: 'sensor.litter',
       state: '42',
       attributes: {},
     };
+    row['entity'] = 'sensor.litter';
+    row['state'] = state;
 
     const tpl = row.render();
     const el = await fixture(tpl as TemplateResult);
@@ -36,7 +38,11 @@ describe('gauge.ts', () => {
     const tplWithPct = row.render();
     const withPct = await fixture(tplWithPct as TemplateResult);
     expect(withPct.querySelector('.label-row')).to.exist;
-    expect(withPct.querySelector('.pct')?.textContent?.trim()).to.equal('42%');
+    const stateDisplayEl = withPct.querySelector('.pct state-display');
+    expect(stateDisplayEl).to.exist;
+    expect(
+      (stateDisplayEl as unknown as { stateObj: unknown }).stateObj,
+    ).to.equal(state);
   });
 
   it('should render waste gauge with variant classes from entity state', async () => {

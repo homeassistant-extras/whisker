@@ -84,10 +84,12 @@ export class WhiskerCard extends LitElement {
    * @param {HomeAssistant} hass - The Home Assistant instance
    */
   static getStubConfig(hass: HomeAssistant): Config {
-    const bot = Object.values(hass.devices).find((d) =>
-      d.identifiers?.some(
-        ([domain]: [string, string]) => domain === 'litterrobot',
-      ),
+    const bot = Object.values(hass.devices).find(
+      (d) =>
+        d.identifiers?.some(
+          ([domain]: [string, string]) => domain === 'litterrobot',
+        ) &&
+        (d.model?.includes('Litter-Robot') || d.model?.includes('Robot')),
     );
 
     return {

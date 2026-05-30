@@ -9,6 +9,24 @@ import { state } from 'lit/decorators.js';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- mixin constructor
 export type Constructor<T = object> = new (...args: any[]) => T;
 
+export type EntityStates = Record<string, EntityState | undefined>;
+
+/** Normalizes {@link SubscribeEntityStateMixin} `entity` to a list of entity ids. */
+export const entityIds = (entity?: string | string[]): string[] => {
+  if (!entity) {
+    return [];
+  }
+  return (Array.isArray(entity) ? entity : [entity]).filter(Boolean);
+};
+
+/** When `entity` is a single id, returns that id; otherwise undefined. */
+export const singleEntityId = (
+  entity?: string | string[],
+): string | undefined => {
+  const ids = entityIds(entity);
+  return ids.length === 1 ? ids[0] : undefined;
+};
+
 export interface SubscribeEntityStateElement {
   /**
    * The Home Assistant instance.
@@ -24,8 +42,8 @@ export interface SubscribeEntityStateElement {
 /**
  * Mixin that subscribes to entity state changes via subscribe_entities.
  * Only notifies on meaningful changes (state/attributes), not context/last_updated.
- * Set entityId to specify which entity to watch.
- * Read _subscribedEntityState for the current state (undefined when not subscribed).
+ * Set `entity` to one or more entity ids; read `states` keyed by entity id.
+ * Single-entity components can use `entityId()` and `entityState()` with no arguments.
  */
 export const SubscribeEntityStateMixin = <
   T extends Constructor<LitElement & SubscribeEntityStateElement>,
@@ -34,26 +52,44 @@ export const SubscribeEntityStateMixin = <
 ) => {
   class SubscribeEntityStateClass extends superClass {
     /**
-     * The unsubscribe function for the subscription.
+     * Unsubscribe callbacks for active entity subscriptions.
      */
-    private _unsubscribe?: SubscriptionUnsubscribe;
+    private _unsubscribes: SubscriptionUnsubscribe[] = [];
 
     /**
-     * The entity_id of the subscribed entity.
+     * Serialized entity id list for the active subscription (skips redundant resubscribe).
      */
-    private _subscribedEntityId?: string;
+    private _subscribedKey?: string;
 
     /**
-     * The entity_id to subscribe to. Set this property to specify which entity to watch.
+     * The entity_id(s) to subscribe to. Set this property to specify which entity to watch.
      */
-    protected entity?: string;
+    protected entity?: string | string[];
 
     /**
-     * The current state of the subscribed entity.
+     * The current state of each subscribed entity, keyed by entity_id.
      * Updates cause re-render of the component.
      */
     @state()
-    protected state: EntityState | undefined;
+    protected states: EntityStates | undefined;
+
+    /** Returns the subscribed entity id when {@link entity} is a single id. */
+    protected entityId(): string | undefined {
+      return singleEntityId(this.entity);
+    }
+
+    /**
+     * Returns subscribed state for `entityId`, or the sole subscription when omitted.
+     */
+    protected entityState(entityId: string): EntityState | undefined;
+    protected entityState(): EntityState | undefined;
+    protected entityState(entityId?: string): EntityState | undefined {
+      const id = entityId ?? singleEntityId(this.entity);
+      if (!id) {
+        return undefined;
+      }
+      return this.states?.[id];
+    }
 
     /**
      * Setup the entity subscription.
@@ -75,39 +111,43 @@ export const SubscribeEntityStateMixin = <
      * Teardown the entity subscription.
      */
     private _teardownEntitySubscription(): void {
-      if (!this._unsubscribe) {
-        return;
+      for (const unsubscribe of this._unsubscribes) {
+        unsubscribe();
       }
-
-      this._unsubscribe();
-      this._unsubscribe = undefined;
-      this._subscribedEntityId = undefined;
+      this._unsubscribes = [];
+      this._subscribedKey = undefined;
     }
 
     /**
      * Setup the entity subscription.
      */
     private _setupEntitySubscription(): void {
-      const id = this.entity;
+      const ids = entityIds(this.entity);
       const hass = this.hass;
 
-      if (!id || !hass) {
+      if (ids.length === 0 || !hass) {
         this._teardownEntitySubscription();
-        this.state = undefined;
+        this.states = undefined;
         return;
       }
 
-      if (this._subscribedEntityId === id) {
+      const key = ids.join('\0');
+      if (this._subscribedKey === key) {
         return;
       }
 
       this._teardownEntitySubscription();
-      this._subscribedEntityId = id;
+      this._subscribedKey = key;
 
       const manager = getEntitySubscriptionManager(hass);
-      this._unsubscribe = manager.subscribe(id, (state) => {
-        this.state = state;
-      });
+      const map: EntityStates = {};
+
+      this._unsubscribes = ids.map((id) =>
+        manager.subscribe(id, (entityState) => {
+          map[id] = entityState;
+          this.states = { ...map };
+        }),
+      );
     }
   }
 

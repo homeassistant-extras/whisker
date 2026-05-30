@@ -49,7 +49,7 @@ describe('map-entities.ts', () => {
         translation_key: 'waste_drawer',
       };
 
-      expect(mapEntitiesByTranslationKey(hass, entity, report)).to.be.true;
+      expect(mapEntitiesByTranslationKey(entity, report)).to.be.true;
       expect(report.waste_drawer).to.equal('sensor.lr_waste');
     });
 
@@ -62,7 +62,7 @@ describe('map-entities.ts', () => {
         translation_key: 'litter_level',
       };
 
-      expect(mapEntitiesByTranslationKey(hass, entity, report)).to.be.true;
+      expect(mapEntitiesByTranslationKey(entity, report)).to.be.true;
       expect(report.litter_level).to.equal('sensor.lr_litter');
     });
 
@@ -75,7 +75,7 @@ describe('map-entities.ts', () => {
         translation_key: 'unknown_key',
       };
 
-      expect(mapEntitiesByTranslationKey(hass, entity, report)).to.be.false;
+      expect(mapEntitiesByTranslationKey(entity, report)).to.be.false;
       expect(report.waste_drawer).to.be.null;
       expect(report.litter_level).to.be.null;
     });
@@ -89,7 +89,7 @@ describe('map-entities.ts', () => {
         translation_key: 'status_code',
       };
 
-      expect(mapEntitiesByTranslationKey(hass, entity, report)).to.be.true;
+      expect(mapEntitiesByTranslationKey(entity, report)).to.be.true;
       expect(report.status).to.equal('sensor.lr_status');
     });
 
@@ -102,7 +102,7 @@ describe('map-entities.ts', () => {
         translation_key: 'reset_waste_drawer',
       };
 
-      expect(mapEntitiesByTranslationKey(hass, entity, report)).to.be.true;
+      expect(mapEntitiesByTranslationKey(entity, report)).to.be.true;
       expect(report.reset_waste_drawer).to.equal(
         'button.lr_reset_waste_drawer',
       );
@@ -117,7 +117,7 @@ describe('map-entities.ts', () => {
         translation_key: 'reset',
       };
 
-      expect(mapEntitiesByTranslationKey(hass, entity, report)).to.be.true;
+      expect(mapEntitiesByTranslationKey(entity, report)).to.be.true;
       expect(report.reset).to.equal('button.lr_reset');
     });
 
@@ -130,7 +130,7 @@ describe('map-entities.ts', () => {
         translation_key: 'litter_box',
       };
 
-      expect(mapEntitiesByTranslationKey(hass, entity, report)).to.be.true;
+      expect(mapEntitiesByTranslationKey(entity, report)).to.be.true;
       expect(report.litter_box).to.equal('vacuum.r2_poop2_litter_box');
     });
 
@@ -143,7 +143,7 @@ describe('map-entities.ts', () => {
         translation_key: undefined,
       };
 
-      expect(mapEntitiesByTranslationKey(hass, entity, report)).to.be.false;
+      expect(mapEntitiesByTranslationKey(entity, report)).to.be.false;
     });
 
     it('should map pet_weight to entity id', () => {
@@ -155,7 +155,7 @@ describe('map-entities.ts', () => {
         translation_key: 'pet_weight',
       };
 
-      expect(mapEntitiesByTranslationKey(hass, entity, report)).to.be.true;
+      expect(mapEntitiesByTranslationKey(entity, report)).to.be.true;
       expect(report.pet_weight).to.equal('sensor.lr_pet_weight');
     });
 
@@ -173,7 +173,7 @@ describe('map-entities.ts', () => {
         translation_key: 'total_cycles',
       };
 
-      expect(mapEntitiesByTranslationKey(hass, entity, report)).to.be.true;
+      expect(mapEntitiesByTranslationKey(entity, report)).to.be.true;
       expect(report.total_cycles).to.equal('sensor.lr_total_cycles');
     });
 
@@ -186,7 +186,7 @@ describe('map-entities.ts', () => {
         translation_key: 'last_seen',
       };
 
-      expect(mapEntitiesByTranslationKey(hass, entity, report)).to.be.true;
+      expect(mapEntitiesByTranslationKey(entity, report)).to.be.true;
       expect(report.last_seen).to.equal('sensor.lr_last_seen');
     });
 
@@ -207,7 +207,7 @@ describe('map-entities.ts', () => {
           labels: [],
           translation_key,
         };
-        expect(mapEntitiesByTranslationKey(hass, entity, report)).to.be.true;
+        expect(mapEntitiesByTranslationKey(entity, report)).to.be.true;
         expect(report[translation_key]).to.equal(entity_id);
       }
     });

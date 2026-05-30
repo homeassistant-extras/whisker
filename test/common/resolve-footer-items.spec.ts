@@ -12,6 +12,8 @@ describe('resolve-footer-items.ts', () => {
     status: 'sensor.status',
     last_seen: 'sensor.last_seen',
     total_cycles: 'sensor.total_cycles',
+    hopper_status: 'sensor.hopper_status',
+    hopper_connected: 'binary_sensor.hopper_connected',
   };
 
   it('uses DEFAULT_FOOTER when config footer is omitted', () => {
@@ -52,6 +54,23 @@ describe('resolve-footer-items.ts', () => {
       { key: 'pet_weight', entity: 'sensor.weight' },
       { key: 'total_cycles', entity: 'sensor.total_cycles' },
     ]);
+  });
+
+  it('resolves hopper footer slots and omits them when absent', () => {
+    const slots = resolveFooterSlots(
+      { device_id: 'd1', footer: ['hopper_status', 'hopper_connected'] },
+      duty,
+    );
+    expect(slots).to.deep.equal([
+      { key: 'hopper_status', entity: 'sensor.hopper_status' },
+      { key: 'hopper_connected', entity: 'binary_sensor.hopper_connected' },
+    ]);
+
+    const noHopper = resolveFooterSlots(
+      { device_id: 'd1', footer: ['hopper_status', 'hopper_connected'] },
+      { ...duty, hopper_status: undefined, hopper_connected: undefined },
+    );
+    expect(noHopper).to.have.length(0);
   });
 
   it('omits unavailable footer slots', () => {

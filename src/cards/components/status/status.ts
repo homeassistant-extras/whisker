@@ -31,27 +31,29 @@ export class WhiskerLitterStatus extends SubscribeEntityStateMixin(LitElement) {
     _changedProperties: PropertyValues<this>,
   ): void {
     super.willUpdate(_changedProperties);
-    this.cycling = isLitterRobotCycling(this.state?.state);
+    this.cycling = isLitterRobotCycling(this.entityState()?.state);
   }
 
   private _onIconClick(): void {
-    openEntityMoreInfo(this, this.entity);
+    openEntityMoreInfo(this, this.entityId());
   }
 
   override render(): TemplateResult | typeof nothing {
-    if (!this.state || !this.hass) {
+    const entityId = this.entityId();
+    const entityState = this.entityState();
+    if (!entityState || !entityId) {
       return nothing;
     }
 
-    const { icon, color } = litterRobotStatusPresentation(this.state.state);
-    const tooltip = computeTooltip(this.hass, {
-      entity: this.entity,
+    const { icon, color } = litterRobotStatusPresentation(entityState.state);
+    const tooltip = computeTooltip(this.hass!, {
+      entity: entityId,
       tap_action: { action: 'more-info' },
       hold_action: { action: 'none' },
     });
 
     return html`
-      ${stateLabel(this.hass, this.entity)}
+      ${stateLabel(this.hass, entityId)}
       <span
         class="status-icon-wrap"
         role="button"

@@ -47,3 +47,13 @@ footer:
   - pet_weight
   - last_seen
 ```
+
+## LitterHopper footer (LR4)
+
+```yaml
+type: custom:whisker-card
+device_id: YOUR_DEVICE_ID
+footer:
+  - hopper_status
+  - hopper_connected
+```

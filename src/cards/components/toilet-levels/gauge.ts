@@ -1,6 +1,7 @@
 import { hasFeature } from '@/config/feature';
 import { SubscribeEntityStateMixin } from '@cards/mixins/subscribe-entity-state-mixin';
 import { openEntityMoreInfo } from '@common/open-entity-more-info';
+import { stateDisplay } from '@html/state-display';
 import type { Config } from '@type/config';
 import { html, LitElement, nothing, type TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
@@ -18,18 +19,19 @@ export class WhiskerGauge extends SubscribeEntityStateMixin(LitElement) {
   kind: 'litter' | 'waste' = 'litter';
 
   private _openMoreInfo(): void {
-    openEntityMoreInfo(this, this.entity);
+    openEntityMoreInfo(this, this.entityId());
   }
 
   override render(): TemplateResult | typeof nothing {
-    if (!this.entity) {
+    const entityState = this.entityState();
+    if (!entityState) {
       return nothing;
     }
 
-    const raw = numericLevelFromEntityState(this.state);
+    const value = stateDisplay(this.hass!, entityState);
+    const raw = numericLevelFromEntityState(entityState);
     const pct = Math.min(100, raw);
     const variant = this.kind === 'waste' ? wasteSeverityClass(raw) : '';
-    const tip = this.kind === 'litter' ? `Litter: ${pct}%` : `Waste: ${pct}%`;
     const barClass =
       this.kind === 'litter' ? 'bar litter' : `bar waste ${variant}`.trim();
     const label = this.kind === 'litter' ? 'Litter' : 'Waste';
@@ -39,11 +41,11 @@ export class WhiskerGauge extends SubscribeEntityStateMixin(LitElement) {
         ${hasFeature(this.config, 'percentage')
           ? html`<div class="label-row">
               <span class="label">${label}</span>
-              <span class="pct">${pct}%</span>
+              <span class="pct">${value}</span>
             </div>`
           : html`<span class="label">${label}</span>`}
         <div class=${barClass} style=${styleMap({ '--fill': `${pct}%` })}></div>
-        <span class="tooltip">${tip}</span>
+        <span class="tooltip">${label}: ${value}</span>
       </div>
     `;
   }

@@ -23,6 +23,12 @@ export const styles = css`
     min-width: 0;
   }
 
+  .card-title-status {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
   .status-panel-row {
     position: relative;
     z-index: 2;

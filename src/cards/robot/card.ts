@@ -1,6 +1,7 @@
 import '@/cards/components/chonk/chonk';
 import '@/cards/components/controls/controls-entity';
 import '@/cards/components/footer/footer';
+import '@/cards/components/hopper/hopper';
 import '@/cards/components/status-panel/status-panel';
 import '@/cards/components/status/status';
 import { scoopDroppings } from '@/delegates/utils/scoop-droppings';
@@ -84,10 +85,11 @@ export class WhiskerCard extends LitElement {
    * @param {HomeAssistant} hass - The Home Assistant instance
    */
   static getStubConfig(hass: HomeAssistant): Config {
-    const bot = Object.values(hass.devices).find((d) =>
-      d.identifiers?.some(
-        ([domain]: [string, string]) => domain === 'litterrobot',
-      ),
+    const bot = Object.values(hass.devices).find(
+      (d) =>
+        d.identifiers?.some(
+          ([domain]: [string, string]) => domain === 'litterrobot',
+        ) && !!d.model?.includes('Litter-Robot'),
     );
 
     return {
@@ -120,14 +122,28 @@ export class WhiskerCard extends LitElement {
       this._duty.serial_number,
       this._config?.color,
     );
+    const hasHopper = !!(
+      this._duty.hopper_status || this._duty.hopper_connected
+    );
+
     return html`
       <ha-card>
         <div class="card-title-row">
           <h2 class="card-title">${title}</h2>
-          <whisker-litter-status
-            .hass=${this._hass}
-            .entity=${this._duty.status}
-          ></whisker-litter-status>
+          <div class="card-title-status">
+            <whisker-litter-status
+              .hass=${this._hass}
+              .entity=${this._duty.status}
+            ></whisker-litter-status>
+            ${hasHopper
+              ? html`<whisker-hopper
+                  .hass=${this._hass}
+                  .config=${this._config}
+                  .statusEntity=${this._duty.hopper_status}
+                  .connectedEntity=${this._duty.hopper_connected}
+                ></whisker-hopper>`
+              : nothing}
+          </div>
         </div>
         <div class="robot-image-stack">
           <div class="status-panel-row">

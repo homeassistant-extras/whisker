@@ -12,10 +12,15 @@ import { computeObjectId } from './compute_object_id';
 export const computeStateNameFromEntityAttributes = (
   entityId: string,
   attributes: Record<string, unknown>,
-): string =>
-  attributes.friendly_name === undefined
-    ? computeObjectId(entityId).replaceAll('_', ' ')
-    : String(attributes.friendly_name ?? '');
+): string => {
+  if (attributes.friendly_name === undefined) {
+    return computeObjectId(entityId).replaceAll('_', ' ');
+  }
+
+  return typeof attributes.friendly_name === 'string'
+    ? attributes.friendly_name
+    : '';
+};
 
 export const computeStateName = (stateObj: HassEntity): string =>
   computeStateNameFromEntityAttributes(stateObj.entity_id, stateObj.attributes);

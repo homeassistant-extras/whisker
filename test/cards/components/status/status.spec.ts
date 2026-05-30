@@ -69,10 +69,12 @@ describe('status.ts (WhiskerLitterStatus)', () => {
       ></whisker-litter-status>`,
     );
 
-    el['state'] = {
-      entity_id: 'sensor.litter_robot_status',
-      state: 'rdy',
-      attributes: {},
+    el['states'] = {
+      'sensor.litter_robot_status': {
+        entity_id: 'sensor.litter_robot_status',
+        state: 'rdy',
+        attributes: {},
+      },
     };
     await el.updateComplete;
 
@@ -100,10 +102,12 @@ describe('status.ts (WhiskerLitterStatus)', () => {
       ></whisker-litter-status>`,
     );
 
-    el['state'] = {
-      entity_id: 'sensor.litter_robot_status',
-      state: 'rdy',
-      attributes: {},
+    el['states'] = {
+      'sensor.litter_robot_status': {
+        entity_id: 'sensor.litter_robot_status',
+        state: 'rdy',
+        attributes: {},
+      },
     };
     await el.updateComplete;
 
@@ -137,10 +141,12 @@ describe('status.ts (WhiskerLitterStatus)', () => {
       ></whisker-litter-status>`,
     );
 
-    el['state'] = {
-      entity_id: 'sensor.litter_robot_status',
-      state: 'ccp',
-      attributes: {},
+    el['states'] = {
+      'sensor.litter_robot_status': {
+        entity_id: 'sensor.litter_robot_status',
+        state: 'ccp',
+        attributes: {},
+      },
     };
     await el.updateComplete;
 
@@ -155,10 +161,12 @@ describe('status.ts (WhiskerLitterStatus)', () => {
       ></whisker-litter-status>`,
     );
 
-    el['state'] = {
-      entity_id: 'sensor.litter_robot_status',
-      state: 'rdy',
-      attributes: {},
+    el['states'] = {
+      'sensor.litter_robot_status': {
+        entity_id: 'sensor.litter_robot_status',
+        state: 'rdy',
+        attributes: {},
+      },
     };
     await el.updateComplete;
 

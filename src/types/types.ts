@@ -55,4 +55,10 @@ export interface DutyReport {
 
   /** Panel lockout switch (`translation_key` panel_lockout), when enabled */
   panel_lockout?: string | null;
+
+  /** Hopper status sensor entity id (`translation_key` hopper_status), when a LitterHopper is attached */
+  hopper_status?: string | null;
+
+  /** Hopper connected binary sensor entity id (`translation_key` hopper_connected), when a LitterHopper is attached */
+  hopper_connected?: string | null;
 }

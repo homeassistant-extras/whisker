@@ -19,7 +19,7 @@ _Litter-Robot status and controls in a single Lovelace card_
 
 ## Overview
 
-Whisker Card is a custom Lovelace card for Home Assistant that shows your **Litter-Robot** at a glance, using the official **[Litter-Robot integration](https://www.home-assistant.io/integrations/litterrobot/)** (`litterrobot`).
+Whisker Card is a custom Lovelace card for Home Assistant that shows your **Litter-Robot** at a glance, using the official **[Litter-Robot integration](https://www.home-assistant.io/integrations/litterrobot/)** (`litterrobot`). On **Litter-Robot 4** with a **LitterHopper** attached, the card can also show hopper connection and refill status.
 
 ## Documentation
 
@@ -85,3 +85,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file.
 - [x] **Gauge percentages** — optional percentage labels on litter/waste gauges - thanks reddit!
 - [x] **Customizable footer** — choose footer metrics and order - thanks @alicia86
 - [x] **Model-aware artwork** — auto-detects Litter-Robot model - thanks @adude007
+- [x] **Litter Hopper status** — hopper badge & footer items on LR4 when a LitterHopper is attached - thanks @chrispgriffin & @adude007

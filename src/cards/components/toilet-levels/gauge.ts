@@ -19,16 +19,17 @@ export class WhiskerGauge extends SubscribeEntityStateMixin(LitElement) {
   kind: 'litter' | 'waste' = 'litter';
 
   private _openMoreInfo(): void {
-    openEntityMoreInfo(this, this.entity);
+    openEntityMoreInfo(this, this.entityId());
   }
 
   override render(): TemplateResult | typeof nothing {
-    if (!this.state || !this.hass) {
+    const entityState = this.entityState();
+    if (!entityState) {
       return nothing;
     }
 
-    const value = stateDisplay(this.hass, this.state);
-    const raw = numericLevelFromEntityState(this.state);
+    const value = stateDisplay(this.hass!, entityState);
+    const raw = numericLevelFromEntityState(entityState);
     const pct = Math.min(100, raw);
     const variant = this.kind === 'waste' ? wasteSeverityClass(raw) : '';
     const barClass =

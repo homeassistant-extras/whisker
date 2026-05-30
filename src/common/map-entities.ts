@@ -1,6 +1,5 @@
 import type { EntityRegistryDisplayEntry } from '@/hass/data/entity_registry';
 import type { DutyReport } from '@/types/types';
-import type { HomeAssistant } from '@hass/types';
 
 const entityIdKeyToProperty = {
   waste_drawer: 'waste_drawer',
@@ -17,6 +16,8 @@ const entityIdKeyToProperty = {
   total_cycles: 'total_cycles',
   last_seen: 'last_seen',
   status_code: 'status',
+  hopper_status: 'hopper_status',
+  hopper_connected: 'hopper_connected',
 } as const;
 
 type EntityIdTranslationKey = keyof typeof entityIdKeyToProperty;
@@ -26,7 +27,6 @@ type EntityIdTranslationKey = keyof typeof entityIdKeyToProperty;
  * @returns true when this entity was handled (matched a known key).
  */
 export const mapEntitiesByTranslationKey = (
-  hass: HomeAssistant,
   entity: EntityRegistryDisplayEntry,
   report: Partial<DutyReport>,
 ): boolean => {

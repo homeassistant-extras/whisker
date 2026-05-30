@@ -1,6 +1,8 @@
-import { SubscribeEntityStateMixin } from '@cards/mixins/subscribe-entity-state-mixin';
+import {
+  SubscribeEntityStateMixin,
+  type EntityStates,
+} from '@cards/mixins/subscribe-entity-state-mixin';
 import type { HomeAssistant } from '@hass/types';
-import type { EntityState } from '@type/entity';
 import { expect } from 'chai';
 import { LitElement } from 'lit';
 import { stub, useFakeTimers } from 'sinon';
@@ -10,8 +12,8 @@ const RESUBSCRIBE_DEBOUNCE_MS = 50;
 type MixinTestElement = LitElement & {
   hass?: HomeAssistant;
   config?: { device_id: string };
-  entity?: string;
-  state?: EntityState;
+  entity?: string | string[];
+  states?: EntityStates;
 };
 
 describe('SubscribeEntityStateMixin', () => {
@@ -53,8 +55,8 @@ describe('SubscribeEntityStateMixin', () => {
     element.config = { device_id: 'test' };
   });
 
-  it('should have _subscribedEntityState undefined initially', () => {
-    expect(element.state).to.be.undefined;
+  it('should have states undefined initially', () => {
+    expect(element.states).to.be.undefined;
   });
 
   it('should subscribe when connected with entityId and hass set', async () => {
@@ -83,7 +85,6 @@ describe('SubscribeEntityStateMixin', () => {
       clock.tick(RESUBSCRIBE_DEBOUNCE_MS);
       await Promise.resolve();
 
-      // subscribe_entities sends initial state via ev.a; fire it
       expect(capturedCallback).to.not.be.null;
       capturedCallback!({
         a: {
@@ -98,12 +99,85 @@ describe('SubscribeEntityStateMixin', () => {
         c: {},
       });
 
-      expect(element.state).to.deep.equal({
+      expect(element.states?.['light.bedroom']).to.deep.equal({
         entity_id: 'light.bedroom',
         state: 'on',
         attributes: { friendly_name: 'Bedroom Light' },
         last_changed: '1970-01-01T00:00:00.000Z',
       });
+    } finally {
+      clock.restore();
+    }
+  });
+
+  it('should expose entityId and no-arg entityState for a single subscription', async () => {
+    const clock = useFakeTimers();
+    try {
+      const el = element as MixinTestElement & {
+        entityId(): string | undefined;
+        entityState(): { state: string } | undefined;
+        entityState(entityId: string): { state: string } | undefined;
+      };
+      el.hass = hass;
+      el.entity = 'light.bedroom';
+
+      el.connectedCallback();
+      clock.tick(RESUBSCRIBE_DEBOUNCE_MS);
+      await Promise.resolve();
+
+      capturedCallback!({
+        a: {
+          'light.bedroom': {
+            s: 'on',
+            a: {},
+            c: '',
+            lc: 0,
+            lu: 0,
+          },
+        },
+        c: {},
+      });
+
+      expect(el.entityId()).to.equal('light.bedroom');
+      expect(el.entityState()?.state).to.equal('on');
+      expect(el.entityState()).to.equal(el.entityState('light.bedroom'));
+    } finally {
+      clock.restore();
+    }
+  });
+
+  it('should track multiple entities in states', async () => {
+    const clock = useFakeTimers();
+    try {
+      element.hass = hass;
+      element.entity = ['light.bedroom', 'light.kitchen'];
+
+      element.connectedCallback();
+      clock.tick(RESUBSCRIBE_DEBOUNCE_MS);
+      await Promise.resolve();
+
+      capturedCallback!({
+        a: {
+          'light.bedroom': {
+            s: 'on',
+            a: {},
+            c: '',
+            lc: 0,
+            lu: 0,
+          },
+          'light.kitchen': {
+            s: 'off',
+            a: {},
+            c: '',
+            lc: 0,
+            lu: 0,
+          },
+        },
+        c: {},
+      });
+
+      expect(element.states?.['light.bedroom']?.state).to.equal('on');
+      expect(element.states?.['light.kitchen']?.state).to.equal('off');
     } finally {
       clock.restore();
     }

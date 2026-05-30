@@ -6,8 +6,23 @@ export type Selector = DeviceSelector | StringSelector | SelectSelector;
 
 export interface DeviceSelector {
   device: {
-    filter?: { integration?: string };
+    filter?: DeviceSelectorFilter | DeviceSelectorFilter[];
+    entity?: EntitySelectorFilter | EntitySelectorFilter[];
+    multiple?: boolean;
   } | null;
+}
+
+export interface DeviceSelectorFilter {
+  integration?: string;
+  manufacturer?: string;
+  model?: string;
+  model_id?: string;
+}
+
+export interface EntitySelectorFilter {
+  integration?: string;
+  domain?: string | string[];
+  device_class?: string | string[];
 }
 
 export interface SelectOption {

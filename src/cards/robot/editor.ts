@@ -14,6 +14,7 @@ const SCHEMA: HaFormSchema[] = [
     selector: {
       device: {
         filter: { integration: 'litterrobot' },
+        entity: { domain: 'vacuum' },
       },
     },
   },
@@ -48,6 +49,8 @@ const SCHEMA: HaFormSchema[] = [
           { value: 'status', label: 'Status' },
           { value: 'litter_level', label: 'Litter level' },
           { value: 'waste_drawer', label: 'Waste drawer' },
+          { value: 'hopper_status', label: 'Hopper status' },
+          { value: 'hopper_connected', label: 'Hopper connected' },
         ],
         multiple: true,
       },

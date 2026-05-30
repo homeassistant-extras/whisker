@@ -46,8 +46,8 @@ export class WhiskerCardFooterItem extends SubscribeEntityStateMixin(
    */
   protected override shouldUpdate(): boolean {
     return (
-      (this.entity !== undefined && this.state !== undefined) ||
-      (this.entity === undefined && this.item.entity !== undefined)
+      (this.entityId() !== undefined && this.entityState() !== undefined) ||
+      (this.entityId() === undefined && this.item.entity !== undefined)
     );
   }
 
@@ -67,7 +67,8 @@ export class WhiskerCardFooterItem extends SubscribeEntityStateMixin(
   }
 
   private _renderRelativeSlot(): TemplateResult | typeof nothing {
-    if (!this.state || !this.hass) {
+    const entityState = this.entityState();
+    if (!entityState) {
       return nothing;
     }
 
@@ -96,7 +97,7 @@ export class WhiskerCardFooterItem extends SubscribeEntityStateMixin(
           })}
           @click=${this._onRelativeClick}
         >
-          ${stateDisplay(this.hass, this.state, content)}
+          ${stateDisplay(this.hass, entityState, content)}
         </div>
       </div>
     `;

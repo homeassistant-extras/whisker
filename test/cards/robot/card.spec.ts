@@ -39,6 +39,7 @@ describe('card.ts', () => {
         lr_found: {
           id: 'lr_found',
           name: 'Litter Robot',
+          model: 'Litter-Robot 4',
           identifiers: [['litterrobot', 'serial']] as [string, string][],
         },
       },
@@ -150,7 +151,31 @@ describe('card.ts', () => {
       expect(el.querySelectorAll('whisker-robot-levels')).to.have.length(1);
       expect(el.querySelector('whisker-status-panel')).to.not.be.null;
       expect(el.querySelector('whisker-chonk')).to.not.be.null;
+      expect(el.querySelector('whisker-hopper')).to.be.null;
       expect(el.querySelector('whisker-card-footer')).to.not.be.null;
+    });
+
+    it('should render hopper badge in the title row when hopper entities exist', async () => {
+      scoopStub.returns({
+        ...mockDuty,
+        hopper_status: 'sensor.lr_hopper_status',
+        hopper_connected: 'binary_sensor.lr_hopper_connected',
+      });
+      card.hass = mockHass;
+      const el = await fixture(card.render() as TemplateResult);
+      const titleStatus = el.querySelector('.card-title-status');
+      const hopper = titleStatus?.querySelector(
+        'whisker-hopper',
+      ) as HTMLElement & {
+        statusEntity?: string | null;
+        connectedEntity?: string | null;
+      };
+      expect(hopper).to.exist;
+      expect(hopper.statusEntity).to.equal('sensor.lr_hopper_status');
+      expect(hopper.connectedEntity).to.equal(
+        'binary_sensor.lr_hopper_connected',
+      );
+      expect(el.querySelector('.robot-image-stack whisker-hopper')).to.be.null;
     });
 
     it('should pass litter_box vacuum entity to the status panel', async () => {

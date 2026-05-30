@@ -10,7 +10,9 @@ export type FooterItem =
   | 'total_cycles'
   | 'litter_level'
   | 'waste_drawer'
-  | 'status';
+  | 'status'
+  | 'hopper_status'
+  | 'hopper_connected';
 
 /** Default footer when `footer` is omitted: cycle counts, status last changed, last seen. */
 export const DEFAULT_FOOTER: FooterItem[] = [

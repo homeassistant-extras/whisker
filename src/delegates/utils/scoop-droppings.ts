@@ -23,7 +23,7 @@ export const scoopDroppings = (
 
   Object.values(hass.entities).forEach((entity) => {
     if (entity.device_id !== config.device_id) return;
-    mapEntitiesByTranslationKey(hass, entity, litterRobotState);
+    mapEntitiesByTranslationKey(entity, litterRobotState);
   });
 
   return litterRobotState as DutyReport;

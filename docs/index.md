@@ -28,6 +28,7 @@ Replace `YOUR_DEVICE_ID` with the id from the device page in Home Assistant, or 
 - Quick actions (vacuum / reset / waste drawer when available)
 - Controls menu with native entity rows
 - Pet weight chip and litter / waste gauges
+- **LitterHopper status badge** on LR4 when a LitterHopper is attached (optional hopper footer items too)
 - Optional gauge percentages and customizable footer
 
 ## Next steps

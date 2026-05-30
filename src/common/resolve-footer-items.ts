@@ -18,6 +18,8 @@ const footerItemToProperty = {
   litter_level: 'litter_level',
   waste_drawer: 'waste_drawer',
   status: 'status',
+  hopper_status: 'hopper_status',
+  hopper_connected: 'hopper_connected',
 } as const satisfies Record<
   Exclude<FooterItem, 'status_changed'>,
   keyof DutyReport

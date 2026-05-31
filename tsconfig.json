@@ -1,6 +1,7 @@
 {
   "extends": "@homeassistant-extras/config/tsconfig.base.json",
   "compilerOptions": {
+    "experimentalDecorators": true,
     "paths": {
       "@/*": ["./src/*"],
       "@cards/*": ["./src/cards/*"],

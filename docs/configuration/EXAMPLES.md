@@ -34,6 +34,15 @@ features:
   - percentage
 ```
 
+## Hide pet weight chip (multi-cat)
+
+```yaml
+type: custom:whisker-card
+device_id: YOUR_DEVICE_ID
+features:
+  - hide_pet_weight
+```
+
 ## Custom footer
 
 Order matters:

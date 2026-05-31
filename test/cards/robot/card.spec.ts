@@ -156,6 +156,12 @@ describe('card.ts', () => {
       expect(el.querySelector('whisker-card-footer')).to.not.be.null;
     });
 
+    it('should not render pet weight chip when hide_pet_weight feature is set', async () => {
+      card.setConfig({ device_id: 'lr-1', features: ['hide_pet_weight'] });
+      const el = await fixture(card.render() as TemplateResult);
+      expect(el.querySelector('whisker-chonk')).to.be.null;
+    });
+
     it('should render hopper badge in the title row when hopper entities exist', async () => {
       scoopStub.returns({
         ...mockDuty,

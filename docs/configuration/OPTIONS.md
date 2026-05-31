@@ -1,12 +1,12 @@
 # Configuration options
 
-| Option      | Type     | Description                                                                         |
-| ----------- | -------- | ----------------------------------------------------------------------------------- |
-| `device_id` | string   | **Required.** Home Assistant device id for the Litter-Robot.                        |
-| `title`     | string   | Optional. Overrides the card heading; defaults to the device name.                  |
-| `color`     | string   | Optional. Robot artwork color: `white` (default) or `black`.                        |
-| `footer`    | string[] | Optional. Footer metrics in display order. See [footer items](#footer-items) below. |
-| `features`  | string[] | Optional. Feature flags. `percentage` — show fill % on litter and waste gauges.     |
+| Option      | Type     | Description                                                                                                                                                                             |
+| ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `device_id` | string   | **Required.** Home Assistant device id for the Litter-Robot.                                                                                                                            |
+| `title`     | string   | Optional. Overrides the card heading; defaults to the device name.                                                                                                                      |
+| `color`     | string   | Optional. Robot artwork color: `white` (default) or `black`.                                                                                                                            |
+| `footer`    | string[] | Optional. Footer metrics in display order. See [footer items](#footer-items) below.                                                                                                     |
+| `features`  | string[] | Optional. Feature flags. `percentage` — show fill % on litter and waste gauges; `hide_pet_weight` — hide the pet weight chip on the robot image. See [Feature flags](FEATURE-FLAGS.md). |
 
 ### Footer items
 

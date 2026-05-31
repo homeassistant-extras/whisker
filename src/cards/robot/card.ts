@@ -5,18 +5,20 @@ import '@/cards/components/hopper/hopper';
 import '@/cards/components/status-panel/status-panel';
 import '@/cards/components/status/status';
 import { scoopDroppings } from '@/delegates/utils/scoop-droppings';
-import { resolvePoatCardHelpers } from '@/helpers/card-helpers';
-import type { CardHelpers } from '@/types/lovelace';
 import type { DutyReport } from '@/types/types';
 import { styles } from '@cards/robot/styles';
-import type { HomeAssistant } from '@hass/types';
+import {
+  resolvePoatCardHelpers,
+  type CardHelpers,
+} from '@homeassistant-extras/hass/helpers/card-helpers';
+import type { HomeAssistant } from '@homeassistant-extras/hass/types';
 import type { Config } from '@type/config';
 import equal from 'fast-deep-equal';
 import {
-  type CSSResult,
   html,
   LitElement,
   nothing,
+  type CSSResult,
   type TemplateResult,
 } from 'lit';
 import { state } from 'lit/decorators.js';

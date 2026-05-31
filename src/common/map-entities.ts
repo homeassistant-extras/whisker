@@ -1,5 +1,5 @@
-import type { EntityRegistryDisplayEntry } from '@/hass/data/entity_registry';
 import type { DutyReport } from '@/types/types';
+import type { EntityRegistryDisplayEntry } from '@homeassistant-extras/hass/data/entity/entity_registry';
 
 const entityIdKeyToProperty = {
   waste_drawer: 'waste_drawer',

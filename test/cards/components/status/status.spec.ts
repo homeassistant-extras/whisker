@@ -1,5 +1,5 @@
 import { WhiskerLitterStatus } from '@cards/components/status/status';
-import type { HomeAssistant } from '@hass/types';
+import type { HomeAssistant } from '@homeassistant-extras/hass/types';
 import { fixture } from '@open-wc/testing-helpers';
 import type { CardHelpers } from '@type/lovelace';
 import { expect } from 'chai';
@@ -74,6 +74,7 @@ describe('status.ts (WhiskerLitterStatus)', () => {
         entity_id: 'sensor.litter_robot_status',
         state: 'rdy',
         attributes: {},
+        last_changed: '1970-01-01T00:00:00.000Z',
       },
     };
     await el.updateComplete;
@@ -107,6 +108,7 @@ describe('status.ts (WhiskerLitterStatus)', () => {
         entity_id: 'sensor.litter_robot_status',
         state: 'rdy',
         attributes: {},
+        last_changed: '1970-01-01T00:00:00.000Z',
       },
     };
     await el.updateComplete;
@@ -146,6 +148,7 @@ describe('status.ts (WhiskerLitterStatus)', () => {
         entity_id: 'sensor.litter_robot_status',
         state: 'ccp',
         attributes: {},
+        last_changed: '1970-01-01T00:00:00.000Z',
       },
     };
     await el.updateComplete;
@@ -166,6 +169,7 @@ describe('status.ts (WhiskerLitterStatus)', () => {
         entity_id: 'sensor.litter_robot_status',
         state: 'rdy',
         attributes: {},
+        last_changed: '1970-01-01T00:00:00.000Z',
       },
     };
     await el.updateComplete;

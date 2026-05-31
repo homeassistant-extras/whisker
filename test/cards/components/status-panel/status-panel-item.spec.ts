@@ -1,5 +1,5 @@
 import { WhiskerStatusPanelItem } from '@cards/components/status-panel/status-panel-item';
-import type { HomeAssistant } from '@hass/types';
+import type { HomeAssistant } from '@homeassistant-extras/hass/types';
 import { fixture } from '@open-wc/testing-helpers';
 import type { Config } from '@type/config';
 import { expect } from 'chai';

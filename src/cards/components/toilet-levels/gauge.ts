@@ -1,8 +1,9 @@
-import { hasFeature } from '@/config/feature';
-import { SubscribeEntityStateMixin } from '@cards/mixins/subscribe-entity-state-mixin';
+import type { Config } from '@/types/config';
 import { openEntityMoreInfo } from '@common/open-entity-more-info';
-import { stateDisplay } from '@html/state-display';
-import type { Config } from '@type/config';
+import { hasFeature } from '@homeassistant-extras/hass/common/config/feature';
+import { HassConfigMixin } from '@homeassistant-extras/hass/mixins/hass-config-mixin';
+import { SubscribeEntityStateMixin } from '@homeassistant-extras/hass/mixins/subscribe-entity-state-mixin';
+import { stateDisplay } from '@homeassistant-extras/hass/render/state-display';
 import { html, LitElement, nothing, type TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
@@ -11,25 +12,25 @@ import { gaugeStyles as styles } from './styles';
 import { wasteSeverityClass } from './waste-severity';
 
 @customElement('whisker-gauge')
-export class WhiskerGauge extends SubscribeEntityStateMixin(LitElement) {
+export class WhiskerGauge extends SubscribeEntityStateMixin(
+  HassConfigMixin<typeof LitElement, Config>(LitElement),
+) {
   static override readonly styles = styles;
-  override config!: Config;
 
   @property({ type: String, reflect: true })
   kind: 'litter' | 'waste' = 'litter';
 
   private _openMoreInfo(): void {
-    openEntityMoreInfo(this, this.entityId());
+    openEntityMoreInfo(this, this.entity);
   }
 
   override render(): TemplateResult | typeof nothing {
-    const entityState = this.entityState();
-    if (!entityState) {
+    if (!this.state) {
       return nothing;
     }
 
-    const value = stateDisplay(this.hass!, entityState);
-    const raw = numericLevelFromEntityState(entityState);
+    const value = stateDisplay(this.hass, this.state);
+    const raw = numericLevelFromEntityState(this.state);
     const pct = Math.min(100, raw);
     const variant = this.kind === 'waste' ? wasteSeverityClass(raw) : '';
     const barClass =

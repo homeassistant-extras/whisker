@@ -295,6 +295,18 @@
   resolved "https://registry.yarnpkg.com/@hapi/bourne/-/bourne-3.0.0.tgz#f11fdf7dda62fe8e336fa7c6642d9041f30356d7"
   integrity sha512-Waj1cwPXJDucOib4a3bAISsKJVb15MKi9IvmTI/7ssVEm6sywXGjVJDhl6/umt1pK1ZS7PacXU3A1PmFKHEZ2w==
 
+"@homeassistant-extras/config@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@homeassistant-extras/config/-/config-0.1.0.tgz#79020a44c899fd37a391ac3bbf30be7b6c19af97"
+  integrity sha512-5OxzM+uUG6YF8n6tTGwoucvh0z8CRr2gqIF8357DdOP2rl5JPxdI+cWbFmuPICsl5hUXL1o/xEmUyn55SDVfEw==
+  dependencies:
+    jsdom "^29.1.1"
+
+"@homeassistant-extras/hass@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@homeassistant-extras/hass/-/hass-0.3.0.tgz#9d5e7d3f20fc77f41c88cb160d000262350f4932"
+  integrity sha512-g/dL80NUs42Z92RJfkA2dFxE3fuO5j1YdICk1N5PwDJsEb4hr7MUxQhCJ99HKLctz4LLXOjl1B1TbLp+VhINGA==
+
 "@humanfs/core@^0.19.2":
   version "0.19.2"
   resolved "https://registry.yarnpkg.com/@humanfs/core/-/core-0.19.2.tgz#a8272ca03b2acf492670222b2320b6c421bfde60"

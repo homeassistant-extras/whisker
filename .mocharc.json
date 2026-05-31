@@ -3,7 +3,8 @@
     "./test/helpers/card-assets-stub.cjs",
     "ts-node/register",
     "tsconfig-paths/register",
-    "./mocha.setup.ts"
+    "@homeassistant-extras/config/mocha/setup.card",
+    "./test/mocha.hooks.ts"
   ],
   "extensions": ["ts"],
   "spec": ["test/**/*.spec.ts"],

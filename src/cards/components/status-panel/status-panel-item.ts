@@ -1,6 +1,6 @@
-import { HassConfigMixin } from '@cards/mixins/hass-config-mixin';
-import type { ActionConfig } from '@hass/data/lovelace/config/action';
-import { stateIcon } from '@html/state-icon-label';
+import type { ActionConfig } from '@homeassistant-extras/hass/data/lovelace/config/action';
+import { HassConfigMixin } from '@homeassistant-extras/hass/mixins/hass-config-mixin';
+import { stateIcon } from '@homeassistant-extras/hass/render/state-icon';
 import { LitElement, type nothing } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { statusPanelItemStyles as styles } from './styles';

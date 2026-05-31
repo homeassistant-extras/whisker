@@ -1,8 +1,22 @@
 import { WhiskerGauge } from '@cards/components/toilet-levels/gauge';
+import type { HassEntity } from '@homeassistant-extras/hass/ws/types';
 import { fixture } from '@open-wc/testing-helpers';
 import { expect } from 'chai';
 import { nothing, type TemplateResult } from 'lit';
 import { stub } from 'sinon';
+
+type GaugeWithStates = WhiskerGauge & {
+  states: Record<string, HassEntity | undefined> | undefined;
+};
+
+function setGaugeState(
+  row: GaugeWithStates,
+  entityId: string,
+  state: HassEntity,
+): void {
+  row.entity = entityId;
+  row.states = { [entityId]: state };
+}
 
 describe('gauge.ts', () => {
   it('should render nothing when entity is not set', () => {
@@ -12,17 +26,17 @@ describe('gauge.ts', () => {
   });
 
   it('should render litter gauge with fill from entity state', async () => {
-    const row = new WhiskerGauge();
+    const row = new WhiskerGauge() as GaugeWithStates;
     row.kind = 'litter';
     row.config = { device_id: 'dev' };
-    row['hass'] = {} as never;
-    const state = {
+    row.hass = {} as never;
+    const state: HassEntity = {
       entity_id: 'sensor.litter',
       state: '42',
       attributes: {},
+      last_changed: '1970-01-01T00:00:00.000Z',
     };
-    row['entity'] = 'sensor.litter';
-    row['states'] = { 'sensor.litter': state };
+    setGaugeState(row, 'sensor.litter', state);
 
     const tpl = row.render();
     const el = await fixture(tpl as TemplateResult);
@@ -46,16 +60,14 @@ describe('gauge.ts', () => {
   });
 
   it('should render waste gauge with variant classes from entity state', async () => {
-    const row = new WhiskerGauge();
+    const row = new WhiskerGauge() as GaugeWithStates;
     row.kind = 'waste';
-    row['entity'] = 'sensor.waste';
-    row['states'] = {
-      'sensor.waste': {
-        entity_id: 'sensor.waste',
-        state: '60',
-        attributes: {},
-      },
-    };
+    setGaugeState(row, 'sensor.waste', {
+      entity_id: 'sensor.waste',
+      state: '60',
+      attributes: {},
+      last_changed: '1970-01-01T00:00:00.000Z',
+    });
 
     const tpl = row.render();
     if (tpl === nothing) {
@@ -68,16 +80,14 @@ describe('gauge.ts', () => {
   });
 
   it('should cap level at 100% for bar fill', async () => {
-    const row = new WhiskerGauge();
+    const row = new WhiskerGauge() as GaugeWithStates;
     row.kind = 'litter';
-    row['entity'] = 'sensor.litter';
-    row['states'] = {
-      'sensor.litter': {
-        entity_id: 'sensor.litter',
-        state: '150',
-        attributes: {},
-      },
-    };
+    setGaugeState(row, 'sensor.litter', {
+      entity_id: 'sensor.litter',
+      state: '150',
+      attributes: {},
+      last_changed: '1970-01-01T00:00:00.000Z',
+    });
 
     const tpl = row.render();
     if (tpl === nothing) {
@@ -92,17 +102,17 @@ describe('gauge.ts', () => {
   });
 
   it('should fire hass-more-info with entity id when hit area is clicked', async () => {
-    const row = new WhiskerGauge();
+    const row = new WhiskerGauge() as GaugeWithStates;
     row.kind = 'litter';
-    row['entity'] = 'sensor.litter';
-    row['hass'] = {} as never;
-    row['states'] = {
-      'sensor.litter': {
-        entity_id: 'sensor.litter',
-        state: '10',
-        attributes: {},
-      },
-    };
+    row.hass = {
+      connection: { subscribeMessage: () => Promise.resolve(() => {}) },
+    } as never;
+    setGaugeState(row, 'sensor.litter', {
+      entity_id: 'sensor.litter',
+      state: '10',
+      attributes: {},
+      last_changed: '1970-01-01T00:00:00.000Z',
+    });
 
     document.body.appendChild(row);
     await row.updateComplete;

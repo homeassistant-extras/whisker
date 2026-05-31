@@ -1,6 +1,6 @@
 import { WhiskerCardFooter } from '@cards/components/footer/footer';
 import { resolveFooterSlots } from '@common/resolve-footer-items';
-import type { HomeAssistant } from '@hass/types';
+import type { HomeAssistant } from '@homeassistant-extras/hass/types';
 import { fixture } from '@open-wc/testing-helpers';
 import type { Config } from '@type/config';
 import type { DutyReport } from '@type/types';

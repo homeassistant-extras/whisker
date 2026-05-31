@@ -1,5 +1,5 @@
 import { WhiskerChonk } from '@cards/components/chonk/chonk';
-import type { HomeAssistant } from '@hass/types';
+import type { HomeAssistant } from '@homeassistant-extras/hass/types';
 import { fixture } from '@open-wc/testing-helpers';
 import type { CardHelpers } from '@type/lovelace';
 import { expect } from 'chai';

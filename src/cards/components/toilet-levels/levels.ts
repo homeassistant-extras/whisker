@@ -1,4 +1,4 @@
-import type { HomeAssistant } from '@hass/types';
+import type { HomeAssistant } from '@homeassistant-extras/hass/types';
 import type { Config } from '@type/config';
 import { css, html, LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';

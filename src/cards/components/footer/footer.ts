@@ -1,6 +1,7 @@
-import { HassConfigMixin } from '@/cards/mixins/hass-config-mixin';
+import type { Config } from '@/types/config';
 import type { DutyReport } from '@/types/types';
 import { resolveFooterSlots as resolveFooterItems } from '@common/resolve-footer-items';
+import { HassConfigMixin } from '@homeassistant-extras/hass/mixins/hass-config-mixin';
 import { html, LitElement, nothing, type TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
@@ -8,7 +9,10 @@ import './footer-item';
 import { footerStyles as styles } from './styles';
 
 @customElement('whisker-card-footer')
-export class WhiskerCardFooter extends HassConfigMixin(LitElement) {
+export class WhiskerCardFooter extends HassConfigMixin<
+  typeof LitElement,
+  Config
+>(LitElement) {
   static override readonly styles = styles;
 
   @property({ attribute: false })

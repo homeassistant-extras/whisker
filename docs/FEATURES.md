@@ -25,7 +25,7 @@ The badge combines `hopper_connected` and `hopper_status`. When the hopper is di
 
 Tap the badge to open the hopper status more-info dialog (or the connected entity when status is missing).
 
-![whisker](assets/hopper.png)
+![hopper](assets/hopper.png)
 
 - **Litter and waste gauges** — Visual fill levels; waste styling reflects severity as the drawer fills. Optionally show fill **percentages** on the gauge labels ([Feature flags](configuration/FEATURE-FLAGS.md)).
 - **Customizable footer** — Choose which device metrics appear in the card footer ([Footer configuration](configuration/FOOTER.md)). Defaults to total cycles, status last changed, and last seen.

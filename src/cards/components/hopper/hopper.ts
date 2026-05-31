@@ -1,11 +1,9 @@
-import { HassConfigMixin } from '@/cards/mixins/hass-config-mixin';
-import {
-  entityIds,
-  SubscribeEntityStateMixin,
-} from '@/cards/mixins/subscribe-entity-state-mixin';
+import type { Config } from '@/types/config';
 import { hopperStatusPresentation } from '@common/hopper-status';
 import { openEntityMoreInfo } from '@common/open-entity-more-info';
-import { computeTooltip } from '@hass/panels/lovelace/common/compute-tooltip';
+import { HassConfigMixin } from '@homeassistant-extras/hass/mixins/hass-config-mixin';
+import { SubscribeEntityStateMixin } from '@homeassistant-extras/hass/mixins/subscribe-entity-state-mixin';
+import { computeTooltip } from '@homeassistant-extras/hass/panels/lovelace/common/compute-tooltip';
 import { html, LitElement, nothing, type TemplateResult } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { hopperStyles as styles } from './styles';
@@ -13,7 +11,7 @@ import { hopperStyles as styles } from './styles';
 /** Header badge for LitterHopper refill status (LR4 with LitterHopper attached). */
 @customElement('whisker-hopper')
 export class WhiskerHopper extends SubscribeEntityStateMixin(
-  HassConfigMixin(LitElement),
+  HassConfigMixin<typeof LitElement, Config>(LitElement),
 ) {
   static override readonly styles = styles;
 
@@ -24,7 +22,7 @@ export class WhiskerHopper extends SubscribeEntityStateMixin(
   connectedEntity?: string;
 
   override connectedCallback(): void {
-    this.entity = [this.statusEntity, this.connectedEntity].filter(
+    this.entities = [this.statusEntity, this.connectedEntity].filter(
       (id): id is string => !!id,
     );
     super.connectedCallback();
@@ -38,16 +36,14 @@ export class WhiskerHopper extends SubscribeEntityStateMixin(
   }
 
   override render(): TemplateResult | typeof nothing {
-    if (!this.hass || entityIds(this.entity).length === 0) {
+    if (!this.hass || (!this.statusEntity && !this.connectedEntity)) {
       return nothing;
     }
 
     const { icon, color } = hopperStatusPresentation(
-      this.statusEntity
-        ? this.entityState(this.statusEntity)?.state
-        : undefined,
+      this.statusEntity ? this.states[this.statusEntity]?.state : undefined,
       this.connectedEntity
-        ? this.entityState(this.connectedEntity)?.state
+        ? this.states[this.connectedEntity]?.state
         : undefined,
     );
     const tooltipEntity = this.statusEntity ?? this.connectedEntity;

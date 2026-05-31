@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-> Cross-agent instructions and the rule for diagnosing `yarn test` failures live in [AGENTS.md](./AGENTS.md) and per-folder `AGENTS.md` files (`test/`, `src/cards/` (+ `mixins/`), `src/delegates/`, `src/hass/`, `src/html/`, `src/common/`, `src/config/`, `src/types/`). Read the nearest one before editing files in a subdirectory.
+> Cross-agent instructions and the rule for diagnosing `yarn test` failures live in [AGENTS.md](./AGENTS.md) and per-folder `AGENTS.md` files (`test/`, `src/cards/` (+ `mixins/`), `src/delegates/`, `src/html/`, `src/common/`, `src/config/`, `src/types/`). Read the nearest one before editing files in a subdirectory.
 
 ## Project
 
@@ -59,7 +59,7 @@ Fix the type errors first, then rerun `yarn test`. Do not investigate path alias
 - **`hass/`** — Vendored / adapted Home Assistant frontend types and helpers (`common`, `components`, `data`, `dialogs`, `panels`, `state`, `ws`, plus `types.ts`). Treat these as upstream code; keep them matching upstream unless a divergence is documented.
 - **`html/`** — Small, side-effect-free helpers that return Lit templates (state displays, icons, sections, rows). No business logic.
 - **`common/`** — Cross-cutting utilities ([litterrobot-status.ts](src/common/litterrobot-status.ts), [map-entities.ts](src/common/map-entities.ts), [open-entity-more-info.ts](src/common/open-entity-more-info.ts)). Must not import from `cards/` (avoid cycles).
-- **`types/`** — TypeScript contracts: `config.ts` (user config / public card API), `entity.ts`, `types.ts`, `assets.d.ts`. Reuse HASS types from `src/hass/` instead of duplicating them.
+- **`types/`** — TypeScript contracts: `config.ts` (user config / public card API), `entity.ts`, `types.ts`, `assets.d.ts`. Reuse HASS types from `hass` instead of duplicating them.
 
 ### Data flow
 
@@ -79,7 +79,7 @@ Defined in `tsconfig.json` and registered at test runtime via `tsconfig-paths`:
 @cards/*     → ./src/cards/*
 @common/*    → ./src/common/*
 @delegates/* → ./src/delegates/*
-@hass/*      → ./src/hass/*
+@homeassistant-extras/hass/*      → ../hass/src/* (via `@homeassistant-extras/hass` dependency)
 @html/*      → ./src/html/*
 @type/*      → ./src/types/*
 @util/*      → ./src/util/*

@@ -1,5 +1,5 @@
 import { WhiskerHopper } from '@cards/components/hopper/hopper';
-import type { HomeAssistant } from '@hass/types';
+import type { HomeAssistant } from '@homeassistant-extras/hass/types';
 import { fixture } from '@open-wc/testing-helpers';
 import type { EntityState } from '@type/entity';
 import type { CardHelpers } from '@type/lovelace';

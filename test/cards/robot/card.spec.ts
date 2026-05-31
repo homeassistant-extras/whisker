@@ -1,8 +1,8 @@
 import * as scoopModule from '@/delegates/utils/scoop-droppings';
-import * as cardHelpersModule from '@/helpers/card-helpers';
 import { WhiskerCard } from '@cards/robot/card';
 import { styles } from '@cards/robot/styles';
-import type { HomeAssistant } from '@hass/types';
+import * as cardHelpersModule from '@homeassistant-extras/hass/helpers/card-helpers';
+import type { HomeAssistant } from '@homeassistant-extras/hass/types';
 import { fixture } from '@open-wc/testing-helpers';
 import type { Config } from '@type/config';
 import type { CardHelpers } from '@type/lovelace';
@@ -20,6 +20,7 @@ describe('card.ts', () => {
   let resolvePoatCardHelpersStub: sinon.SinonStub;
 
   beforeEach(() => {
+    cardHelpersModule.resetPoatCardHelpersForTests();
     scoopStub = stub(scoopModule, 'scoopDroppings');
 
     mockConfig = { device_id: 'lr-1' };

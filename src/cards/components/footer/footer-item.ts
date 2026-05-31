@@ -1,18 +1,15 @@
-import { HassConfigMixin } from '@/cards/mixins/hass-config-mixin';
-import { SubscribeEntityStateMixin } from '@/cards/mixins/subscribe-entity-state-mixin';
-import { getPoatCardHelpers } from '@/helpers/card-helpers';
 import { openEntityMoreInfo } from '@common/open-entity-more-info';
 import {
   isRelativeFooterSlot,
   type FooterSlot,
 } from '@common/resolve-footer-items';
-import { computeTooltip } from '@hass/panels/lovelace/common/compute-tooltip';
-import type { LovelaceElementConfig } from '@hass/panels/lovelace/elements/types';
-import { stateDisplay } from '@html/state-display';
-import {
-  HOLD_AND_DOUBLE_TAP_NONE,
-  stateIconLabel,
-} from '@html/state-icon-label';
+import { HassConfigMixin } from '@homeassistant-extras/hass/mixins/hass-config-mixin';
+import { SubscribeEntityStateMixin } from '@homeassistant-extras/hass/mixins/subscribe-entity-state-mixin';
+import { computeTooltip } from '@homeassistant-extras/hass/panels/lovelace/common/compute-tooltip';
+import { HOLD_AND_DOUBLE_TAP_NONE } from '@homeassistant-extras/hass/render/constants';
+import { createHuiElement } from '@homeassistant-extras/hass/render/create-hui-element';
+import { stateDisplay } from '@homeassistant-extras/hass/render/state-display';
+import { stateIconLabel } from '@homeassistant-extras/hass/render/state-icon-label';
 import { html, LitElement, nothing, type TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { footerItemStyles as styles } from './footer-item-styles';
@@ -30,10 +27,9 @@ export class WhiskerCardFooterItem extends SubscribeEntityStateMixin(
    * Subscribes to the entity if we need to render a state display.
    */
   override connectedCallback(): void {
-    this.entity =
-      this.item && isRelativeFooterSlot(this.item)
-        ? this.item.entity
-        : undefined;
+    if (this.item && isRelativeFooterSlot(this.item)) {
+      this.entity = this.item.entity;
+    }
     super.connectedCallback();
   }
 
@@ -46,8 +42,8 @@ export class WhiskerCardFooterItem extends SubscribeEntityStateMixin(
    */
   protected override shouldUpdate(): boolean {
     return (
-      (this.entityId() !== undefined && this.entityState() !== undefined) ||
-      (this.entityId() === undefined && this.item.entity !== undefined)
+      (this.entity !== undefined && this.state !== undefined) ||
+      (this.entity === undefined && this.item.entity !== undefined)
     );
   }
 
@@ -67,12 +63,15 @@ export class WhiskerCardFooterItem extends SubscribeEntityStateMixin(
   }
 
   private _renderRelativeSlot(): TemplateResult | typeof nothing {
-    const entityState = this.entityState();
-    if (!entityState) {
+    if (!this.state) {
       return nothing;
     }
 
-    const icon = this._createHuiElement({
+    if (!this.hass) {
+      return nothing;
+    }
+
+    const icon = createHuiElement(this.hass, {
       type: 'state-icon',
       entity: this.item.entity,
       state_color: true,
@@ -97,7 +96,7 @@ export class WhiskerCardFooterItem extends SubscribeEntityStateMixin(
           })}
           @click=${this._onRelativeClick}
         >
-          ${stateDisplay(this.hass, entityState, content)}
+          ${stateDisplay(this.hass, this.state, content)}
         </div>
       </div>
     `;
@@ -105,19 +104,6 @@ export class WhiskerCardFooterItem extends SubscribeEntityStateMixin(
 
   private _onRelativeClick(): void {
     openEntityMoreInfo(this, this.item.entity);
-  }
-
-  private _createHuiElement(
-    config: LovelaceElementConfig,
-  ): HTMLElement | typeof nothing {
-    const helpers = getPoatCardHelpers();
-    if (!helpers || !this.hass) {
-      return nothing;
-    }
-
-    const element = helpers.createHuiElement(config);
-    element.hass = this.hass;
-    return element;
   }
 }
 

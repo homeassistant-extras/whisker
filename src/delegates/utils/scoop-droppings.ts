@@ -1,7 +1,7 @@
 import type { DutyReport } from '@/types/types';
 import { mapEntitiesByTranslationKey } from '@common/map-entities';
-import { getDevice } from '@delegates/retrievers/device';
-import type { HomeAssistant } from '@hass/types';
+import { getDevice } from '@homeassistant-extras/hass/delegates/retrievers/device';
+import type { HomeAssistant } from '@homeassistant-extras/hass/types';
 import type { Config } from '@type/config';
 
 /**

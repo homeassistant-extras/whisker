@@ -1,5 +1,5 @@
-import { HassConfigMixin } from '@/cards/mixins/hass-config-mixin';
-import { getPoatCardHelpers } from '@/helpers/card-helpers';
+import { getPoatCardHelpers } from '@homeassistant-extras/hass/helpers/card-helpers';
+import { HassConfigMixin } from '@homeassistant-extras/hass/mixins/hass-config-mixin';
 import { css, html, LitElement, nothing, type TemplateResult } from 'lit';
 import { customElement } from 'lit/decorators.js';
 

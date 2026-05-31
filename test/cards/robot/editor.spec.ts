@@ -1,5 +1,5 @@
 import { WhiskerCardEditor } from '@cards/robot/editor';
-import type { HomeAssistant } from '@hass/types';
+import type { HomeAssistant } from '@homeassistant-extras/hass/types';
 import { fixture } from '@open-wc/testing-helpers';
 import type { Config } from '@type/config';
 import { expect } from 'chai';
@@ -16,11 +16,11 @@ describe('editor.ts', () => {
       connection: {
         subscribeMessage: () => Promise.resolve(() => {}),
       },
-      callService: stub().resolves(undefined),
+      localize: (key: string) => key,
       states: {},
       entities: {},
       devices: {},
-    } as HomeAssistant;
+    } as unknown as HomeAssistant;
 
     if (!customElements.get('whisker-card-editor')) {
       customElements.define('whisker-card-editor', WhiskerCardEditor);

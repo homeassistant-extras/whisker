@@ -1,11 +1,12 @@
-import { SubscribeEntityStateMixin } from '@cards/mixins/subscribe-entity-state-mixin';
 import {
   isLitterRobotCycling,
   litterRobotStatusPresentation,
 } from '@common/litterrobot-status';
 import { openEntityMoreInfo } from '@common/open-entity-more-info';
-import { computeTooltip } from '@hass/panels/lovelace/common/compute-tooltip';
-import { stateLabel } from '@html/state-icon-label';
+import { HassConfigMixin } from '@homeassistant-extras/hass/mixins/hass-config-mixin';
+import { SubscribeEntityStateMixin } from '@homeassistant-extras/hass/mixins/subscribe-entity-state-mixin';
+import { computeTooltip } from '@homeassistant-extras/hass/panels/lovelace/common/compute-tooltip';
+import { stateLabel } from '@homeassistant-extras/hass/render/state-label';
 import {
   html,
   LitElement,
@@ -17,7 +18,9 @@ import { customElement, property } from 'lit/decorators.js';
 import { statusStyles as styles } from './styles';
 
 @customElement('whisker-litter-status')
-export class WhiskerLitterStatus extends SubscribeEntityStateMixin(LitElement) {
+export class WhiskerLitterStatus extends SubscribeEntityStateMixin(
+  HassConfigMixin(LitElement),
+) {
   static override readonly styles = styles;
 
   /**
@@ -31,22 +34,24 @@ export class WhiskerLitterStatus extends SubscribeEntityStateMixin(LitElement) {
     _changedProperties: PropertyValues<this>,
   ): void {
     super.willUpdate(_changedProperties);
-    this.cycling = isLitterRobotCycling(this.entityState()?.state);
+    this.cycling = isLitterRobotCycling(this.state?.state);
   }
 
   private _onIconClick(): void {
-    openEntityMoreInfo(this, this.entityId());
+    const entityId = this.entity;
+    if (typeof entityId === 'string') {
+      openEntityMoreInfo(this, entityId);
+    }
   }
 
   override render(): TemplateResult | typeof nothing {
-    const entityId = this.entityId();
-    const entityState = this.entityState();
-    if (!entityState || !entityId) {
+    const entityId = this.entity;
+    if (!this.state || typeof entityId !== 'string') {
       return nothing;
     }
 
-    const { icon, color } = litterRobotStatusPresentation(entityState.state);
-    const tooltip = computeTooltip(this.hass!, {
+    const { icon, color } = litterRobotStatusPresentation(this.state.state);
+    const tooltip = computeTooltip(this.hass, {
       entity: entityId,
       tap_action: { action: 'more-info' },
       hold_action: { action: 'none' },

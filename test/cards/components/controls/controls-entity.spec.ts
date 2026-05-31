@@ -1,5 +1,5 @@
 import { WhiskerControlsEntity } from '@cards/components/controls/controls-entity';
-import type { HomeAssistant } from '@hass/types';
+import type { HomeAssistant } from '@homeassistant-extras/hass/types';
 import { fixture } from '@open-wc/testing-helpers';
 import { expect } from 'chai';
 import { html } from 'lit';

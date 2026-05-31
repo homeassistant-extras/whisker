@@ -1,23 +1,16 @@
-import type { CardHelpers } from '@type/lovelace';
-import { expect } from 'chai';
-import { stub } from 'sinon';
 import {
   getPoatCardHelpers,
   resetPoatCardHelpersForTests,
   resolvePoatCardHelpers,
   setPoatCardHelpers,
-} from '../../src/helpers/card-helpers';
+  type CardHelpers,
+} from '@homeassistant-extras/hass/helpers/card-helpers';
+import { expect } from 'chai';
+import { stub } from 'sinon';
 
 describe('card-helpers.ts', () => {
-  let consoleLogStub: sinon.SinonStub;
-
-  beforeEach(() => {
-    consoleLogStub = stub(console, 'log');
-  });
-
   afterEach(() => {
     resetPoatCardHelpersForTests();
-    consoleLogStub.restore();
   });
 
   it('reject when loader is missing', async () => {
@@ -27,12 +20,12 @@ describe('card-helpers.ts', () => {
     } catch (e) {
       expect(e).to.be.instanceOf(Error);
       expect((e as Error).message).to.equal(
-        '[whisker-card] helpers: missing globalThis.loadCardHelpers',
+        '[custom-card] helpers: missing globalThis.loadCardHelpers',
       );
     }
   });
 
-  it('setDeviceCardHelpers / getDeviceCardHelpers round-trip', () => {
+  it('setPoatCardHelpers / getPoatCardHelpers round-trip', () => {
     const helpers = {
       createRowElement: () => document.createElement('div'),
       createHuiElement: () => document.createElement('div'),
@@ -42,7 +35,7 @@ describe('card-helpers.ts', () => {
     expect(getPoatCardHelpers()).to.equal(helpers);
   });
 
-  it('resolveDeviceCardHelpers shares one in-flight load across callers', async () => {
+  it('resolvePoatCardHelpers shares one in-flight load across callers', async () => {
     const mockHelpers = {
       createRowElement: () => document.createElement('div'),
       createHuiElement: () => document.createElement('div'),
@@ -68,7 +61,7 @@ describe('card-helpers.ts', () => {
     expect(b).to.equal(mockHelpers);
   });
 
-  it('resolveDeviceCardHelpers returns immediately when helpers already set', async () => {
+  it('resolvePoatCardHelpers returns immediately when helpers already set', async () => {
     const mockHelpers = {
       createRowElement: () => document.createElement('div'),
       createHuiElement: () => document.createElement('div'),

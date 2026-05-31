@@ -1,6 +1,6 @@
 import type { EntityState } from '@/types/entity';
 import { scoopDroppings } from '@delegates/utils/scoop-droppings';
-import type { HomeAssistant } from '@hass/types';
+import type { HomeAssistant } from '@homeassistant-extras/hass/types';
 import type { Config } from '@type/config';
 import { expect } from 'chai';
 

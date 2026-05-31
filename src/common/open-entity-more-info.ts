@@ -1,5 +1,5 @@
-import { fireEvent } from '@hass/common/dom/fire_event';
-import '@hass/state/more-info-mixin';
+import { fireEvent } from '@homeassistant-extras/hass/common/dom/fire_event';
+import '@homeassistant-extras/hass/state/more-info-mixin';
 
 /**
  * Opens the Home Assistant more-info dialog for an entity (Lovelace convention).

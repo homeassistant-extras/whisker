@@ -12,7 +12,7 @@ Read the **nearest** `AGENTS.md` before editing files in a subdirectory. Scoped 
 | [src/cards/AGENTS.md](./src/cards/AGENTS.md)               | Lit card UI, editor, components           |
 | [src/cards/mixins/AGENTS.md](./src/cards/mixins/AGENTS.md) | Shared card mixins                        |
 | [src/delegates/AGENTS.md](./src/delegates/AGENTS.md)       | Business logic, retrievers, subscriptions |
-| [src/hass/AGENTS.md](./src/hass/AGENTS.md)                 | Vendored Home Assistant frontend code     |
+| [../hass/AGENTS.md](../hass/AGENTS.md)                     | Vendored Home Assistant frontend code     |
 | [src/html/AGENTS.md](./src/html/AGENTS.md)                 | Lit template helpers                      |
 | [src/common/AGENTS.md](./src/common/AGENTS.md)             | Cross-cutting utilities                   |
 | [src/config/AGENTS.md](./src/config/AGENTS.md)             | Feature flags and config helpers          |

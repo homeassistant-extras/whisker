@@ -1,8 +1,8 @@
-import { resolvePoatCardHelpers } from '@/helpers/card-helpers';
 import '@cards/components/toilet-levels/gauge';
 import '@cards/components/toilet-levels/levels';
 import { WhiskerCard } from '@cards/robot/card';
 import { WhiskerCardEditor } from '@cards/robot/editor';
+import { resolvePoatCardHelpers } from '@homeassistant-extras/hass/helpers/card-helpers';
 import { version } from '../package.json';
 
 // Kick off HA card helper resolution once when the bundle loads

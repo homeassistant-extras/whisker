@@ -1,7 +1,7 @@
-import { fireEvent } from '@hass/common/dom/fire_event';
-import type { HaFormSchema } from '@hass/components/ha-form/types';
-import '@hass/panels/lovelace/editor/hui-element-editor';
-import type { HomeAssistant } from '@hass/types';
+import { fireEvent } from '@homeassistant-extras/hass/common/dom/fire_event';
+import type { HaFormSchema } from '@homeassistant-extras/hass/components/ha-form/types';
+import '@homeassistant-extras/hass/panels/lovelace/editor/hui-element-editor';
+import type { HomeAssistant } from '@homeassistant-extras/hass/types';
 import { type Config } from '@type/config';
 import { html, LitElement, nothing, type TemplateResult } from 'lit';
 import { state } from 'lit/decorators.js';

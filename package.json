@@ -6,6 +6,7 @@
     "url": "https://curiouscat.consulting/projects/ha-whisker?utm_source=github-whisker&utm_medium=package-metadata&utm_campaign=oss-presence&utm_content=author-url"
   },
   "license": "ISC",
+  "prettier": "@homeassistant-extras/config/prettier",
   "description": "Custom card Home Assistant which allows control of a Litter Robot device.",
   "repository": {
     "type": "git",
@@ -20,6 +21,9 @@
     "module": {
       "includeNodeModules": true
     }
+  },
+  "@parcel/resolver-default": {
+    "packageExports": true
   },
   "scripts": {
     "watch": "parcel watch",
@@ -36,6 +40,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@homeassistant-extras/config": "^0.1.0",
+    "@homeassistant-extras/hass": "^0.3.0",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@open-wc/testing": "^4.0.0",
     "@parcel/transformer-inline-string": "^2.16.4",

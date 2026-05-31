@@ -1,8 +1,8 @@
-import type { EntityRegistryDisplayEntry } from '@/hass/data/entity_registry';
-import type { HassEntity } from '@/hass/ws/types';
 import type { DutyReport } from '@/types/types';
 import { mapEntitiesByTranslationKey } from '@common/map-entities';
-import type { HomeAssistant } from '@hass/types';
+import type { EntityRegistryDisplayEntry } from '@homeassistant-extras/hass/data/entity/entity_registry';
+import type { HomeAssistant } from '@homeassistant-extras/hass/types';
+import type { HassEntity } from '@homeassistant-extras/hass/ws/types';
 import { expect } from 'chai';
 
 const e = (domain: string, name: string, state: string): HassEntity => ({
@@ -44,8 +44,6 @@ describe('map-entities.ts', () => {
       const entity: EntityRegistryDisplayEntry = {
         entity_id: 'sensor.lr_waste',
         device_id: 'd1',
-        area_id: '',
-        labels: [],
         translation_key: 'waste_drawer',
       };
 
@@ -57,8 +55,6 @@ describe('map-entities.ts', () => {
       const entity: EntityRegistryDisplayEntry = {
         entity_id: 'sensor.lr_litter',
         device_id: 'd1',
-        area_id: '',
-        labels: [],
         translation_key: 'litter_level',
       };
 
@@ -70,8 +66,6 @@ describe('map-entities.ts', () => {
       const entity: EntityRegistryDisplayEntry = {
         entity_id: 'sensor.lr_waste',
         device_id: 'd1',
-        area_id: '',
-        labels: [],
         translation_key: 'unknown_key',
       };
 
@@ -84,8 +78,6 @@ describe('map-entities.ts', () => {
       const entity: EntityRegistryDisplayEntry = {
         entity_id: 'sensor.lr_status',
         device_id: 'd1',
-        area_id: '',
-        labels: [],
         translation_key: 'status_code',
       };
 
@@ -97,8 +89,6 @@ describe('map-entities.ts', () => {
       const entity: EntityRegistryDisplayEntry = {
         entity_id: 'button.lr_reset_waste_drawer',
         device_id: 'd1',
-        area_id: '',
-        labels: [],
         translation_key: 'reset_waste_drawer',
       };
 
@@ -112,8 +102,6 @@ describe('map-entities.ts', () => {
       const entity: EntityRegistryDisplayEntry = {
         entity_id: 'button.lr_reset',
         device_id: 'd1',
-        area_id: '',
-        labels: [],
         translation_key: 'reset',
       };
 
@@ -125,8 +113,6 @@ describe('map-entities.ts', () => {
       const entity: EntityRegistryDisplayEntry = {
         entity_id: 'vacuum.r2_poop2_litter_box',
         device_id: 'd1',
-        area_id: '',
-        labels: [],
         translation_key: 'litter_box',
       };
 
@@ -138,8 +124,6 @@ describe('map-entities.ts', () => {
       const entity: EntityRegistryDisplayEntry = {
         entity_id: 'sensor.lr_waste',
         device_id: 'd1',
-        area_id: '',
-        labels: [],
         translation_key: undefined,
       };
 
@@ -150,8 +134,6 @@ describe('map-entities.ts', () => {
       const entity: EntityRegistryDisplayEntry = {
         entity_id: 'sensor.lr_pet_weight',
         device_id: 'd1',
-        area_id: '',
-        labels: [],
         translation_key: 'pet_weight',
       };
 
@@ -168,8 +150,6 @@ describe('map-entities.ts', () => {
       const entity: EntityRegistryDisplayEntry = {
         entity_id: 'sensor.lr_total_cycles',
         device_id: 'd1',
-        area_id: '',
-        labels: [],
         translation_key: 'total_cycles',
       };
 
@@ -181,8 +161,6 @@ describe('map-entities.ts', () => {
       const entity: EntityRegistryDisplayEntry = {
         entity_id: 'sensor.lr_last_seen',
         device_id: 'd1',
-        area_id: '',
-        labels: [],
         translation_key: 'last_seen',
       };
 
@@ -203,8 +181,6 @@ describe('map-entities.ts', () => {
         const entity: EntityRegistryDisplayEntry = {
           entity_id,
           device_id: 'd1',
-          area_id: '',
-          labels: [],
           translation_key,
         };
         expect(mapEntitiesByTranslationKey(entity, report)).to.be.true;

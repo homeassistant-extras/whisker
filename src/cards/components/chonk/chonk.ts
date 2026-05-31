@@ -1,5 +1,5 @@
-import { HassConfigMixin } from '@/cards/mixins/hass-config-mixin';
-import { stateIconLabel } from '@html/state-icon-label';
+import { HassConfigMixin } from '@homeassistant-extras/hass/mixins/hass-config-mixin';
+import { stateIconLabel } from '@homeassistant-extras/hass/render/state-icon-label';
 import { LitElement, type nothing, type TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { chonkStyles as styles } from './styles';

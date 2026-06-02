@@ -1,8 +1,8 @@
-import { openEntityMoreInfo } from '@common/open-entity-more-info';
 import {
   isRelativeFooterSlot,
   type FooterSlot,
 } from '@common/resolve-footer-items';
+import { moreInfo } from '@homeassistant-extras/hass/events/more-info';
 import { HassConfigMixin } from '@homeassistant-extras/hass/mixins/hass-config-mixin';
 import { SubscribeEntityStateMixin } from '@homeassistant-extras/hass/mixins/subscribe-entity-state-mixin';
 import { computeTooltip } from '@homeassistant-extras/hass/panels/lovelace/common/compute-tooltip';
@@ -103,7 +103,7 @@ export class WhiskerCardFooterItem extends SubscribeEntityStateMixin(
   }
 
   private _onRelativeClick(): void {
-    openEntityMoreInfo(this, this.item.entity);
+    moreInfo(this, this.item.entity);
   }
 }
 

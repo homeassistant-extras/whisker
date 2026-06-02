@@ -1,6 +1,6 @@
 import type { Config } from '@/types/config';
 import { hopperStatusPresentation } from '@common/hopper-status';
-import { openEntityMoreInfo } from '@common/open-entity-more-info';
+import { moreInfo } from '@homeassistant-extras/hass/events/more-info';
 import { HassConfigMixin } from '@homeassistant-extras/hass/mixins/hass-config-mixin';
 import { SubscribeEntityStateMixin } from '@homeassistant-extras/hass/mixins/subscribe-entity-state-mixin';
 import { computeTooltip } from '@homeassistant-extras/hass/panels/lovelace/common/compute-tooltip';
@@ -29,10 +29,7 @@ export class WhiskerHopper extends SubscribeEntityStateMixin(
   }
 
   private _openMoreInfo(): void {
-    openEntityMoreInfo(
-      this,
-      this.statusEntity ?? this.connectedEntity ?? undefined,
-    );
+    moreInfo(this, this.statusEntity ?? this.connectedEntity ?? undefined);
   }
 
   override render(): TemplateResult | typeof nothing {

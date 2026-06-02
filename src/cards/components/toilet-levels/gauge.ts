@@ -1,6 +1,6 @@
 import type { Config } from '@/types/config';
-import { openEntityMoreInfo } from '@common/open-entity-more-info';
 import { hasFeature } from '@homeassistant-extras/hass/common/config/feature';
+import { moreInfo } from '@homeassistant-extras/hass/events/more-info';
 import { HassConfigMixin } from '@homeassistant-extras/hass/mixins/hass-config-mixin';
 import { SubscribeEntityStateMixin } from '@homeassistant-extras/hass/mixins/subscribe-entity-state-mixin';
 import { stateDisplay } from '@homeassistant-extras/hass/render/state-display';
@@ -21,7 +21,7 @@ export class WhiskerGauge extends SubscribeEntityStateMixin(
   kind: 'litter' | 'waste' = 'litter';
 
   private _openMoreInfo(): void {
-    openEntityMoreInfo(this, this.entity);
+    moreInfo(this, this.entity);
   }
 
   override render(): TemplateResult | typeof nothing {

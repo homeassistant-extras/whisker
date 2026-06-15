@@ -15,6 +15,7 @@ describe('stateDisplay.ts', () => {
       state: '42',
       attributes: {},
       last_changed: '2024-01-01T00:00:00.000Z',
+      last_updated: '1970-01-01T00:00:00.000Z',
     };
 
     mockHass = {

@@ -6,7 +6,7 @@ import { moreInfo } from '@homeassistant-extras/hass/events/more-info';
 import { HassConfigMixin } from '@homeassistant-extras/hass/mixins/hass-config-mixin';
 import { SubscribeEntityStateMixin } from '@homeassistant-extras/hass/mixins/subscribe-entity-state-mixin';
 import { computeTooltip } from '@homeassistant-extras/hass/panels/lovelace/common/compute-tooltip';
-import { stateLabel } from '@homeassistant-extras/hass/render/state-label';
+import { stateDisplay } from '@homeassistant-extras/hass/render/state-display';
 import {
   html,
   LitElement,
@@ -58,7 +58,7 @@ export class WhiskerLitterStatus extends SubscribeEntityStateMixin(
     });
 
     return html`
-      ${stateLabel(this.hass, entityId)}
+      ${stateDisplay(this.hass, this.state)}
       <span
         class="status-icon-wrap"
         role="button"

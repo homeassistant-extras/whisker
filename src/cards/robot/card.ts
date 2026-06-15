@@ -5,9 +5,9 @@ import '@/cards/components/hopper/hopper';
 import '@/cards/components/status-panel/status-panel';
 import '@/cards/components/status/status';
 import { hasFeature } from '@/config/feature';
-import { scoopDroppings } from '@/delegates/utils/scoop-droppings';
 import type { DutyReport } from '@/types/types';
 import { styles } from '@cards/robot/styles';
+import { scoopDroppings } from '@delegates/utils/scoop-droppings';
 import {
   resolvePoatCardHelpers,
   type CardHelpers,

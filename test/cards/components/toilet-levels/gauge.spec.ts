@@ -35,6 +35,7 @@ describe('gauge.ts', () => {
       state: '42',
       attributes: {},
       last_changed: '1970-01-01T00:00:00.000Z',
+      last_updated: '1970-01-01T00:00:00.000Z',
     };
     setGaugeState(row, 'sensor.litter', state);
 
@@ -67,6 +68,7 @@ describe('gauge.ts', () => {
       state: '60',
       attributes: {},
       last_changed: '1970-01-01T00:00:00.000Z',
+      last_updated: '1970-01-01T00:00:00.000Z',
     });
 
     const tpl = row.render();
@@ -87,6 +89,7 @@ describe('gauge.ts', () => {
       state: '150',
       attributes: {},
       last_changed: '1970-01-01T00:00:00.000Z',
+      last_updated: '1970-01-01T00:00:00.000Z',
     });
 
     const tpl = row.render();
@@ -112,6 +115,7 @@ describe('gauge.ts', () => {
       state: '10',
       attributes: {},
       last_changed: '1970-01-01T00:00:00.000Z',
+      last_updated: '1970-01-01T00:00:00.000Z',
     });
 
     document.body.appendChild(row);

@@ -1,6 +1,6 @@
-import * as scoopModule from '@/delegates/utils/scoop-droppings';
 import { WhiskerCard } from '@cards/robot/card';
 import { styles } from '@cards/robot/styles';
+import * as scoopModule from '@delegates/utils/scoop-droppings';
 import * as cardHelpersModule from '@homeassistant-extras/hass/helpers/card-helpers';
 import type { HomeAssistant } from '@homeassistant-extras/hass/types';
 import { fixture } from '@open-wc/testing-helpers';

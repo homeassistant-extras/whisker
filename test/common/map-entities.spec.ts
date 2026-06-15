@@ -10,6 +10,7 @@ const e = (domain: string, name: string, state: string): HassEntity => ({
   state,
   attributes: {},
   last_changed: '2024-01-01T00:00:00+00:00',
+  last_updated: '1970-01-01T00:00:00.000Z',
 });
 
 describe('map-entities.ts', () => {
@@ -34,6 +35,7 @@ describe('map-entities.ts', () => {
             state: '2024-01-15T10:00:00+00:00',
             attributes: { device_class: 'timestamp' },
             last_changed: '2024-01-15T10:00:00+00:00',
+            last_updated: '1970-01-01T00:00:00.000Z',
           },
           'sensor.lr_status': e('sensor', 'lr_status', 'rdy'),
         },

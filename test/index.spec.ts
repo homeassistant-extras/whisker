@@ -1,11 +1,16 @@
+import { getEntitySuggestion } from '@delegates/utils/entity-suggestion';
 import { resetPoatCardHelpersForTests } from '@homeassistant-extras/hass/helpers/card-helpers';
 import { expect } from 'chai';
 import { stub, type SinonStub } from 'sinon';
 import { version } from '../package.json';
 
+// Path to the hass module that captures `customCards` at import time. It must
+// be reset alongside index.ts so each test re-captures the current global.
+const customCardsModule =
+  require.resolve('@homeassistant-extras/hass/data/lovelace_custom_cards');
+
 describe('index.ts', () => {
   let customElementsStub: SinonStub;
-  let customCardsStub: Array<Object> | undefined;
   let consoleInfoStub: sinon.SinonStub;
   let loadCardHelpersStub: sinon.SinonStub | undefined;
 
@@ -15,23 +20,18 @@ describe('index.ts', () => {
     customElementsStub = stub(customElements, 'define');
     consoleInfoStub = stub(console, 'info');
 
-    // Create a stub for window.customCards
-    customCardsStub = [];
-    Object.defineProperty(globalThis, 'customCards', {
-      get: () => customCardsStub,
-      set: (value) => {
-        customCardsStub = value;
-      },
-      configurable: true,
-    });
+    // Start each test with a clean global. The hass module snapshots
+    // `globalThis.customCards` when it first loads, so the global must be set
+    // up before requiring index.ts (which transitively loads that module).
+    (globalThis as { customCards?: Array<Object> }).customCards = [];
   });
 
   afterEach(() => {
     customElementsStub.restore();
     consoleInfoStub.restore();
-    customCardsStub = undefined;
     resetPoatCardHelpersForTests();
     delete require.cache[require.resolve('@/index.ts')];
+    delete require.cache[customCardsModule];
   });
 
   it('should call loadCardHelpers when available (preload)', () => {
@@ -56,13 +56,6 @@ describe('index.ts', () => {
     );
   });
 
-  it('should initialize window.customCards if undefined', () => {
-    customCardsStub = undefined;
-    require('@/index.ts');
-
-    expect(globalThis.customCards).to.be.an('array');
-  });
-
   it('should add card configuration with all fields to window.customCards', () => {
     require('@/index.ts');
 
@@ -74,6 +67,7 @@ describe('index.ts', () => {
         'A card for Litter Robot / Whisker devices with visual status.',
       preview: true,
       documentationURL: 'https://github.com/homeassistant-extras/whisker',
+      getEntitySuggestion,
     });
   });
 

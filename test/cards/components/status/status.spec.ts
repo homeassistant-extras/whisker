@@ -1,16 +1,12 @@
 import { WhiskerLitterStatus } from '@cards/components/status/status';
 import type { HomeAssistant } from '@homeassistant-extras/hass/types';
+import type { HassEntity } from '@homeassistant-extras/hass/ws/types';
 import { fixture } from '@open-wc/testing-helpers';
-import type { CardHelpers } from '@type/lovelace';
 import { expect } from 'chai';
 import { html } from 'lit';
 import { stub } from 'sinon';
 
 describe('status.ts (WhiskerLitterStatus)', () => {
-  interface MockHuiElement extends HTMLElement {
-    hass?: HomeAssistant;
-  }
-
   const mockHass = {
     language: 'en',
     localize: (key: string, values?: Record<string, unknown>) => {
@@ -34,22 +30,17 @@ describe('status.ts (WhiskerLitterStatus)', () => {
     },
   } as unknown as HomeAssistant;
 
-  let mockCreateHuiElement: sinon.SinonStub;
-
   beforeEach(() => {
-    mockCreateHuiElement = stub().callsFake(() => {
-      return document.createElement('div') as MockHuiElement;
-    });
-
-    const helpers: CardHelpers = {
-      createRowElement: stub().returns(document.createElement('div')),
-      createHuiElement: mockCreateHuiElement,
-    };
-    globalThis.poatCardHelpers = helpers;
-  });
-
-  afterEach(() => {
-    Reflect.deleteProperty(globalThis, 'poatCardHelpers');
+    if (!customElements.get('state-display')) {
+      customElements.define(
+        'state-display',
+        class extends HTMLElement {
+          hass?: HomeAssistant;
+          stateObj?: HassEntity;
+          content?: string | string[];
+        },
+      );
+    }
   });
 
   it('renders nothing when there is no entity state', async () => {
@@ -57,11 +48,11 @@ describe('status.ts (WhiskerLitterStatus)', () => {
       html`<whisker-litter-status .hass=${mockHass}></whisker-litter-status>`,
     );
 
-    expect(mockCreateHuiElement.called).to.be.false;
+    expect(el.shadowRoot?.querySelector('state-display')).to.be.null;
     expect(el.shadowRoot?.querySelector('ha-icon.status-icon')).to.be.null;
   });
 
-  it('renders state-label and status icon from litter robot state', async () => {
+  it('renders state-display and status icon from litter robot state', async () => {
     const el = await fixture<WhiskerLitterStatus>(
       html`<whisker-litter-status
         .hass=${mockHass}
@@ -69,21 +60,24 @@ describe('status.ts (WhiskerLitterStatus)', () => {
       ></whisker-litter-status>`,
     );
 
+    const stateObj = {
+      entity_id: 'sensor.litter_robot_status',
+      state: 'rdy',
+      attributes: {},
+      last_changed: '1970-01-01T00:00:00.000Z',
+      last_updated: '1970-01-01T00:00:00.000Z',
+    };
     el['states'] = {
-      'sensor.litter_robot_status': {
-        entity_id: 'sensor.litter_robot_status',
-        state: 'rdy',
-        attributes: {},
-        last_changed: '1970-01-01T00:00:00.000Z',
-      },
+      'sensor.litter_robot_status': stateObj,
     };
     await el.updateComplete;
 
-    expect(mockCreateHuiElement.calledOnce).to.be.true;
-    expect(mockCreateHuiElement.firstCall.args[0]).to.deep.include({
-      type: 'state-label',
-      entity: 'sensor.litter_robot_status',
-    });
+    const display = el.shadowRoot?.querySelector('state-display') as
+      | (HTMLElement & { hass?: HomeAssistant; stateObj?: HassEntity })
+      | null;
+    expect(display).to.exist;
+    expect(display?.hass).to.equal(mockHass);
+    expect(display?.stateObj).to.deep.equal(stateObj);
 
     const iconWrap = el.shadowRoot?.querySelector('.status-icon-wrap');
     expect(iconWrap?.getAttribute('title')).to.equal(
@@ -109,6 +103,7 @@ describe('status.ts (WhiskerLitterStatus)', () => {
         state: 'rdy',
         attributes: {},
         last_changed: '1970-01-01T00:00:00.000Z',
+        last_updated: '1970-01-01T00:00:00.000Z',
       },
     };
     await el.updateComplete;
@@ -149,6 +144,7 @@ describe('status.ts (WhiskerLitterStatus)', () => {
         state: 'ccp',
         attributes: {},
         last_changed: '1970-01-01T00:00:00.000Z',
+        last_updated: '1970-01-01T00:00:00.000Z',
       },
     };
     await el.updateComplete;
@@ -170,6 +166,7 @@ describe('status.ts (WhiskerLitterStatus)', () => {
         state: 'rdy',
         attributes: {},
         last_changed: '1970-01-01T00:00:00.000Z',
+        last_updated: '1970-01-01T00:00:00.000Z',
       },
     };
     await el.updateComplete;

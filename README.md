@@ -85,5 +85,5 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file.
 - [x] **Gauge percentages** — optional percentage labels on litter/waste gauges - thanks reddit!
 - [x] **Customizable footer** — choose footer metrics and order - thanks @alicia86
 - [x] **Model-aware artwork** — auto-detects Litter-Robot model - thanks @adude007
-- [x] **Litter Hopper status** — hopper badge & footer items on LR4 when a LitterHopper is attached - thanks @chrispgriffin & @adude007
+- [x] **Litter Hopper status** — hopper badge & footer items on LR4 when a LitterHopper is attached - thanks @chrispgriffin & @adude007, @eviljacquiooh
 - [x] **Hide pet weight chip** — optional `hide_pet_weight` feature flag for multi-cat setups - thanks @semichcsc-byte

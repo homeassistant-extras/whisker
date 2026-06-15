@@ -195,13 +195,15 @@ describe('footer-item.ts (WhiskerCardFooterItem)', () => {
     const display = el.shadowRoot?.querySelector('state-display');
     expect(display).to.exist;
     expect((display as { content?: string }).content).to.equal('last_changed');
+    const lc = new Date(
+      toCompressedLc(mockState.last_changed as string) * 1000,
+    ).toISOString();
     expect((display as { stateObj?: EntityState }).stateObj).to.deep.equal({
       entity_id: 'sensor.status',
       state: 'rdy',
       attributes: { friendly_name: 'Status' },
-      last_changed: new Date(
-        toCompressedLc(mockState.last_changed as string) * 1000,
-      ).toISOString(),
+      last_changed: lc,
+      last_updated: lc,
     });
 
     const stateWrapper = el.shadowRoot?.querySelector(

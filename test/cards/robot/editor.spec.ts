@@ -1,7 +1,11 @@
 import { WhiskerCardEditor } from '@cards/robot/editor';
 import type { HomeAssistant } from '@homeassistant-extras/hass/types';
 import { fixture } from '@open-wc/testing-helpers';
-import type { Config } from '@type/config';
+import {
+  DEFAULT_COLOR,
+  DEFAULT_WEIGHT_HOURS_TO_SHOW,
+  type Config,
+} from '@type/config';
 import { expect } from 'chai';
 import { nothing, type TemplateResult } from 'lit';
 import { stub } from 'sinon';
@@ -93,22 +97,79 @@ describe('editor.ts', () => {
           },
         },
         {
-          name: 'title',
-          label: 'Card Title',
-          required: false,
-          selector: { text: {} },
+          name: 'content',
+          label: 'Content',
+          type: 'expandable',
+          flatten: true,
+          icon: 'mdi:text-short',
+          schema: [
+            {
+              name: 'title',
+              label: 'Card Title',
+              required: false,
+              selector: { text: {} },
+            },
+            {
+              name: 'color',
+              label: 'Robot color',
+              selector: {
+                select: {
+                  options: [
+                    { value: 'white', label: 'White' },
+                    { value: 'black', label: 'Black' },
+                  ],
+                },
+              },
+            },
+          ],
         },
         {
-          name: 'color',
-          label: 'Robot color',
-          selector: {
-            select: {
-              options: [
-                { value: 'white', label: 'White' },
-                { value: 'black', label: 'Black' },
-              ],
+          name: 'chonk',
+          label: 'Pet weight chonk',
+          type: 'expandable',
+          icon: 'mdi:weight',
+          schema: [
+            {
+              name: 'kitties',
+              label: 'Weight entities',
+              selector: {
+                entity: {
+                  multiple: true,
+                  reorder: true,
+                  filter: {
+                    integration: 'litterrobot',
+                    device_class: 'weight',
+                  },
+                },
+              },
             },
-          },
+            {
+              name: 'hours_to_show',
+              label: 'Weight graph hours to show',
+              selector: {
+                number: {
+                  min: 1,
+                  max: 720,
+                  mode: 'box',
+                  unit_of_measurement: 'hours',
+                },
+              },
+            },
+            {
+              name: 'hide',
+              label: 'Hide chonk',
+              selector: {
+                boolean: {},
+              },
+            },
+            {
+              name: 'hide_names',
+              label: 'Hide pet names',
+              selector: {
+                boolean: {},
+              },
+            },
+          ],
         },
         {
           name: 'footer',
@@ -159,6 +220,13 @@ describe('editor.ts', () => {
   });
 
   describe('_valueChanged', () => {
+    const fireValueChanged = (value: Config): Config => {
+      editor['_valueChanged'](
+        new CustomEvent('value-changed', { detail: { value } }),
+      );
+      return dispatchStub.firstCall.args[0].detail.config as Config;
+    };
+
     it('should fire config-changed with updated config', () => {
       editor.setConfig({ device_id: 'lr-1' });
       const next: Config = { device_id: 'lr-1', title: 'Updated' };
@@ -168,6 +236,69 @@ describe('editor.ts', () => {
       expect(dispatchStub.calledOnce).to.be.true;
       expect(dispatchStub.firstCall.args[0].type).to.equal('config-changed');
       expect(dispatchStub.firstCall.args[0].detail.config).to.deep.equal(next);
+    });
+
+    it('should drop an empty chonk object', () => {
+      editor.setConfig({ device_id: 'lr-1' });
+      const config = fireValueChanged({
+        device_id: 'lr-1',
+        chonk: { hide: false, kitties: [], hours_to_show: undefined },
+      } as Config);
+      expect(config.chonk).to.be.undefined;
+    });
+
+    it('should drop the default hours_to_show but keep hide and kitties', () => {
+      editor.setConfig({ device_id: 'lr-1' });
+      const config = fireValueChanged({
+        device_id: 'lr-1',
+        chonk: {
+          hide: true,
+          kitties: ['sensor.pet_weight'],
+          hours_to_show: DEFAULT_WEIGHT_HOURS_TO_SHOW,
+        },
+      });
+      expect(config.chonk).to.deep.equal({
+        hide: true,
+        kitties: ['sensor.pet_weight'],
+      });
+    });
+
+    it('should drop hide_names when false', () => {
+      editor.setConfig({ device_id: 'lr-1' });
+      const config = fireValueChanged({
+        device_id: 'lr-1',
+        chonk: { hours_to_show: 48, hide_names: false },
+      } as Config);
+      expect(config.chonk).to.deep.equal({ hours_to_show: 48 });
+    });
+
+    it('should keep hide_names when true', () => {
+      editor.setConfig({ device_id: 'lr-1' });
+      const config = fireValueChanged({
+        device_id: 'lr-1',
+        chonk: { hide_names: true },
+      });
+      expect(config.chonk).to.deep.equal({ hide_names: true });
+    });
+
+    it('should keep a non-default hours_to_show', () => {
+      editor.setConfig({ device_id: 'lr-1' });
+      const config = fireValueChanged({
+        device_id: 'lr-1',
+        chonk: { hours_to_show: 48 },
+      });
+      expect(config.chonk).to.deep.equal({ hours_to_show: 48 });
+    });
+
+    it('should drop empty features and default color', () => {
+      editor.setConfig({ device_id: 'lr-1' });
+      const config = fireValueChanged({
+        device_id: 'lr-1',
+        features: [],
+        color: DEFAULT_COLOR,
+      });
+      expect(config.features).to.be.undefined;
+      expect(config.color).to.be.undefined;
     });
   });
 });

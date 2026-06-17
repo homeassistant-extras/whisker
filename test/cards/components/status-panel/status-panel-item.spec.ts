@@ -29,6 +29,7 @@ describe('status-panel-item.ts (WhiskerStatusPanelItem)', () => {
     mockElement = document.createElement('div') as MockHui;
     mockCreateHuiElement = stub().returns(mockElement);
     globalThis.poatCardHelpers = {
+      createCardElement: stub(),
       createRowElement: stub(),
       createHuiElement: mockCreateHuiElement,
     };

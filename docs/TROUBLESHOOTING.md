@@ -10,6 +10,12 @@ If controls or gauges are missing:
 - Verify `device_id` in YAML matches **Settings → Devices & services → Litter-Robot →** your device (or use the card editor).
 - Check that expected entities exist in **Developer tools → States** for that device.
 
+## Pet weight graph is empty
+
+- The graph uses the **history** integration (enabled by default). Confirm it's loaded.
+- Confirm the weight sensor(s) have recorded history (Developer tools → History) and aren't excluded from the `recorder`.
+- If auto-detection finds nothing, set `chonk.kitties` explicitly. See [Pet weight graph](configuration/OPTIONS.md#pet-weight-graph).
+
 ## Getting help
 
 - [GitHub issues](https://github.com/homeassistant-extras/whisker/issues) — include HA version, integration version, and robot model when possible.

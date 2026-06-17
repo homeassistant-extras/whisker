@@ -104,7 +104,8 @@ describe('footer-item.ts (WhiskerCardFooterItem)', () => {
     mockCreateHuiElement = stub().returns(mockElement);
 
     globalThis.poatCardHelpers = {
-      createRowElement: stub().returns(document.createElement('div')),
+      createCardElement: stub(),
+      createRowElement: stub(),
       createHuiElement: mockCreateHuiElement,
     };
 

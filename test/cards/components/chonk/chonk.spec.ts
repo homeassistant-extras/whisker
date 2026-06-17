@@ -21,7 +21,8 @@ describe('chonk.ts (WhiskerChonk)', () => {
     });
 
     const helpers: CardHelpers = {
-      createRowElement: stub().returns(document.createElement('div')),
+      createCardElement: stub(),
+      createRowElement: stub(),
       createHuiElement: mockCreateHuiElement,
     };
     globalThis.poatCardHelpers = helpers;

@@ -4,7 +4,7 @@
 
 Show fill **percentages** on litter and waste gauge labels:
 
-![Gauge percentages](assets/percentages.png)
+![Gauge percentages](../assets/percentages.png)
 
 ```yaml
 type: custom:whisker-card
@@ -23,3 +23,5 @@ device_id: YOUR_DEVICE_ID
 features:
   - hide_pet_weight
 ```
+
+> The pet weight **history graph** is configured separately via the `chonk` option (not a feature flag). See [Pet weight graph](OPTIONS.md#pet-weight-graph).

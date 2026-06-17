@@ -17,6 +17,7 @@ describe('controls-entity-row.ts (WhiskerControlsEntityRow)', () => {
   beforeEach(() => {
     createRowElement = stub().callsFake(() => document.createElement('div'));
     globalThis.poatCardHelpers = {
+      createCardElement: stub(),
       createRowElement,
       createHuiElement: stub(),
     };

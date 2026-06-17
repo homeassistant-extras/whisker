@@ -162,6 +162,27 @@ describe('card.ts', () => {
       expect(el.querySelector('whisker-chonk')).to.be.null;
     });
 
+    it('should render the weight graph with kitties from duty by default', async () => {
+      scoopStub.returns({
+        ...mockDuty,
+        kitties: ['sensor.cat_weight'],
+      });
+      card.hass = mockHass;
+      const el = await fixture(card.render() as TemplateResult);
+      const graph = el.querySelector('whisker-weight-graph') as HTMLElement & {
+        kitties?: string[];
+      };
+      expect(graph).to.not.be.null;
+      expect(graph.kitties).to.deep.equal(['sensor.cat_weight']);
+    });
+
+    it('should not render the weight graph when chonk.hide is set', async () => {
+      card.setConfig({ device_id: 'lr-1', chonk: { hide: true } });
+      card.hass = mockHass;
+      const el = await fixture(card.render() as TemplateResult);
+      expect(el.querySelector('whisker-weight-graph')).to.be.null;
+    });
+
     it('should render hopper badge in the title row when hopper entities exist', async () => {
       scoopStub.returns({
         ...mockDuty,

@@ -43,6 +43,29 @@ features:
   - hide_pet_weight
 ```
 
+## Pet weight history graph
+
+Shown by default; auto-detects per-cat weight sensors. List them explicitly to control which appear:
+
+```yaml
+type: custom:whisker-card
+device_id: YOUR_DEVICE_ID
+chonk:
+  kitties:
+    - sensor.tuna_weight
+    - sensor.mittens_weight
+  hours_to_show: 168
+```
+
+Hide the graph entirely:
+
+```yaml
+type: custom:whisker-card
+device_id: YOUR_DEVICE_ID
+chonk:
+  hide: true
+```
+
 ## Custom footer
 
 Order matters:

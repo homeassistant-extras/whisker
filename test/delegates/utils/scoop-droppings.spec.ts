@@ -30,36 +30,43 @@ describe('scoop-droppings.ts', () => {
       'sensor.lr_waste': {
         entity_id: 'sensor.lr_waste',
         device_id: deviceId,
+        platform: 'litterrobot',
         translation_key: 'waste_drawer',
       },
       'sensor.lr_litter': {
         entity_id: 'sensor.lr_litter',
         device_id: deviceId,
+        platform: 'litterrobot',
         translation_key: 'litter_level',
       },
       'sensor.other_device': {
         entity_id: 'sensor.other_device',
         device_id: 'other',
+        platform: 'litterrobot',
         translation_key: 'waste_drawer',
       },
       'sensor.lr_pet_weight': {
         entity_id: 'sensor.lr_pet_weight',
         device_id: deviceId,
+        platform: 'litterrobot',
         translation_key: 'pet_weight',
       },
       'sensor.lr_last_seen': {
         entity_id: 'sensor.lr_last_seen',
         device_id: deviceId,
+        platform: 'litterrobot',
         translation_key: 'last_seen',
       },
       'sensor.lr_total_cycles': {
         entity_id: 'sensor.lr_total_cycles',
         device_id: deviceId,
+        platform: 'litterrobot',
         translation_key: 'total_cycles',
       },
       'sensor.lr_status': {
         entity_id: 'sensor.lr_status',
         device_id: deviceId,
+        platform: 'litterrobot',
         translation_key: 'status_code',
       },
     },
@@ -90,6 +97,7 @@ describe('scoop-droppings.ts', () => {
       name: 'Living Room LR',
       model: null,
       serial_number: null,
+      kitties: [],
       waste_drawer: 'sensor.lr_waste',
       litter_level: 'sensor.lr_litter',
       status: 'sensor.lr_status',
@@ -97,5 +105,54 @@ describe('scoop-droppings.ts', () => {
       last_seen: 'sensor.lr_last_seen',
       total_cycles: 'sensor.lr_total_cycles',
     });
+  });
+
+  it('should auto-detect weight entities from other devices into kitties', () => {
+    const hass = {
+      ...mockHass,
+      entities: {
+        ...mockHass.entities,
+        'sensor.cat_weight': {
+          entity_id: 'sensor.cat_weight',
+          device_id: 'other',
+          platform: 'litterrobot',
+        },
+      },
+      states: {
+        ...mockHass.states,
+        'sensor.cat_weight': e('sensor', 'cat_weight', '11.2', {
+          device_class: 'weight',
+        }),
+      },
+    } as unknown as HomeAssistant;
+
+    const report = scoopDroppings(hass, config);
+    expect(report?.kitties).to.deep.equal(['sensor.cat_weight']);
+  });
+
+  it('should not auto-detect weight entities when chonk entities are configured', () => {
+    const hass = {
+      ...mockHass,
+      entities: {
+        ...mockHass.entities,
+        'sensor.cat_weight': {
+          entity_id: 'sensor.cat_weight',
+          device_id: 'other',
+          platform: 'litterrobot',
+        },
+      },
+      states: {
+        ...mockHass.states,
+        'sensor.cat_weight': e('sensor', 'cat_weight', '11.2', {
+          device_class: 'weight',
+        }),
+      },
+    } as unknown as HomeAssistant;
+
+    const report = scoopDroppings(hass, {
+      device_id: deviceId,
+      chonk: { kitties: ['sensor.my_cat'] },
+    });
+    expect(report?.kitties).to.deep.equal(['sensor.my_cat']);
   });
 });

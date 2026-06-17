@@ -8,6 +8,6 @@
 
 The **controls menu** (hamburger icon) opens a dialog of full entity rows—use each row’s own tap/hold behavior as in the rest of Lovelace.
 
-![Controls](assets/control.png)
+![Controls](../assets/control.png)
 
 **Pet weight chip** and **litter / waste gauges**: **click** (or keyboard activate on the chip) opens **more-info** for the corresponding entity.

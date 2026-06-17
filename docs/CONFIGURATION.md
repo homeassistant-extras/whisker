@@ -18,6 +18,8 @@ Add the card from the dashboard editor and choose **Litter Robot Device** (filte
 
 On **Litter-Robot 4** with a **LitterHopper** attached, the card shows a hopper status badge next to the robot status icon when the integration exposes hopper entities. You can also add **Hopper status** or **Hopper connected** under **Footer items** in the editor. See [LitterHopper header badge](FEATURES.md#litterhopper-header-badge) for icon and color details.
 
+The **Pet weight chonk** section in the editor configures the pet weight history graph — pick weight entities, set the hours to show, or hide it. See [Pet weight graph](configuration/OPTIONS.md#pet-weight-graph).
+
 ![Card editor](assets/editor.png)
 
 ## YAML basics

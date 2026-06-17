@@ -6,6 +6,7 @@
 - **Quick actions** — Picture-style controls for the litter box **vacuum** and **reset** (see [Interactions](configuration/INTERACTIONS.md)).
 - **Controls menu** — A menu button opens a dialog with standard Lovelace **entity rows** for globe light, globe brightness, panel brightness, cycle delay, and panel lockout when those entities exist.
 - **Pet weight** — A compact chip for the **pet weight** sensor (when present). Optional `hide_pet_weight` feature flag hides the chip on the robot image while keeping the sensor available ([Feature flags](configuration/FEATURE-FLAGS.md)).
+- **Pet weight graph** — A pet weight **history graph** below the gauges, powered by Home Assistant's native `history-graph` card. Per-cat weight sensors are auto-detected; use the `chonk` option to choose sensors, set the time window, or hide the graph ([Pet weight graph](configuration/OPTIONS.md#pet-weight-graph)).
 - **LitterHopper status** — On **Litter-Robot 4** with a **LitterHopper** attached, a **header badge** appears next to the robot status icon when the integration exposes hopper entities. You can also add **Hopper status** and **Hopper connected** to the footer ([Footer configuration](configuration/FOOTER.md)). Badge icons match the official [`litterrobot` integration](https://github.com/home-assistant/core/blob/dev/homeassistant/components/litterrobot/icons.json); colors follow your Home Assistant theme.
 
 ### LitterHopper header badge

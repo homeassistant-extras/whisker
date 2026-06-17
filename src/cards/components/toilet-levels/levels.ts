@@ -15,7 +15,7 @@ export class WhiskerRobotLevels extends LitElement {
       display: flex;
       flex-direction: column;
       gap: 8px;
-      padding: 12px 20%;
+      padding: 0px 20%;
       box-sizing: border-box;
     }
   `;

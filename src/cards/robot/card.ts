@@ -4,6 +4,7 @@ import '@/cards/components/footer/footer';
 import '@/cards/components/hopper/hopper';
 import '@/cards/components/status-panel/status-panel';
 import '@/cards/components/status/status';
+import '@/cards/components/weight-graph/weight-graph';
 import { hasFeature } from '@/config/feature';
 import type { DutyReport } from '@/types/types';
 import { styles } from '@cards/robot/styles';
@@ -182,6 +183,13 @@ export class WhiskerCard extends LitElement {
           .litter_level=${this._duty.litter_level}
           .waste_drawer=${this._duty.waste_drawer}
         ></whisker-robot-levels>
+        ${this._config.chonk?.hide
+          ? nothing
+          : html`<whisker-weight-graph
+              .hass=${this._hass}
+              .config=${this._config}
+              .kitties=${this._duty.kitties}
+            ></whisker-weight-graph>`}
         <whisker-card-footer
           .hass=${this._hass}
           .config=${this._config}

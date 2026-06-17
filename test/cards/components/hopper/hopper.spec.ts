@@ -30,7 +30,8 @@ describe('hopper.ts (WhiskerHopper)', () => {
 
   beforeEach(() => {
     const helpers: CardHelpers = {
-      createRowElement: stub().returns(document.createElement('div')),
+      createCardElement: stub(),
+      createRowElement: stub(),
       createHuiElement: stub().returns(document.createElement('div')),
     };
     globalThis.poatCardHelpers = helpers;

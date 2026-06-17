@@ -59,6 +59,7 @@ nav:
   - Configuration:
       - Overview: CONFIGURATION.md
       - Options: configuration/OPTIONS.md
+      - Cleaning reminder: configuration/CLEANING-REMINDER.md
       - Interactions: configuration/INTERACTIONS.md
       - Footer: configuration/FOOTER.md
       - Feature flags: configuration/FEATURE-FLAGS.md

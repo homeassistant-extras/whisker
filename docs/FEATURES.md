@@ -8,6 +8,9 @@
 - **Pet weight** — A compact chip for the **pet weight** sensor (when present). Optional `hide_pet_weight` feature flag hides the chip on the robot image while keeping the sensor available ([Feature flags](configuration/FEATURE-FLAGS.md)).
 - **Pet weight graph** — A pet weight graph below the gauges. Choose between Home Assistant's native **history graph** (live data) or **statistics graph** (long-term mean/min/max trends) via `graph_type`. Per-cat weight sensors are auto-detected; use the `chonk` option to choose sensors, set the time window, statistic types, chart style (`line`, `line-stack`, `bar`, `bar-stack`), or hide the graph ([Pet weight graph](configuration/OPTIONS.md#pet-weight-graph)).
 - **LitterHopper status** — On **Litter-Robot 4** with a **LitterHopper** attached, a **header badge** appears next to the robot status icon when the integration exposes hopper entities. You can also add **Hopper status** and **Hopper connected** to the footer ([Footer configuration](configuration/FOOTER.md)). Badge icons match the official [`litterrobot` integration](https://github.com/home-assistant/core/blob/dev/homeassistant/components/litterrobot/icons.json); colors follow your Home Assistant theme.
+- **Cleaning reminder** — Point the card at any on/off-style entity with `cleaning_entity`; when it's active, a `mdi:broom` **header badge** and a warning-colored **card glow** (tinted background + border) appear, signalling the unit needs cleaning. Tap the badge for more-info. Great for a calendar-driven "needs cleaned" loop ([Cleaning reminder](configuration/CLEANING-REMINDER.md)).
+
+![Card showing the needs-cleaning badge and warning glow](assets/cleaning.png)
 
 ### LitterHopper header badge
 

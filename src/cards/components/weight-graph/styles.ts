@@ -5,10 +5,6 @@ export const weightGraphStyles = css`
     display: block;
   }
 
-  .weight-graph {
-    margin-top: 8px;
-  }
-
   /**
    * Flatten the embedded graph card. These ha-card custom properties inherit
    * through the card's shadow DOM into its internal <ha-card>.

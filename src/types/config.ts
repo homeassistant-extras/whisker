@@ -83,6 +83,12 @@ export interface Config {
   /** Robot artwork color variant. Defaults to {@link DEFAULT_COLOR}. */
   color?: RobotColor;
 
+  /**
+   * Entity (input_boolean / alert / binary_sensor / switch) whose active state
+   * means the unit needs cleaning. Shows a header badge + card glow.
+   */
+  cleaning_entity?: string;
+
   /** Options to enable or disable features **/
   features?: Features[];
 

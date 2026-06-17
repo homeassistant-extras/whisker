@@ -111,6 +111,22 @@ describe('editor.ts', () => {
               selector: { text: {} },
             },
             {
+              name: 'cleaning_entity',
+              label: 'Needs-cleaning entity',
+              selector: {
+                entity: {
+                  filter: {
+                    domain: [
+                      'input_boolean',
+                      'alert',
+                      'binary_sensor',
+                      'switch',
+                    ],
+                  },
+                },
+              },
+            },
+            {
               name: 'color',
               label: 'Robot color',
               selector: {

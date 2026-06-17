@@ -1,4 +1,5 @@
 import '@/cards/components/chonk/chonk';
+import '@/cards/components/cleaning/cleaning';
 import '@/cards/components/controls/controls-entity';
 import '@/cards/components/footer/footer';
 import '@/cards/components/hopper/hopper';
@@ -135,6 +136,12 @@ export class WhiskerCard extends LitElement {
         <div class="card-title-row">
           <h2 class="card-title">${title}</h2>
           <div class="card-title-status">
+            ${this._config?.cleaning_entity
+              ? html`<whisker-cleaning
+                  .hass=${this._hass}
+                  .entity=${this._config.cleaning_entity}
+                ></whisker-cleaning>`
+              : nothing}
             <whisker-litter-status
               .hass=${this._hass}
               .entity=${this._duty.status}

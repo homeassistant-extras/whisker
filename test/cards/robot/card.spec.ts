@@ -206,6 +206,28 @@ describe('card.ts', () => {
       expect(el.querySelector('.robot-image-stack whisker-hopper')).to.be.null;
     });
 
+    it('should not render the cleaning badge when cleaning_entity is unset', async () => {
+      const el = await fixture(card.render() as TemplateResult);
+      expect(el.querySelector('whisker-cleaning')).to.be.null;
+    });
+
+    it('should render the cleaning badge in the title row when cleaning_entity is set', async () => {
+      card.setConfig({
+        device_id: 'lr-1',
+        cleaning_entity: 'input_boolean.litter_robots_needs_cleaned',
+      });
+      card.hass = mockHass;
+      const el = await fixture(card.render() as TemplateResult);
+      const titleStatus = el.querySelector('.card-title-status');
+      const cleaning = titleStatus?.querySelector(
+        'whisker-cleaning',
+      ) as HTMLElement & { entity?: string };
+      expect(cleaning).to.exist;
+      expect(cleaning.entity).to.equal(
+        'input_boolean.litter_robots_needs_cleaned',
+      );
+    });
+
     it('should pass litter_box vacuum entity to the status panel', async () => {
       scoopStub.returns({
         ...mockDuty,

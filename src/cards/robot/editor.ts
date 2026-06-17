@@ -124,6 +124,17 @@ const getSchema = (config?: Config): HaFormSchema[] => {
           selector: { text: {} },
         },
         {
+          name: 'cleaning_entity',
+          label: 'Needs-cleaning entity',
+          selector: {
+            entity: {
+              filter: {
+                domain: ['input_boolean', 'alert', 'binary_sensor', 'switch'],
+              },
+            },
+          },
+        },
+        {
           name: 'color',
           label: 'Robot color',
           selector: {

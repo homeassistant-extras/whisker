@@ -83,6 +83,22 @@ export const styles = css`
     will-change: filter, transform;
   }
 
+  /** While the configured needs-cleaning entity is active */
+  ha-card:has(whisker-cleaning[needs-cleaning]) {
+    background-image: linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--warning-color, #ff9800) 14%, transparent) 0%,
+      color-mix(in srgb, var(--warning-color, #ff9800) 4%, transparent) 45%,
+      transparent 100%
+    );
+    box-shadow:
+      var(--ha-card-box-shadow, none),
+      inset 0 0 0 2px
+        color-mix(in srgb, var(--warning-color, #ff9800) 70%, transparent),
+      0 0 14px
+        color-mix(in srgb, var(--warning-color, #ff9800) 30%, transparent);
+  }
+
   @keyframes whisker-cycle-glow {
     0%,
     100% {

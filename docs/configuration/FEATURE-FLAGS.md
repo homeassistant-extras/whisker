@@ -24,4 +24,4 @@ features:
   - hide_pet_weight
 ```
 
-> The pet weight **history graph** is configured separately via the `chonk` option (not a feature flag). See [Pet weight graph](OPTIONS.md#pet-weight-graph).
+> The pet weight **graph** (history or statistics) is configured separately via the `chonk` option (not a feature flag). See [Pet weight graph](OPTIONS.md#pet-weight-graph).

@@ -45,16 +45,47 @@ features:
 
 ## Pet weight history graph
 
-Shown by default; auto-detects per-cat weight sensors. List them explicitly to control which appear:
+Auto-detects per-cat weight sensors. List them explicitly to control which appear:
 
 ```yaml
 type: custom:whisker-card
 device_id: YOUR_DEVICE_ID
 chonk:
+  graph_type: history
   kitties:
     - sensor.tuna_weight
     - sensor.mittens_weight
   hours_to_show: 168
+```
+
+## Pet weight statistics graph
+
+Plots long-term statistics (mean/min/max) — great for spotting trends over weeks or months. This is the default for new cards added through the dashboard UI:
+
+```yaml
+type: custom:whisker-card
+device_id: YOUR_DEVICE_ID
+chonk:
+  graph_type: statistics
+  days_to_show: 30
+  period: day
+  stat_types:
+    - mean
+    - max
+    - min
+  chart_type: line
+```
+
+Stacked line chart:
+
+```yaml
+type: custom:whisker-card
+device_id: YOUR_DEVICE_ID
+chonk:
+  graph_type: statistics
+  chart_type: line-stack
+  stat_types:
+    - mean
 ```
 
 Hide the graph entirely:

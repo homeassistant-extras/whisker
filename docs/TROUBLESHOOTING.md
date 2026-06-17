@@ -12,8 +12,8 @@ If controls or gauges are missing:
 
 ## Pet weight graph is empty
 
-- The graph uses the **history** integration (enabled by default). Confirm it's loaded.
-- Confirm the weight sensor(s) have recorded history (Developer tools → History) and aren't excluded from the `recorder`.
+- **History graph** (`graph_type: history`): uses the **history** integration (enabled by default). Confirm it's loaded and the weight sensor(s) have recorded history (Developer tools → History) and aren't excluded from the `recorder`.
+- **Statistics graph** (`graph_type: statistics`, the default for new cards): uses **long-term statistics**, which accumulate over time. A brand-new sensor may show nothing until statistics have been generated, and only entities tracked by the recorder will appear. Try a shorter `period` (e.g. `hour`) or switch to the history graph to confirm data exists.
 - If auto-detection finds nothing, set `chonk.kitties` explicitly. See [Pet weight graph](configuration/OPTIONS.md#pet-weight-graph).
 
 ## Getting help

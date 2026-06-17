@@ -7,7 +7,7 @@
 | `color`     | string   | Optional. Robot artwork color: `white` (default) or `black`.                                                                                                                            |
 | `footer`    | string[] | Optional. Footer metrics in display order. See [footer items](#footer-items) below.                                                                                                     |
 | `features`  | string[] | Optional. Feature flags. `percentage` — show fill % on litter and waste gauges; `hide_pet_weight` — hide the pet weight chip on the robot image. See [Feature flags](FEATURE-FLAGS.md). |
-| `chonk`     | object   | Optional. Pet weight history graph options. See [Pet weight graph](#pet-weight-graph) below.                                                                                            |
+| `chonk`     | object   | Optional. Pet weight graph options (history or statistics graph). See [Pet weight graph](#pet-weight-graph) below.                                                                      |
 
 ### Footer items
 
@@ -29,23 +29,70 @@ More detail in [Footer configuration](FOOTER.md).
 
 ### Pet weight graph
 
-The card shows a pet weight **history graph** below the gauges, powered by Home Assistant's built-in `history-graph` card. Configure it with the `chonk` object:
+The card shows a pet weight graph below the gauges. It can render either Home Assistant's built-in **history graph** (live recorder data) or its **statistics graph** (long-term statistics — mean/min/max aggregated over days). Pick the mode with `graph_type`. Cards added through the dashboard UI start on the **statistics graph** (mean/min/max, daily); manually written YAML without `graph_type` falls back to the history graph.
 
-| Key             | Type     | Description                                                                                                                  |
-| --------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `kitties`       | string[] | Optional. Weight sensor entity ids to plot. When omitted, the card auto-detects per-cat weight sensors from the integration. |
-| `hours_to_show` | number   | Optional. Hours of history to show. Defaults to `168` (7 days).                                                              |
-| `hide`          | boolean  | Optional. Hide the weight graph entirely. Defaults to `false`.                                                               |
-| `hide_names`    | boolean  | Optional. Hide entity names in the graph legend. Defaults to `false`.                                                        |
+Configure it with the `chonk` object:
 
-![Pet weight graph](../assets/history.png)
+| Key             | Type     | Graph      | Description                                                                                                                  |
+| --------------- | -------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `kitties`       | string[] | both       | Optional. Weight sensor entity ids to plot. When omitted, the card auto-detects per-cat weight sensors from the integration. |
+| `graph_type`    | string   | both       | Optional. `history` (default) or `statistics`.                                                                               |
+| `hide`          | boolean  | both       | Optional. Hide the weight graph entirely. Defaults to `false`.                                                               |
+| `hide_names`    | boolean  | both       | Optional. History graph: hide entity names. Statistics graph: hide the legend. Defaults to `false`.                          |
+| `hours_to_show` | number   | history    | Optional. Hours of history to show. Defaults to `168` (7 days).                                                              |
+| `days_to_show`  | number   | statistics | Optional. Days of statistics to show. Defaults to `30`.                                                                      |
+| `period`        | string   | statistics | Optional. Aggregation period: `auto` (default), `5minute`, `hour`, `day`, `week`, or `month`.                                |
+| `stat_types`    | string[] | statistics | Optional. Statistic series to plot: `mean` (default), `min`, `max`, `state`, `change`, `sum`.                                |
+| `chart_type`    | string   | statistics | Optional. Chart style: `line` (default), `line-stack`, `bar`, or `bar-stack`.                                                |
+
+#### History graph
+
+![Pet weight history graph](../assets/history.png)
 
 ```yaml
 type: custom:whisker-card
 device_id: YOUR_DEVICE_ID
 chonk:
+  graph_type: history
   kitties:
     - sensor.kitty_weight
     - sensor.mittens_weight
   hours_to_show: 168
+```
+
+#### Statistics graph
+
+Plots long-term statistics, which is ideal for spotting weight trends over weeks or months.
+
+![Pet weight statistics graph](../assets/statistics.png)
+
+```yaml
+type: custom:whisker-card
+device_id: YOUR_DEVICE_ID
+chonk:
+  graph_type: statistics
+  kitties:
+    - sensor.kitty_weight
+    - sensor.mittens_weight
+  days_to_show: 30
+  period: day
+  stat_types:
+    - mean
+    - max
+    - min
+  chart_type: line
+```
+
+Use a stacked chart (`line-stack` or `bar-stack`) to compare combined weight across cats:
+
+![Stacked line statistics graph](../assets/line-stack.png)
+
+```yaml
+type: custom:whisker-card
+device_id: YOUR_DEVICE_ID
+chonk:
+  graph_type: statistics
+  chart_type: line-stack
+  stat_types:
+    - mean
 ```

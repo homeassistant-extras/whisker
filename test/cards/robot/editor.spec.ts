@@ -1,4 +1,5 @@
 import { WhiskerCardEditor } from '@cards/robot/editor';
+import type { HaFormSchema } from '@homeassistant-extras/hass/components/ha-form/types';
 import type { HomeAssistant } from '@homeassistant-extras/hass/types';
 import { fixture } from '@open-wc/testing-helpers';
 import {
@@ -144,14 +145,70 @@ describe('editor.ts', () => {
               },
             },
             {
-              name: 'hours_to_show',
-              label: 'Weight graph hours to show',
+              name: 'graph_type',
+              label: 'Graph type',
+              selector: {
+                select: {
+                  options: [
+                    { value: 'history', label: 'History' },
+                    { value: 'statistics', label: 'Statistics' },
+                  ],
+                },
+              },
+            },
+            {
+              name: 'days_to_show',
+              label: 'Weight graph days to show',
               selector: {
                 number: {
                   min: 1,
-                  max: 720,
+                  max: 365,
                   mode: 'box',
-                  unit_of_measurement: 'hours',
+                  unit_of_measurement: 'days',
+                },
+              },
+            },
+            {
+              name: 'period',
+              label: 'Statistics period',
+              selector: {
+                select: {
+                  options: [
+                    { value: 'auto', label: 'Automatic' },
+                    { value: '5minute', label: '5 minutes' },
+                    { value: 'hour', label: 'Hour' },
+                    { value: 'day', label: 'Day' },
+                    { value: 'week', label: 'Week' },
+                    { value: 'month', label: 'Month' },
+                  ],
+                },
+              },
+            },
+            {
+              name: 'stat_types',
+              label: 'Statistic types',
+              selector: {
+                select: {
+                  options: [
+                    { value: 'mean', label: 'Mean' },
+                    { value: 'min', label: 'Min' },
+                    { value: 'max', label: 'Max' },
+                  ],
+                  multiple: true,
+                },
+              },
+            },
+            {
+              name: 'chart_type',
+              label: 'Chart type',
+              selector: {
+                select: {
+                  options: [
+                    { value: 'line', label: 'Line' },
+                    { value: 'line-stack', label: 'Stacked line' },
+                    { value: 'bar', label: 'Bar' },
+                    { value: 'bar-stack', label: 'Stacked bar' },
+                  ],
                 },
               },
             },
@@ -206,6 +263,30 @@ describe('editor.ts', () => {
         },
       ]);
     });
+  });
+
+  it('should swap in statistics fields when graph_type is statistics', async () => {
+    editor.setConfig({
+      device_id: 'lr-1',
+      chonk: { graph_type: 'statistics' },
+    });
+    const el = await fixture(editor.render() as TemplateResult);
+    const schema = (el as HTMLElement & { schema: HaFormSchema[] }).schema;
+    const chonk = schema.find(
+      (s) => (s as { name?: string }).name === 'chonk',
+    ) as unknown as { schema: { name: string }[] };
+    const names = chonk.schema.map((s) => s.name);
+
+    expect(names).to.deep.equal([
+      'kitties',
+      'graph_type',
+      'days_to_show',
+      'period',
+      'stat_types',
+      'chart_type',
+      'hide',
+      'hide_names',
+    ]);
   });
 
   describe('form behavior', () => {
@@ -288,6 +369,41 @@ describe('editor.ts', () => {
         chonk: { hours_to_show: 48 },
       });
       expect(config.chonk).to.deep.equal({ hours_to_show: 48 });
+    });
+
+    it('should keep statistics options and graph_type', () => {
+      editor.setConfig({ device_id: 'lr-1' });
+      const config = fireValueChanged({
+        device_id: 'lr-1',
+        chonk: {
+          graph_type: 'statistics',
+          days_to_show: 60,
+          period: 'week',
+          stat_types: ['mean', 'max'],
+          chart_type: 'bar',
+        },
+      } as Config);
+      expect(config.chonk).to.deep.equal({
+        days_to_show: 60,
+        period: 'week',
+        stat_types: ['mean', 'max'],
+        chart_type: 'bar',
+      });
+    });
+
+    it('should drop default/auto statistics values and keep history graph_type', () => {
+      editor.setConfig({ device_id: 'lr-1' });
+      const config = fireValueChanged({
+        device_id: 'lr-1',
+        chonk: {
+          graph_type: 'history',
+          days_to_show: 30,
+          period: 'auto',
+          stat_types: [],
+          chart_type: 'line',
+        },
+      } as Config);
+      expect(config.chonk).to.deep.equal({ graph_type: 'history' });
     });
 
     it('should drop empty features and default color', () => {

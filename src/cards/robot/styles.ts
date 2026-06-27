@@ -40,14 +40,6 @@ export const styles = css`
     padding: 8px 12px 4px;
   }
 
-  /** Pet weight chip: bottom-left overlay on robot image */
-  .status-chonk {
-    position: absolute;
-    bottom: 8px;
-    left: 12px;
-    z-index: 3;
-  }
-
   .robot-image-stack {
     position: relative;
     display: block;

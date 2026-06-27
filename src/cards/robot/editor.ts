@@ -221,10 +221,7 @@ const getSchema = (config?: Config): HaFormSchema[] => {
       label: 'Features',
       selector: {
         select: {
-          options: [
-            { value: 'percentage', label: 'Show gauge percentages' },
-            { value: 'hide_pet_weight', label: 'Hide pet weight chip' },
-          ],
+          options: [{ value: 'percentage', label: 'Show gauge percentages' }],
           multiple: true,
         },
       },

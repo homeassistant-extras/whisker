@@ -11,7 +11,7 @@ This folder contains Lit-based card UI, editors, mixins, and card-specific compo
 ## Layout
 
 - **`robot/`** — main card (`card.ts`), visual editor (`editor.ts`), shared `styles.ts`, bundled artwork (`assets.ts`), and model detection (`detect-model.ts`).
-- **`components/`** — focused sub-components: `status`, `status-panel`, `controls`, `footer`, `toilet-levels`, `chonk`.
+- **`components/`** — focused sub-components: `status`, `status-panel`, `controls`, `footer`, `toilet-levels`, `weight-graph`.
 - **`mixins/`** — shared Lit mixins; see [mixins/AGENTS.md](./mixins/AGENTS.md).
 
 ## Robot artwork

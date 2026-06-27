@@ -27,7 +27,7 @@ Replace `YOUR_DEVICE_ID` with the id from the device page in Home Assistant, or 
 - Status header with human-readable status and colored icon
 - Quick actions (vacuum / reset / waste drawer when available)
 - Controls menu with native entity rows
-- Pet weight chip and litter / waste gauges
+- Litter / waste gauges
 - Pet weight graph — history or long-term statistics (auto-detects multiple cats)
 - **LitterHopper status badge** on LR4 when a LitterHopper is attached (optional hopper footer items too)
 - Optional gauge percentages and customizable footer

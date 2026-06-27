@@ -54,7 +54,7 @@ Fix the type errors first, then rerun `yarn test`. Do not investigate path alias
 
 ### Layered structure under `src/`
 
-- **`cards/`** — Lit components. `cards/robot/` holds the main card ([card.ts](src/cards/robot/card.ts)), visual editor ([editor.ts](src/cards/robot/editor.ts)), shared `styles.ts`, bundled artwork ([assets.ts](src/cards/robot/assets.ts)), and model detection ([detect-model.ts](src/cards/robot/detect-model.ts)). `cards/components/` contains focused sub-components (`status`, `status-panel`, `controls`, `footer`, `toilet-levels`, `chonk`). `cards/mixins/` holds Lit mixins shared across components.
+- **`cards/`** — Lit components. `cards/robot/` holds the main card ([card.ts](src/cards/robot/card.ts)), visual editor ([editor.ts](src/cards/robot/editor.ts)), shared `styles.ts`, bundled artwork ([assets.ts](src/cards/robot/assets.ts)), and model detection ([detect-model.ts](src/cards/robot/detect-model.ts)). `cards/components/` contains focused sub-components (`status`, `status-panel`, `controls`, `footer`, `toilet-levels`, `weight-graph`). `cards/mixins/` holds Lit mixins shared across components.
 - **`delegates/`** — Business logic, kept independent of Lit rendering: `retrievers/` for reading HASS state/entities, `entities/` for entity selection/mapping, `utils/` for pure transforms and action handlers. Cards call into delegates; delegates do not import from cards.
 - **`hass/`** — Vendored / adapted Home Assistant frontend types and helpers (`common`, `components`, `data`, `dialogs`, `panels`, `state`, `ws`, plus `types.ts`). Treat these as upstream code; keep them matching upstream unless a divergence is documented.
 - **`html/`** — Small, side-effect-free helpers that return Lit templates (state displays, icons, sections, rows). No business logic.
@@ -67,7 +67,7 @@ Fix the type errors first, then rerun `yarn test`. Do not investigate path alias
 2. Delegates resolve the device's entities from HA's entity/device registries and current state; `scoop-droppings` also reads `model` and `serial_number` from the device registry.
 3. Robot artwork is selected from bundled AVIFs via serial-prefix detection (`detect-model.ts`) and config `color`.
 4. Status is derived from the `status_code` sensor; an active cycle (`ccp`, `ec`, `cst`) triggers "cycling" visual emphasis.
-5. The card and its sub-components render gauges (litter/waste), configurable footer metrics, pet weight chip, status header, and quick actions.
+5. The card and its sub-components render gauges (litter/waste), configurable footer metrics, pet weight graph, status header, and quick actions.
 6. Interactions: litter-box tap → `vacuum.start`, reset tap → `button.press`; hold on either opens the standard HA more-info dialog. The hamburger menu opens a dialog of native Lovelace entity rows for globe light, brightness, panel brightness, and cycle delay (when present).
 
 ### TypeScript path aliases

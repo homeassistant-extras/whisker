@@ -1,4 +1,3 @@
-import '@/cards/components/chonk/chonk';
 import '@/cards/components/cleaning/cleaning';
 import '@/cards/components/controls/controls-entity';
 import '@/cards/components/footer/footer';
@@ -6,7 +5,6 @@ import '@/cards/components/hopper/hopper';
 import '@/cards/components/status-panel/status-panel';
 import '@/cards/components/status/status';
 import '@/cards/components/weight-graph/weight-graph';
-import { hasFeature } from '@/config/feature';
 import type { DutyReport } from '@/types/types';
 import { styles } from '@cards/robot/styles';
 import { scoopDroppings } from '@delegates/utils/scoop-droppings';
@@ -175,13 +173,6 @@ export class WhiskerCard extends LitElement {
               .panelLockoutEntity=${this._duty.panel_lockout}
             ></whisker-controls-entity>
           </div>
-          ${hasFeature(this._config, 'hide_pet_weight')
-            ? nothing
-            : html`<whisker-chonk
-                class="status-chonk"
-                .hass=${this._hass}
-                .entity=${this._duty.pet_weight}
-              ></whisker-chonk>`}
           <img src=${robotImage} alt="Litter Robot" loading="lazy" />
         </div>
         <whisker-robot-levels

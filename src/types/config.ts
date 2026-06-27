@@ -153,4 +153,4 @@ export interface Config {
 }
 
 /** Features to enable or disable functionality */
-export type Features = 'percentage' | 'hide_pet_weight';
+export type Features = 'percentage';

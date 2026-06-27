@@ -86,5 +86,5 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file.
 - [x] **Customizable footer** — choose footer metrics and order - thanks @alicia86
 - [x] **Model-aware artwork** — auto-detects Litter-Robot model - thanks @adude007
 - [x] **Litter Hopper status** — hopper badge & footer items on LR4 when a LitterHopper is attached - thanks @chrispgriffin & @adude007, @eviljacquiooh
-- [x] **Hide pet weight chip** — optional `hide_pet_weight` feature flag for multi-cat setups - thanks @semichcsc-byte
+- [x] **Pet weight** — shown via the footer (`pet_weight`) and the auto-detected weight graph (the standalone chip was retired) - thanks @semichcsc-byte
 - [x] **Pet weight graph** — auto-detected multi-cat weight graph with history or long-term **statistics** - thanks @brombomb & @adude007

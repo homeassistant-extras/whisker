@@ -151,15 +151,8 @@ describe('card.ts', () => {
       );
       expect(el.querySelectorAll('whisker-robot-levels')).to.have.length(1);
       expect(el.querySelector('whisker-status-panel')).to.not.be.null;
-      expect(el.querySelector('whisker-chonk')).to.not.be.null;
       expect(el.querySelector('whisker-hopper')).to.be.null;
       expect(el.querySelector('whisker-card-footer')).to.not.be.null;
-    });
-
-    it('should not render pet weight chip when hide_pet_weight feature is set', async () => {
-      card.setConfig({ device_id: 'lr-1', features: ['hide_pet_weight'] });
-      const el = await fixture(card.render() as TemplateResult);
-      expect(el.querySelector('whisker-chonk')).to.be.null;
     });
 
     it('should render the weight graph with kitties from duty by default', async () => {

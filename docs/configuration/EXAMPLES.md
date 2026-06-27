@@ -34,15 +34,6 @@ features:
   - percentage
 ```
 
-## Hide pet weight chip (multi-cat)
-
-```yaml
-type: custom:whisker-card
-device_id: YOUR_DEVICE_ID
-features:
-  - hide_pet_weight
-```
-
 ## Pet weight history graph
 
 Auto-detects per-cat weight sensors. List them explicitly to control which appear:

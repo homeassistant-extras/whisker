@@ -7,7 +7,7 @@
 | `cleaning_entity` | string   | Optional. Entity (`input_boolean`, `alert`, `binary_sensor`, or `switch`) whose active state shows a "needs cleaning" header badge + card glow. See [Cleaning reminder](CLEANING-REMINDER.md). |
 | `color`           | string   | Optional. Robot artwork color: `white` (default) or `black`.                                                                                                                                   |
 | `footer`          | string[] | Optional. Footer metrics in display order. See [footer items](#footer-items) below.                                                                                                            |
-| `features`        | string[] | Optional. Feature flags. `percentage` — show fill % on litter and waste gauges; `hide_pet_weight` — hide the pet weight chip on the robot image. See [Feature flags](FEATURE-FLAGS.md).        |
+| `features`        | string[] | Optional. Feature flags. `percentage` — show fill % on litter and waste gauges. See [Feature flags](FEATURE-FLAGS.md).                                                                         |
 | `chonk`           | object   | Optional. Pet weight graph options (history or statistics graph). See [Pet weight graph](#pet-weight-graph) below.                                                                             |
 
 ### Footer items

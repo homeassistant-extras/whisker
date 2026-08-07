@@ -186,7 +186,7 @@ describe('editor.ts', () => {
             },
             {
               name: 'period',
-              label: 'Statistics period',
+              label: 'Weight graph statistics period',
               selector: {
                 select: {
                   options: [
@@ -202,7 +202,7 @@ describe('editor.ts', () => {
             },
             {
               name: 'stat_types',
-              label: 'Statistic types',
+              label: 'Weight graph statistic types',
               selector: {
                 select: {
                   options: [
@@ -216,7 +216,7 @@ describe('editor.ts', () => {
             },
             {
               name: 'chart_type',
-              label: 'Chart type',
+              label: 'Weight graph chart type',
               selector: {
                 select: {
                   options: [
@@ -231,6 +231,120 @@ describe('editor.ts', () => {
             {
               name: 'hide',
               label: 'Hide chonk',
+              selector: {
+                boolean: {},
+              },
+            },
+            {
+              name: 'collapsed',
+              label: 'Start collapsed',
+              selector: {
+                boolean: {},
+              },
+            },
+            {
+              name: 'hide_names',
+              label: 'Hide pet names',
+              selector: {
+                boolean: {},
+              },
+            },
+          ],
+        },
+        {
+          name: 'visits',
+          label: 'Pet visits',
+          type: 'expandable',
+          icon: 'mdi:paw',
+          schema: [
+            {
+              name: 'kitties',
+              label: 'Visit entities',
+              selector: {
+                entity: {
+                  multiple: true,
+                  reorder: true,
+                  filter: { integration: 'litterrobot', domain: 'sensor' },
+                },
+              },
+            },
+            {
+              name: 'graph_type',
+              label: 'Graph type',
+              selector: {
+                select: {
+                  options: [
+                    { value: 'history', label: 'History' },
+                    { value: 'statistics', label: 'Statistics' },
+                  ],
+                },
+              },
+            },
+            {
+              name: 'days_to_show',
+              label: 'Visits graph days to show',
+              selector: {
+                number: {
+                  min: 1,
+                  max: 365,
+                  mode: 'box',
+                  unit_of_measurement: 'days',
+                },
+              },
+            },
+            {
+              name: 'period',
+              label: 'Visits graph statistics period',
+              selector: {
+                select: {
+                  options: [
+                    { value: 'auto', label: 'Automatic' },
+                    { value: '5minute', label: '5 minutes' },
+                    { value: 'hour', label: 'Hour' },
+                    { value: 'day', label: 'Day' },
+                    { value: 'week', label: 'Week' },
+                    { value: 'month', label: 'Month' },
+                  ],
+                },
+              },
+            },
+            {
+              name: 'stat_types',
+              label: 'Visits graph statistic types',
+              selector: {
+                select: {
+                  options: [
+                    { value: 'change', label: 'Total per period' },
+                    { value: 'sum', label: 'Sum' },
+                  ],
+                  multiple: true,
+                },
+              },
+            },
+            {
+              name: 'chart_type',
+              label: 'Visits graph chart type',
+              selector: {
+                select: {
+                  options: [
+                    { value: 'line', label: 'Line' },
+                    { value: 'line-stack', label: 'Stacked line' },
+                    { value: 'bar', label: 'Bar' },
+                    { value: 'bar-stack', label: 'Stacked bar' },
+                  ],
+                },
+              },
+            },
+            {
+              name: 'hide',
+              label: 'Hide visits',
+              selector: {
+                boolean: {},
+              },
+            },
+            {
+              name: 'collapsed',
+              label: 'Start collapsed',
               selector: {
                 boolean: {},
               },
@@ -300,6 +414,50 @@ describe('editor.ts', () => {
       'stat_types',
       'chart_type',
       'hide',
+      'collapsed',
+      'hide_names',
+    ]);
+  });
+
+  it('should swap in history fields when visits.graph_type is history', async () => {
+    editor.setConfig({
+      device_id: 'lr-1',
+      visits: { graph_type: 'history' },
+    });
+    const el = await fixture(editor.render() as TemplateResult);
+    const schema = (el as HTMLElement & { schema: HaFormSchema[] }).schema;
+    const visits = schema.find(
+      (s) => (s as { name?: string }).name === 'visits',
+    ) as unknown as { schema: { name: string }[] };
+    const names = visits.schema.map((s) => s.name);
+
+    expect(names).to.deep.equal([
+      'kitties',
+      'graph_type',
+      'hours_to_show',
+      'hide',
+      'collapsed',
+      'hide_names',
+    ]);
+  });
+
+  it('should default the visits section to statistics fields', async () => {
+    editor.setConfig({ device_id: 'lr-1' });
+    const el = await fixture(editor.render() as TemplateResult);
+    const schema = (el as HTMLElement & { schema: HaFormSchema[] }).schema;
+    const visits = schema.find(
+      (s) => (s as { name?: string }).name === 'visits',
+    ) as unknown as { schema: { name: string }[] };
+
+    expect(visits.schema.map((s) => s.name)).to.deep.equal([
+      'kitties',
+      'graph_type',
+      'days_to_show',
+      'period',
+      'stat_types',
+      'chart_type',
+      'hide',
+      'collapsed',
       'hide_names',
     ]);
   });
@@ -419,6 +577,99 @@ describe('editor.ts', () => {
         },
       } as Config);
       expect(config.chonk).to.deep.equal({ graph_type: 'history' });
+    });
+
+    it('should drop an empty visits object', () => {
+      editor.setConfig({ device_id: 'lr-1' });
+      const config = fireValueChanged({
+        device_id: 'lr-1',
+        visits: { hide: false, kitties: [], days_to_show: undefined },
+      } as Config);
+      expect(config.visits).to.be.undefined;
+    });
+
+    it('should drop the visits defaults but keep hide and kitties', () => {
+      editor.setConfig({ device_id: 'lr-1' });
+      const config = fireValueChanged({
+        device_id: 'lr-1',
+        visits: {
+          hide: true,
+          kitties: ['sensor.ellie_visits_today'],
+          graph_type: 'statistics',
+          days_to_show: 30,
+          period: 'day',
+          chart_type: 'bar-stack',
+          stat_types: ['change'],
+        },
+      } as Config);
+      expect(config.visits).to.deep.equal({
+        hide: true,
+        kitties: ['sensor.ellie_visits_today'],
+      });
+    });
+
+    it('should drop default weight stat_types', () => {
+      editor.setConfig({ device_id: 'lr-1' });
+      const config = fireValueChanged({
+        device_id: 'lr-1',
+        chonk: {
+          days_to_show: 60,
+          stat_types: ['mean', 'max', 'min'],
+        },
+      } as Config);
+      expect(config.chonk).to.deep.equal({ days_to_show: 60 });
+    });
+
+    it('should keep non-default visits options', () => {
+      editor.setConfig({ device_id: 'lr-1' });
+      const config = fireValueChanged({
+        device_id: 'lr-1',
+        visits: {
+          graph_type: 'history',
+          hours_to_show: 48,
+          stat_types: ['sum'],
+          chart_type: 'line',
+        },
+      } as Config);
+      expect(config.visits).to.deep.equal({
+        graph_type: 'history',
+        hours_to_show: 48,
+        stat_types: ['sum'],
+        chart_type: 'line',
+      });
+    });
+
+    it('should drop collapsed when false', () => {
+      editor.setConfig({ device_id: 'lr-1' });
+      const config = fireValueChanged({
+        device_id: 'lr-1',
+        chonk: { hours_to_show: 48, collapsed: false },
+        visits: { days_to_show: 14, collapsed: false },
+      } as Config);
+      expect(config.chonk).to.deep.equal({ hours_to_show: 48 });
+      expect(config.visits).to.deep.equal({ days_to_show: 14 });
+    });
+
+    it('should keep collapsed when true', () => {
+      editor.setConfig({ device_id: 'lr-1' });
+      const config = fireValueChanged({
+        device_id: 'lr-1',
+        chonk: { collapsed: true },
+        visits: { collapsed: true },
+      } as Config);
+      expect(config.chonk).to.deep.equal({ collapsed: true });
+      expect(config.visits).to.deep.equal({ collapsed: true });
+    });
+
+    it('should clean chonk and visits independently', () => {
+      editor.setConfig({ device_id: 'lr-1' });
+      const config = fireValueChanged({
+        device_id: 'lr-1',
+        chonk: { hours_to_show: 48 },
+        visits: { hide: false, kitties: [] },
+      } as Config);
+      expect(config.chonk).to.deep.equal({ hours_to_show: 48 });
+      expect(config.visits).to.be.undefined;
     });
 
     it('should drop empty features and default color', () => {

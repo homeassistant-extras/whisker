@@ -2,11 +2,15 @@ import '@/cards/components/cleaning/cleaning';
 import '@/cards/components/controls/controls-entity';
 import '@/cards/components/footer/footer';
 import '@/cards/components/hopper/hopper';
+import '@/cards/components/pet-graph/pet-graph';
 import '@/cards/components/status-panel/status-panel';
 import '@/cards/components/status/status';
-import '@/cards/components/weight-graph/weight-graph';
 import type { DutyReport } from '@/types/types';
 import { styles } from '@cards/robot/styles';
+import {
+  VISITS_GRAPH_DEFAULTS,
+  WEIGHT_GRAPH_DEFAULTS,
+} from '@delegates/utils/graph-config';
 import { scoopDroppings } from '@delegates/utils/scoop-droppings';
 import {
   resolvePoatCardHelpers,
@@ -183,11 +187,22 @@ export class WhiskerCard extends LitElement {
         ></whisker-robot-levels>
         ${this._config.chonk?.hide
           ? nothing
-          : html`<whisker-weight-graph
+          : html`<whisker-pet-graph
               .hass=${this._hass}
-              .config=${this._config}
+              .header=${'Pet weight'}
               .kitties=${this._duty.kitties}
-            ></whisker-weight-graph>`}
+              .options=${this._config.chonk}
+              .defaults=${WEIGHT_GRAPH_DEFAULTS}
+            ></whisker-pet-graph>`}
+        ${this._config.visits?.hide
+          ? nothing
+          : html`<whisker-pet-graph
+              .hass=${this._hass}
+              .header=${'Pet visits'}
+              .kitties=${this._duty.visits}
+              .options=${this._config.visits}
+              .defaults=${VISITS_GRAPH_DEFAULTS}
+            ></whisker-pet-graph>`}
         <whisker-card-footer
           .hass=${this._hass}
           .config=${this._config}

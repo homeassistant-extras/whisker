@@ -62,5 +62,9 @@ export interface DutyReport {
   /** Hopper connected binary sensor entity id (`translation_key` hopper_connected), when a LitterHopper is attached */
   hopper_connected?: string | null;
 
+  /** Pet weight sensor entity ids (configured, else auto-detected) */
   kitties?: string[];
+
+  /** Pet `visits_today` sensor entity ids (configured, else auto-detected) */
+  visits?: string[];
 }

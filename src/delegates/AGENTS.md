@@ -13,3 +13,14 @@ This folder contains business logic, retrievers, action handlers, subscriptions,
 `utils/scoop-droppings.ts` builds the card's `DutyReport` from the device registry and entity translation keys via `getDevice()` and `mapEntitiesByTranslationKey()`. It passes through `model` and `serial_number` from the device entry — the card uses those for robot artwork, not for entity mapping.
 
 Entity-to-field mapping lives in `src/common/map-entities.ts`. Live entity subscriptions live under `entities/subscriptions/`.
+
+Pet sensors live on **other** devices than the configured robot, so they are auto-detected rather than mapped by key. The two heuristics differ because upstream registers them differently:
+
+- **weight** (`kitties`) — no `translation_key`, matched on `device_class: weight`.
+- **visits** (`visits`) — no device class, matched on `translation_key: visits_today`.
+
+Either list is skipped when the user configures `chonk.kitties` / `visits.kitties` explicitly.
+
+## Graph config
+
+`utils/graph-config.ts` exposes `buildGraphConfig(entities, options, defaults)`, a pure builder returning the `history-graph` or `statistics-graph` config that `whisker-pet-graph` wraps. It also exports `WEIGHT_GRAPH_DEFAULTS` and `VISITS_GRAPH_DEFAULTS` for the card to pass in as props.

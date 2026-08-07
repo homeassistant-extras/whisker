@@ -1,23 +1,56 @@
 import { fireEvent } from '@homeassistant-extras/hass/common/dom/fire_event';
 import type { HaFormSchema } from '@homeassistant-extras/hass/components/ha-form/types';
+import type { EntitySelectorFilter } from '@homeassistant-extras/hass/data/selector';
 import '@homeassistant-extras/hass/panels/lovelace/editor/hui-element-editor';
 import type { HomeAssistant } from '@homeassistant-extras/hass/types';
 import {
   DEFAULT_COLOR,
+  DEFAULT_VISITS_CHART_TYPE,
+  DEFAULT_VISITS_DAYS_TO_SHOW,
+  DEFAULT_VISITS_GRAPH_TYPE,
+  DEFAULT_VISITS_HOURS_TO_SHOW,
+  DEFAULT_VISITS_PERIOD,
+  DEFAULT_VISITS_STAT_TYPES,
   DEFAULT_WEIGHT_CHART_TYPE,
   DEFAULT_WEIGHT_DAYS_TO_SHOW,
   DEFAULT_WEIGHT_GRAPH_TYPE,
   DEFAULT_WEIGHT_HOURS_TO_SHOW,
+  DEFAULT_WEIGHT_STAT_TYPES,
+  type ChartType,
   type Config,
+  type GraphSectionConfig,
+  type GraphType,
+  type StatisticPeriod,
+  type StatisticType,
 } from '@type/config';
 import { html, LitElement, nothing, type TemplateResult } from 'lit';
 import { state } from 'lit/decorators.js';
 
-/** Chonk fields shown only for the live `history-graph`. */
-const HISTORY_GRAPH_SCHEMA: HaFormSchema[] = [
+/** Statistic series offered for the pet weight graph (a continuous measurement). */
+const WEIGHT_STAT_OPTIONS = [
+  { value: 'mean', label: 'Mean' },
+  { value: 'min', label: 'Min' },
+  { value: 'max', label: 'Max' },
+];
+
+/**
+ * Statistic series offered for the visits graph. `visits_today` resets daily,
+ * so only running totals make sense — mean/min/max would be meaningless.
+ */
+const VISITS_STAT_OPTIONS = [
+  { value: 'change', label: 'Total per period' },
+  { value: 'sum', label: 'Sum' },
+];
+
+/**
+ * Builds the fields shown only for the live `history-graph`.
+ * @param {string} prefix - Section label prefix, e.g. `Weight graph`
+ * @returns {HaFormSchema[]} The history-graph-only fields
+ */
+const historyGraphSchema = (prefix: string): HaFormSchema[] => [
   {
     name: 'hours_to_show',
-    label: 'Weight graph hours to show',
+    label: `${prefix} hours to show`,
     selector: {
       number: {
         min: 1,
@@ -29,11 +62,19 @@ const HISTORY_GRAPH_SCHEMA: HaFormSchema[] = [
   },
 ];
 
-/** Chonk fields shown only for the `statistics-graph`. */
-const STATISTICS_GRAPH_SCHEMA: HaFormSchema[] = [
+/**
+ * Builds the fields shown only for the `statistics-graph`.
+ * @param {string} prefix - Section label prefix, e.g. `Weight graph`
+ * @param {object[]} statOptions - Statistic series options for this section
+ * @returns {HaFormSchema[]} The statistics-graph-only fields
+ */
+const statisticsGraphSchema = (
+  prefix: string,
+  statOptions: { value: string; label: string }[],
+): HaFormSchema[] => [
   {
     name: 'days_to_show',
-    label: 'Weight graph days to show',
+    label: `${prefix} days to show`,
     selector: {
       number: {
         min: 1,
@@ -45,7 +86,7 @@ const STATISTICS_GRAPH_SCHEMA: HaFormSchema[] = [
   },
   {
     name: 'period',
-    label: 'Statistics period',
+    label: `${prefix} statistics period`,
     selector: {
       select: {
         options: [
@@ -61,21 +102,17 @@ const STATISTICS_GRAPH_SCHEMA: HaFormSchema[] = [
   },
   {
     name: 'stat_types',
-    label: 'Statistic types',
+    label: `${prefix} statistic types`,
     selector: {
       select: {
-        options: [
-          { value: 'mean', label: 'Mean' },
-          { value: 'min', label: 'Min' },
-          { value: 'max', label: 'Max' },
-        ],
+        options: statOptions,
         multiple: true,
       },
     },
   },
   {
     name: 'chart_type',
-    label: 'Chart type',
+    label: `${prefix} chart type`,
     selector: {
       select: {
         options: [
@@ -89,14 +126,91 @@ const STATISTICS_GRAPH_SCHEMA: HaFormSchema[] = [
   },
 ];
 
+/** Inputs shared by both graph editor sections. */
+interface GraphSectionSchemaOptions {
+  name: 'chonk' | 'visits';
+  label: string;
+  icon: string;
+  entitiesLabel: string;
+  hideLabel: string;
+  entityFilter: EntitySelectorFilter;
+  prefix: string;
+  graphType: GraphType;
+  statOptions: { value: string; label: string }[];
+}
+
 /**
- * Builds the editor schema, swapping the graph-specific chonk fields based on
- * the currently selected `graph_type`.
+ * Builds one expandable graph section (`chonk` / `visits`) for the editor.
+ * @param {GraphSectionSchemaOptions} opts - Section labels, filters, and type
+ * @returns {HaFormSchema} The expandable section schema
+ */
+const graphSectionSchema = (opts: GraphSectionSchemaOptions): HaFormSchema => ({
+  name: opts.name,
+  label: opts.label,
+  type: 'expandable',
+  icon: opts.icon,
+  schema: [
+    {
+      name: 'kitties',
+      label: opts.entitiesLabel,
+      selector: {
+        entity: {
+          multiple: true,
+          reorder: true,
+          filter: opts.entityFilter,
+        },
+      },
+    },
+    {
+      name: 'graph_type',
+      label: 'Graph type',
+      selector: {
+        select: {
+          options: [
+            { value: 'history', label: 'History' },
+            { value: 'statistics', label: 'Statistics' },
+          ],
+        },
+      },
+    },
+    ...(opts.graphType === 'statistics'
+      ? statisticsGraphSchema(opts.prefix, opts.statOptions)
+      : historyGraphSchema(opts.prefix)),
+    {
+      name: 'hide',
+      label: opts.hideLabel,
+      selector: {
+        boolean: {},
+      },
+    },
+    {
+      name: 'collapsed',
+      label: 'Start collapsed',
+      selector: {
+        boolean: {},
+      },
+    },
+    {
+      name: 'hide_names',
+      label: 'Hide pet names',
+      selector: {
+        boolean: {},
+      },
+    },
+  ],
+});
+
+/**
+ * Builds the editor schema, swapping the graph-specific fields based on each
+ * section's currently selected `graph_type`.
  * @param {Config} [config] - The current card config
  * @returns {HaFormSchema[]} The ha-form schema
  */
 const getSchema = (config?: Config): HaFormSchema[] => {
-  const graphType = config?.chonk?.graph_type ?? DEFAULT_WEIGHT_GRAPH_TYPE;
+  const weightGraphType =
+    config?.chonk?.graph_type ?? DEFAULT_WEIGHT_GRAPH_TYPE;
+  const visitsGraphType =
+    config?.visits?.graph_type ?? DEFAULT_VISITS_GRAPH_TYPE;
 
   return [
     {
@@ -148,54 +262,33 @@ const getSchema = (config?: Config): HaFormSchema[] => {
         },
       ],
     },
-    {
+    graphSectionSchema({
       name: 'chonk',
       label: 'Pet weight chonk',
-      type: 'expandable',
       icon: 'mdi:weight',
-      schema: [
-        {
-          name: 'kitties',
-          label: 'Weight entities',
-          selector: {
-            entity: {
-              multiple: true,
-              reorder: true,
-              filter: { integration: 'litterrobot', device_class: 'weight' },
-            },
-          },
-        },
-        {
-          name: 'graph_type',
-          label: 'Graph type',
-          selector: {
-            select: {
-              options: [
-                { value: 'history', label: 'History' },
-                { value: 'statistics', label: 'Statistics' },
-              ],
-            },
-          },
-        },
-        ...(graphType === 'statistics'
-          ? STATISTICS_GRAPH_SCHEMA
-          : HISTORY_GRAPH_SCHEMA),
-        {
-          name: 'hide',
-          label: 'Hide chonk',
-          selector: {
-            boolean: {},
-          },
-        },
-        {
-          name: 'hide_names',
-          label: 'Hide pet names',
-          selector: {
-            boolean: {},
-          },
-        },
-      ],
-    },
+      entitiesLabel: 'Weight entities',
+      hideLabel: 'Hide chonk',
+      // weight sensors expose device_class; visits_today does not, so the
+      // visits picker below can only narrow to litterrobot sensors
+      entityFilter: {
+        integration: 'litterrobot',
+        device_class: 'weight',
+      },
+      prefix: 'Weight graph',
+      graphType: weightGraphType,
+      statOptions: WEIGHT_STAT_OPTIONS,
+    }),
+    graphSectionSchema({
+      name: 'visits',
+      label: 'Pet visits',
+      icon: 'mdi:paw',
+      entitiesLabel: 'Visit entities',
+      hideLabel: 'Hide visits',
+      entityFilter: { integration: 'litterrobot', domain: 'sensor' },
+      prefix: 'Visits graph',
+      graphType: visitsGraphType,
+      statOptions: VISITS_STAT_OPTIONS,
+    }),
     {
       name: 'footer',
       label: 'Footer items',
@@ -229,44 +322,93 @@ const getSchema = (config?: Config): HaFormSchema[] => {
   ];
 };
 
+/** Values a graph section drops as redundant when saving the config. */
+interface GraphSectionDefaults {
+  graph_type: GraphType;
+  hours_to_show: number;
+  days_to_show: number;
+  period: StatisticPeriod;
+  chart_type: ChartType;
+  stat_types: StatisticType[];
+}
+
+const WEIGHT_SECTION_DEFAULTS: GraphSectionDefaults = {
+  graph_type: DEFAULT_WEIGHT_GRAPH_TYPE,
+  hours_to_show: DEFAULT_WEIGHT_HOURS_TO_SHOW,
+  days_to_show: DEFAULT_WEIGHT_DAYS_TO_SHOW,
+  // the weight graph has always stripped `auto` rather than its render default
+  period: 'auto',
+  chart_type: DEFAULT_WEIGHT_CHART_TYPE,
+  stat_types: DEFAULT_WEIGHT_STAT_TYPES,
+};
+
+const VISITS_SECTION_DEFAULTS: GraphSectionDefaults = {
+  graph_type: DEFAULT_VISITS_GRAPH_TYPE,
+  hours_to_show: DEFAULT_VISITS_HOURS_TO_SHOW,
+  days_to_show: DEFAULT_VISITS_DAYS_TO_SHOW,
+  period: DEFAULT_VISITS_PERIOD,
+  chart_type: DEFAULT_VISITS_CHART_TYPE,
+  stat_types: DEFAULT_VISITS_STAT_TYPES,
+};
+
 /**
- * Strips empty/default values from `config.chonk` in place, deleting the whole
- * object when nothing meaningful remains. Keeps stored configs minimal.
- * @param {Config} config - The card config to normalize
+ * Whether two statistic-type lists match in order and length.
+ * @param {StatisticType[]} [a] - Candidate list from the config
+ * @param {StatisticType[]} b - Default list to compare against
+ * @returns {boolean} True when both lists are identical
  */
-const cleanChonk = (config: Config): void => {
-  const chonk = config.chonk;
-  if (!chonk) {
+const sameStatTypes = (
+  a: StatisticType[] | undefined,
+  b: StatisticType[],
+): boolean =>
+  !!a && a.length === b.length && a.every((value, index) => value === b[index]);
+
+/**
+ * Strips empty/default values from a graph section (`chonk` / `visits`) in
+ * place, deleting the whole object when nothing meaningful remains. Keeps
+ * stored configs minimal.
+ * @param {Config} config - The card config to normalize
+ * @param {'chonk' | 'visits'} key - Which graph section to clean
+ * @param {GraphSectionDefaults} defaults - Values considered redundant
+ */
+const cleanGraphSection = (
+  config: Config,
+  key: 'chonk' | 'visits',
+  defaults: GraphSectionDefaults,
+): void => {
+  const section = config[key];
+  if (!section) {
     return;
   }
 
-  const isDefault: Partial<
-    Record<keyof NonNullable<Config['chonk']>, boolean>
-  > = {
-    hide: !chonk.hide,
-    hide_names: !chonk.hide_names,
-    kitties: !chonk.kitties?.length,
+  const isDefault: Partial<Record<keyof GraphSectionConfig, boolean>> = {
+    hide: !section.hide,
+    collapsed: !section.collapsed,
+    hide_names: !section.hide_names,
+    kitties: !section.kitties?.length,
     graph_type:
-      !chonk.graph_type || chonk.graph_type === DEFAULT_WEIGHT_GRAPH_TYPE,
+      !section.graph_type || section.graph_type === defaults.graph_type,
     hours_to_show:
-      !chonk.hours_to_show ||
-      chonk.hours_to_show === DEFAULT_WEIGHT_HOURS_TO_SHOW,
+      !section.hours_to_show ||
+      section.hours_to_show === defaults.hours_to_show,
     days_to_show:
-      !chonk.days_to_show || chonk.days_to_show === DEFAULT_WEIGHT_DAYS_TO_SHOW,
-    period: !chonk.period || chonk.period === 'auto',
-    stat_types: !chonk.stat_types?.length,
+      !section.days_to_show || section.days_to_show === defaults.days_to_show,
+    period: !section.period || section.period === defaults.period,
+    stat_types:
+      !section.stat_types?.length ||
+      sameStatTypes(section.stat_types, defaults.stat_types),
     chart_type:
-      !chonk.chart_type || chonk.chart_type === DEFAULT_WEIGHT_CHART_TYPE,
+      !section.chart_type || section.chart_type === defaults.chart_type,
   };
 
-  for (const [key, drop] of Object.entries(isDefault)) {
+  for (const [prop, drop] of Object.entries(isDefault)) {
     if (drop) {
-      delete chonk[key as keyof typeof chonk];
+      delete section[prop as keyof typeof section];
     }
   }
 
-  if (Object.keys(chonk).length === 0) {
-    delete config.chonk;
+  if (Object.keys(section).length === 0) {
+    delete config[key];
   }
 };
 
@@ -299,7 +441,8 @@ export class WhiskerCardEditor extends LitElement {
   private _valueChanged(ev: CustomEvent) {
     const config = ev.detail.value as Config;
 
-    cleanChonk(config);
+    cleanGraphSection(config, 'chonk', WEIGHT_SECTION_DEFAULTS);
+    cleanGraphSection(config, 'visits', VISITS_SECTION_DEFAULTS);
 
     // handle features
     if (!config.features?.length) {

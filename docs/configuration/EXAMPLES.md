@@ -88,6 +88,53 @@ chonk:
   hide: true
 ```
 
+## Pet visits graph
+
+Auto-detects the per-cat `visits_today` sensors and plots daily totals as bars — no configuration needed. To pick specific cats and a shorter window:
+
+```yaml
+type: custom:whisker-card
+device_id: YOUR_DEVICE_ID
+visits:
+  kitties:
+    - sensor.tuna_visits_today
+    - sensor.mittens_visits_today
+  days_to_show: 14
+  chart_type: bar
+```
+
+Watch the last couple of days hour by hour with the history graph instead:
+
+```yaml
+type: custom:whisker-card
+device_id: YOUR_DEVICE_ID
+visits:
+  graph_type: history
+  hours_to_show: 48
+```
+
+Hide the visits graph entirely:
+
+```yaml
+type: custom:whisker-card
+device_id: YOUR_DEVICE_ID
+visits:
+  hide: true
+```
+
+## Collapsible graphs
+
+Keep both graphs on the card but start them closed, so the card stays compact:
+
+```yaml
+type: custom:whisker-card
+device_id: YOUR_DEVICE_ID
+chonk:
+  collapsed: true
+visits:
+  collapsed: true
+```
+
 ## Custom footer
 
 Order matters:

@@ -9,6 +9,7 @@
 | `footer`          | string[] | Optional. Footer metrics in display order. See [footer items](#footer-items) below.                                                                                                            |
 | `features`        | string[] | Optional. Feature flags. `percentage` — show fill % on litter and waste gauges. See [Feature flags](FEATURE-FLAGS.md).                                                                         |
 | `chonk`           | object   | Optional. Pet weight graph options (history or statistics graph). See [Pet weight graph](#pet-weight-graph) below.                                                                             |
+| `visits`          | object   | Optional. Pet visits graph options (daily litter box visits per cat). See [Pet visits graph](#pet-visits-graph) below.                                                                         |
 
 ### Footer items
 
@@ -30,15 +31,16 @@ More detail in [Footer configuration](FOOTER.md).
 
 ### Pet weight graph
 
-The card shows a pet weight graph below the gauges. It can render either Home Assistant's built-in **history graph** (live recorder data) or its **statistics graph** (long-term statistics — mean/min/max aggregated over days). Pick the mode with `graph_type`. Cards added through the dashboard UI start on the **statistics graph** (mean/min/max, daily); manually written YAML without `graph_type` falls back to the history graph.
+The card shows a pet weight graph below the gauges. It can render either Home Assistant's built-in **history graph** (live recorder data) or its **statistics graph** (long-term statistics — mean/min/max aggregated over days). Pick the mode with `graph_type`. When it is omitted, the card uses the **statistics graph** (mean/min/max, daily) — both from the dashboard UI and from hand-written YAML.
 
 Configure it with the `chonk` object:
 
 | Key             | Type     | Graph      | Description                                                                                                                  |
 | --------------- | -------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | `kitties`       | string[] | both       | Optional. Weight sensor entity ids to plot. When omitted, the card auto-detects per-cat weight sensors from the integration. |
-| `graph_type`    | string   | both       | Optional. `history` (default) or `statistics`.                                                                               |
+| `graph_type`    | string   | both       | Optional. `statistics` (default) or `history`.                                                                               |
 | `hide`          | boolean  | both       | Optional. Hide the weight graph entirely. Defaults to `false`.                                                               |
+| `collapsed`     | boolean  | both       | Optional. Start the titled collapsible section closed. Defaults to `false` (starts open).                                    |
 | `hide_names`    | boolean  | both       | Optional. History graph: hide entity names. Statistics graph: hide the legend. Defaults to `false`.                          |
 | `hours_to_show` | number   | history    | Optional. Hours of history to show. Defaults to `168` (7 days).                                                              |
 | `days_to_show`  | number   | statistics | Optional. Days of statistics to show. Defaults to `30`.                                                                      |
@@ -97,3 +99,70 @@ chonk:
   stat_types:
     - mean
 ```
+
+### Pet visits graph
+
+The card also shows a **visits** graph below the weight graph, plotting how many times each cat used the box. It's built from the integration's per-pet `visits_today` sensors, which are auto-detected the same way weight sensors are.
+
+That sensor is a running daily total that resets at midnight, so the defaults differ from the weight graph: a **statistics graph** plotting **`change`** (visits per period) as **stacked bars** over a **daily** period. Stacking gives you one bar per day showing the household's total visits, split by cat. Averages and min/max don't mean anything for a resetting counter, so the editor only offers `change` and `sum`.
+
+Configure it with the `visits` object:
+
+| Key             | Type     | Graph      | Description                                                                                                        |
+| --------------- | -------- | ---------- | ------------------------------------------------------------------------------------------------------------------ |
+| `kitties`       | string[] | both       | Optional. `visits_today` sensor entity ids to plot. When omitted, the card auto-detects them from the integration. |
+| `graph_type`    | string   | both       | Optional. `statistics` (default) or `history`.                                                                     |
+| `hide`          | boolean  | both       | Optional. Hide the visits graph entirely. Defaults to `false`.                                                     |
+| `collapsed`     | boolean  | both       | Optional. Start the titled collapsible section closed. Defaults to `false` (starts open).                          |
+| `hide_names`    | boolean  | both       | Optional. History graph: hide entity names. Statistics graph: hide the legend. Defaults to `false`.                |
+| `hours_to_show` | number   | history    | Optional. Hours of history to show. Defaults to `168` (7 days).                                                    |
+| `days_to_show`  | number   | statistics | Optional. Days of statistics to show. Defaults to `30`.                                                            |
+| `period`        | string   | statistics | Optional. Aggregation period: `day` (default), `auto`, `5minute`, `hour`, `week`, or `month`.                      |
+| `stat_types`    | string[] | statistics | Optional. Statistic series to plot: `change` (default) or `sum`.                                                   |
+| `chart_type`    | string   | statistics | Optional. Chart style: `bar-stack` (default), `bar`, `line`, or `line-stack`.                                      |
+
+Nothing is required — with the integration set up, the graph appears on its own:
+
+```yaml
+type: custom:whisker-card
+device_id: YOUR_DEVICE_ID
+```
+
+Pick specific cats and a shorter window:
+
+```yaml
+type: custom:whisker-card
+device_id: YOUR_DEVICE_ID
+visits:
+  kitties:
+    - sensor.ellie_visits_today
+    - sensor.mittens_visits_today
+  days_to_show: 14
+  chart_type: bar
+```
+
+Use plain `bar` (as above) to give each cat its own bar instead of stacking them.
+
+Hide it entirely:
+
+```yaml
+type: custom:whisker-card
+device_id: YOUR_DEVICE_ID
+visits:
+  hide: true
+```
+
+#### Collapsible sections
+
+Each graph sits in its own titled section ("Pet weight", "Pet visits") that you can click to open and close. Set `collapsed: true` to have a section start closed — useful when you want a graph available without making the card tall:
+
+```yaml
+type: custom:whisker-card
+device_id: YOUR_DEVICE_ID
+chonk:
+  collapsed: true
+visits:
+  collapsed: true
+```
+
+Expanding a section lasts for as long as the dashboard stays loaded; it returns to closed on the next refresh. Use `hide` instead of `collapsed` if you never want the graph shown at all.

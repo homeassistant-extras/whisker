@@ -16,6 +16,12 @@ If controls or gauges are missing:
 - **Statistics graph** (`graph_type: statistics`, the default for new cards): uses **long-term statistics**, which accumulate over time. A brand-new sensor may show nothing until statistics have been generated, and only entities tracked by the recorder will appear. Try a shorter `period` (e.g. `hour`) or switch to the history graph to confirm data exists.
 - If auto-detection finds nothing, set `chonk.kitties` explicitly. See [Pet weight graph](configuration/OPTIONS.md#pet-weight-graph).
 
+## Pet visits graph is empty
+
+- The graph needs the per-pet **`visits_today`** sensors from the `litterrobot` integration. Confirm they exist in **Developer tools → States**; if your pets aren't set up in the Whisker app, the integration won't create them.
+- **Statistics graph** (the default): `visits_today` is a `total` sensor that resets daily, so the card plots `change` (visits per period). Long-term statistics accumulate over time — a newly added pet may show nothing for a while.
+- If auto-detection finds nothing, set `visits.kitties` explicitly. See [Pet visits graph](configuration/OPTIONS.md#pet-visits-graph).
+
 ## Getting help
 
 - [GitHub issues](https://github.com/homeassistant-extras/whisker/issues) — include HA version, integration version, and robot model when possible.

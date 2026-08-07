@@ -20,6 +20,10 @@ On **Litter-Robot 4** with a **LitterHopper** attached, the card shows a hopper 
 
 The **Pet weight chonk** section in the editor configures the pet weight graph — pick the graph type (history or statistics), choose weight entities, set the time window, statistic types and chart style (statistics), or hide it. See [Pet weight graph](configuration/OPTIONS.md#pet-weight-graph).
 
+The **Pet visits** section configures the daily visits graph — pick the graph type, choose the `visits_today` entities, set the time window, statistic types and chart style, or hide it. See [Pet visits graph](configuration/OPTIONS.md#pet-visits-graph).
+
+Each graph renders in its own collapsible section on the card. Both editor sections have a **Start collapsed** toggle to have that graph begin closed. See [Collapsible sections](configuration/OPTIONS.md#collapsible-sections).
+
 ![Card editor](assets/editor.png)
 
 ## YAML basics

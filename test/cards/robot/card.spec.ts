@@ -162,18 +162,63 @@ describe('card.ts', () => {
       });
       card.hass = mockHass;
       const el = await fixture(card.render() as TemplateResult);
-      const graph = el.querySelector('whisker-weight-graph') as HTMLElement & {
-        kitties?: string[];
-      };
-      expect(graph).to.not.be.null;
-      expect(graph.kitties).to.deep.equal(['sensor.cat_weight']);
+      const graphs = el.querySelectorAll('whisker-pet-graph');
+      const weight = [...graphs].find(
+        (graph) =>
+          (graph as HTMLElement & { header?: string }).header === 'Pet weight',
+      ) as HTMLElement & { kitties?: string[] };
+      expect(weight).to.exist;
+      expect(weight.kitties).to.deep.equal(['sensor.cat_weight']);
     });
 
     it('should not render the weight graph when chonk.hide is set', async () => {
       card.setConfig({ device_id: 'lr-1', chonk: { hide: true } });
       card.hass = mockHass;
       const el = await fixture(card.render() as TemplateResult);
-      expect(el.querySelector('whisker-weight-graph')).to.be.null;
+      const headers = [...el.querySelectorAll('whisker-pet-graph')].map(
+        (graph) => (graph as HTMLElement & { header?: string }).header,
+      );
+      expect(headers).to.not.include('Pet weight');
+    });
+
+    it('should render the visits graph with visits from duty by default', async () => {
+      scoopStub.returns({
+        ...mockDuty,
+        visits: ['sensor.ellie_visits_today'],
+      });
+      card.hass = mockHass;
+      const el = await fixture(card.render() as TemplateResult);
+      const visits = [...el.querySelectorAll('whisker-pet-graph')].find(
+        (graph) =>
+          (graph as HTMLElement & { header?: string }).header === 'Pet visits',
+      ) as HTMLElement & { kitties?: string[] };
+      expect(visits).to.exist;
+      expect(visits.kitties).to.deep.equal(['sensor.ellie_visits_today']);
+    });
+
+    it('should not render the visits graph when visits.hide is set', async () => {
+      card.setConfig({ device_id: 'lr-1', visits: { hide: true } });
+      card.hass = mockHass;
+      const el = await fixture(card.render() as TemplateResult);
+      const headers = [...el.querySelectorAll('whisker-pet-graph')].map(
+        (graph) => (graph as HTMLElement & { header?: string }).header,
+      );
+      expect(headers).to.not.include('Pet visits');
+    });
+
+    it('should render both graphs independently', async () => {
+      scoopStub.returns({
+        ...mockDuty,
+        kitties: ['sensor.cat_weight'],
+        visits: ['sensor.ellie_visits_today'],
+      });
+      card.setConfig({ device_id: 'lr-1', chonk: { hide: true } });
+      card.hass = mockHass;
+      const el = await fixture(card.render() as TemplateResult);
+      const headers = [...el.querySelectorAll('whisker-pet-graph')].map(
+        (graph) => (graph as HTMLElement & { header?: string }).header,
+      );
+      expect(headers).to.deep.equal(['Pet visits']);
     });
 
     it('should render hopper badge in the title row when hopper entities exist', async () => {

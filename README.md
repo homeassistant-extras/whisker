@@ -88,3 +88,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file.
 - [x] **Litter Hopper status** — hopper badge & footer items on LR4 when a LitterHopper is attached - thanks @chrispgriffin & @adude007, @eviljacquiooh
 - [x] **Pet weight** — shown via the footer (`pet_weight`) and the auto-detected weight graph (the standalone chip was retired) - thanks @semichcsc-byte
 - [x] **Pet weight graph** — auto-detected multi-cat weight graph with history or long-term **statistics** - thanks @brombomb & @adude007
+- [x] **Pet visits graph** — auto-detected per-cat daily litter box visit counts - thanks @alicia86

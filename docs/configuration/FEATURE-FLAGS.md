@@ -14,3 +14,5 @@ features:
 ```
 
 > Looking for pet weight? Add `pet_weight` to the [footer](FOOTER.md), or use the pet weight **graph** (history or statistics) configured via the `chonk` option. See [Pet weight graph](OPTIONS.md#pet-weight-graph).
+
+> Looking for pet visits? That graph is configured via the `visits` option, not a feature flag. See [Pet visits graph](OPTIONS.md#pet-visits-graph).

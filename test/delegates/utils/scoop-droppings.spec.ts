@@ -98,6 +98,7 @@ describe('scoop-droppings.ts', () => {
       model: null,
       serial_number: null,
       kitties: [],
+      visits: [],
       waste_drawer: 'sensor.lr_waste',
       litter_level: 'sensor.lr_litter',
       status: 'sensor.lr_status',
@@ -154,5 +155,117 @@ describe('scoop-droppings.ts', () => {
       chonk: { kitties: ['sensor.my_cat'] },
     });
     expect(report?.kitties).to.deep.equal(['sensor.my_cat']);
+  });
+
+  /** hass fixture with a pet device exposing both weight and visits sensors */
+  const hassWithPet = {
+    ...mockHass,
+    entities: {
+      ...mockHass.entities,
+      'sensor.cat_weight': {
+        entity_id: 'sensor.cat_weight',
+        device_id: 'pet-1',
+        platform: 'litterrobot',
+      },
+      'sensor.ellie_visits_today': {
+        entity_id: 'sensor.ellie_visits_today',
+        device_id: 'pet-1',
+        platform: 'litterrobot',
+        translation_key: 'visits_today',
+      },
+    },
+    states: {
+      ...mockHass.states,
+      'sensor.cat_weight': e('sensor', 'cat_weight', '11.2', {
+        device_class: 'weight',
+      }),
+      'sensor.ellie_visits_today': e('sensor', 'ellie_visits_today', '3', {
+        state_class: 'total',
+        unit_of_measurement: 'visits',
+      }),
+    },
+  } as unknown as HomeAssistant;
+
+  it('should auto-detect visits entities from other devices into visits', () => {
+    const report = scoopDroppings(hassWithPet, config);
+    expect(report?.visits).to.deep.equal(['sensor.ellie_visits_today']);
+  });
+
+  it('should keep weight and visits detection separate', () => {
+    const report = scoopDroppings(hassWithPet, config);
+    expect(report?.kitties).to.deep.equal(['sensor.cat_weight']);
+    expect(report?.visits).to.deep.equal(['sensor.ellie_visits_today']);
+  });
+
+  it('should not auto-detect visits entities when they are configured', () => {
+    const report = scoopDroppings(hassWithPet, {
+      device_id: deviceId,
+      visits: { kitties: ['sensor.my_cat_visits'] },
+    });
+    expect(report?.visits).to.deep.equal(['sensor.my_cat_visits']);
+  });
+
+  it('should ignore a visits_today entity on the configured device', () => {
+    const hass = {
+      ...mockHass,
+      entities: {
+        ...mockHass.entities,
+        'sensor.lr_visits_today': {
+          entity_id: 'sensor.lr_visits_today',
+          device_id: deviceId,
+          platform: 'litterrobot',
+          translation_key: 'visits_today',
+        },
+      },
+      states: {
+        ...mockHass.states,
+        'sensor.lr_visits_today': e('sensor', 'lr_visits_today', '9'),
+      },
+    } as unknown as HomeAssistant;
+
+    const report = scoopDroppings(hass, config);
+    expect(report?.visits).to.deep.equal([]);
+  });
+
+  it('should not collect entities for a hidden visits graph', () => {
+    const report = scoopDroppings(hassWithPet, {
+      device_id: deviceId,
+      visits: { hide: true, kitties: ['sensor.my_cat_visits'] },
+    });
+    expect(report?.visits).to.deep.equal([]);
+    // the weight graph is unaffected
+    expect(report?.kitties).to.deep.equal(['sensor.cat_weight']);
+  });
+
+  it('should not collect entities for a hidden weight graph', () => {
+    const report = scoopDroppings(hassWithPet, {
+      device_id: deviceId,
+      chonk: { hide: true, kitties: ['sensor.my_cat'] },
+    });
+    expect(report?.kitties).to.deep.equal([]);
+    // the visits graph is unaffected
+    expect(report?.visits).to.deep.equal(['sensor.ellie_visits_today']);
+  });
+
+  it('should ignore visits entities from other integrations', () => {
+    const hass = {
+      ...mockHass,
+      entities: {
+        ...mockHass.entities,
+        'sensor.other_visits': {
+          entity_id: 'sensor.other_visits',
+          device_id: 'pet-1',
+          platform: 'some_other_integration',
+          translation_key: 'visits_today',
+        },
+      },
+      states: {
+        ...mockHass.states,
+        'sensor.other_visits': e('sensor', 'other_visits', '5'),
+      },
+    } as unknown as HomeAssistant;
+
+    const report = scoopDroppings(hass, config);
+    expect(report?.visits).to.deep.equal([]);
   });
 });

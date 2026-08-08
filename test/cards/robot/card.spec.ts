@@ -155,6 +155,39 @@ describe('card.ts', () => {
       expect(el.querySelector('whisker-card-footer')).to.not.be.null;
     });
 
+    it('should render only the title row and gauges when mini is set', async () => {
+      scoopStub.returns({
+        ...mockDuty,
+        kitties: ['sensor.cat_weight'],
+        hopper_status: 'sensor.hopper',
+      });
+      card.setConfig({
+        ...mockConfig,
+        mini: true,
+        cleaning_entity: 'binary_sensor.needs_cleaning',
+      });
+      card.hass = mockHass;
+
+      const el = await fixture(card.render() as TemplateResult);
+
+      // title row survives, badges included
+      expect(el.classList.contains('mini')).to.be.true;
+      expect(el.querySelector('.card-title')?.textContent).to.equal(
+        'Living Room LR',
+      );
+      expect(el.querySelector('whisker-litter-status')).to.not.be.null;
+      expect(el.querySelector('whisker-cleaning')).to.not.be.null;
+      expect(el.querySelector('whisker-hopper')).to.not.be.null;
+      expect(el.querySelectorAll('whisker-robot-levels')).to.have.length(1);
+
+      // everything else is dropped
+      expect(el.querySelector('.robot-image-stack')).to.be.null;
+      expect(el.querySelector('whisker-status-panel')).to.be.null;
+      expect(el.querySelector('whisker-controls-entity')).to.be.null;
+      expect(el.querySelector('whisker-pet-graph')).to.be.null;
+      expect(el.querySelector('whisker-card-footer')).to.be.null;
+    });
+
     it('should render the weight graph with kitties from duty by default', async () => {
       scoopStub.returns({
         ...mockDuty,

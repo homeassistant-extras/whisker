@@ -54,6 +54,25 @@ export const styles = css`
   }
 
   /**
+   * Compact layout for wall-mount dashboards: tighter title row and
+   * full-width gauges (the levels component insets itself by 20% otherwise).
+   */
+  ha-card.mini .card-title-row {
+    padding: 8px 16px 6px;
+    /* a divider reads as a section break, which is noise on a two-row card */
+    border-bottom: none;
+  }
+
+  ha-card.mini .card-title {
+    font-size: 1rem;
+  }
+
+  ha-card.mini whisker-robot-levels {
+    display: block;
+    --whisker-levels-padding: 0px 16px 10px;
+  }
+
+  /**
    * :host(:has()) only sees light-DOM descendants, not shadow content.
    * ha-card:has() matches within this shadow tree; the custom property
    * inherits into nested component shadows (e.g. status-panel vacuum spin).

@@ -34,6 +34,30 @@ features:
   - percentage
 ```
 
+## Mini layout
+
+![mini](../assets/mini.png)
+
+A compact card for wall-mount dashboards — name, status, and the two gauges.
+
+```yaml
+type: custom:whisker-card
+device_id: YOUR_DEVICE_ID
+mini: true
+```
+
+Mini pairs well with gauge percentages and a cleaning reminder:
+
+```yaml
+type: custom:whisker-card
+device_id: YOUR_DEVICE_ID
+mini: true
+title: Upstairs
+cleaning_entity: input_boolean.litter_robot_needs_cleaning
+features:
+  - percentage
+```
+
 ## Pet weight history graph
 
 Auto-detects per-cat weight sensors. List them explicitly to control which appear:

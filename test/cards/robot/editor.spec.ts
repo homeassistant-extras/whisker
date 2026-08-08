@@ -75,6 +75,21 @@ describe('editor.ts', () => {
       expect(el.outerHTML).to.equal('<ha-form></ha-form>');
     });
 
+    it('should hide graph and footer options when mini is enabled', async () => {
+      editor.setConfig({ device_id: 'lr-1', mini: true });
+      const el = await fixture(editor.render() as TemplateResult);
+      const names = (
+        (el as HTMLElement & { schema: { name: string }[] }).schema ?? []
+      ).map((s) => s.name);
+
+      expect(names).to.not.include('chonk');
+      expect(names).to.not.include('visits');
+      expect(names).to.not.include('footer');
+      // gauges still render in mini, so their percentage flag stays
+      expect(names).to.include('features');
+      expect(names).to.include('device_id');
+    });
+
     it('should pass correct props to ha-form', async () => {
       const testConfig: Config = { device_id: 'lr-1', title: 'T' };
       editor.setConfig(testConfig);
@@ -137,6 +152,11 @@ describe('editor.ts', () => {
                   ],
                 },
               },
+            },
+            {
+              name: 'mini',
+              label: 'Mini layout',
+              selector: { boolean: {} },
             },
           ],
         },
@@ -672,15 +692,23 @@ describe('editor.ts', () => {
       expect(config.visits).to.be.undefined;
     });
 
-    it('should drop empty features and default color', () => {
+    it('should drop empty features, default color and falsy mini', () => {
       editor.setConfig({ device_id: 'lr-1' });
       const config = fireValueChanged({
         device_id: 'lr-1',
         features: [],
         color: DEFAULT_COLOR,
+        mini: false,
       });
       expect(config.features).to.be.undefined;
       expect(config.color).to.be.undefined;
+      expect(config.mini).to.be.undefined;
+    });
+
+    it('should keep mini when enabled', () => {
+      editor.setConfig({ device_id: 'lr-1' });
+      const config = fireValueChanged({ device_id: 'lr-1', mini: true });
+      expect(config.mini).to.be.true;
     });
   });
 });

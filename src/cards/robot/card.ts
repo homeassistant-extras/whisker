@@ -115,6 +115,46 @@ export class WhiskerCard extends LitElement {
   }
 
   /**
+   * Renders the title row shared by the full and mini layouts: the card title
+   * plus the cleaning, status and hopper badges.
+   * @param {DutyReport} duty - The resolved duty report
+   * @param {string} title - The resolved card title
+   * @param {boolean} hasHopper - Whether a LitterHopper is attached
+   * @returns {TemplateResult} The rendered title row
+   */
+  private _renderHeader(
+    duty: DutyReport,
+    title: string,
+    hasHopper: boolean,
+  ): TemplateResult {
+    return html`
+      <div class="card-title-row">
+        <h2 class="card-title">${title}</h2>
+        <div class="card-title-status">
+          ${this._config?.cleaning_entity
+            ? html`<whisker-cleaning
+                .hass=${this._hass}
+                .entity=${this._config.cleaning_entity}
+              ></whisker-cleaning>`
+            : nothing}
+          <whisker-litter-status
+            .hass=${this._hass}
+            .entity=${duty.status}
+          ></whisker-litter-status>
+          ${hasHopper
+            ? html`<whisker-hopper
+                .hass=${this._hass}
+                .config=${this._config}
+                .statusEntity=${duty.hopper_status}
+                .connectedEntity=${duty.hopper_connected}
+              ></whisker-hopper>`
+            : nothing}
+        </div>
+      </div>
+    `;
+  }
+
+  /**
    * renders the lit element card
    * @returns {TemplateResult} The rendered HTML template
    */
@@ -124,40 +164,33 @@ export class WhiskerCard extends LitElement {
     }
 
     const title = this._config?.title ?? this._duty.name;
+    const hasHopper = !!(
+      this._duty.hopper_status || this._duty.hopper_connected
+    );
+
+    if (this._config?.mini) {
+      return html`
+        <ha-card class="mini">
+          ${this._renderHeader(this._duty, title, hasHopper)}
+          <whisker-robot-levels
+            .hass=${this._hass}
+            .config=${this._config}
+            .litter_level=${this._duty.litter_level}
+            .waste_drawer=${this._duty.waste_drawer}
+          ></whisker-robot-levels>
+        </ha-card>
+      `;
+    }
+
     const robotImage = resolveRobotImage(
       this._duty.model,
       this._duty.serial_number,
       this._config?.color,
     );
-    const hasHopper = !!(
-      this._duty.hopper_status || this._duty.hopper_connected
-    );
 
     return html`
       <ha-card>
-        <div class="card-title-row">
-          <h2 class="card-title">${title}</h2>
-          <div class="card-title-status">
-            ${this._config?.cleaning_entity
-              ? html`<whisker-cleaning
-                  .hass=${this._hass}
-                  .entity=${this._config.cleaning_entity}
-                ></whisker-cleaning>`
-              : nothing}
-            <whisker-litter-status
-              .hass=${this._hass}
-              .entity=${this._duty.status}
-            ></whisker-litter-status>
-            ${hasHopper
-              ? html`<whisker-hopper
-                  .hass=${this._hass}
-                  .config=${this._config}
-                  .statusEntity=${this._duty.hopper_status}
-                  .connectedEntity=${this._duty.hopper_connected}
-                ></whisker-hopper>`
-              : nothing}
-          </div>
-        </div>
+        ${this._renderHeader(this._duty, title, hasHopper)}
         <div class="robot-image-stack">
           <div class="status-panel-row">
             <div class="status-panel-wrap">

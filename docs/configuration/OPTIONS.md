@@ -6,10 +6,29 @@
 | `title`           | string   | Optional. Overrides the card heading; defaults to the device name.                                                                                                                             |
 | `cleaning_entity` | string   | Optional. Entity (`input_boolean`, `alert`, `binary_sensor`, or `switch`) whose active state shows a "needs cleaning" header badge + card glow. See [Cleaning reminder](CLEANING-REMINDER.md). |
 | `color`           | string   | Optional. Robot artwork color: `white` (default) or `black`.                                                                                                                                   |
+| `mini`            | boolean  | Optional. Compact layout: title row and litter/waste gauges only. Hides the artwork, quick actions, controls menu, graphs, and footer. See [Mini layout](#mini-layout) below.                  |
 | `footer`          | string[] | Optional. Footer metrics in display order. See [footer items](#footer-items) below.                                                                                                            |
 | `features`        | string[] | Optional. Feature flags. `percentage` — show fill % on litter and waste gauges. See [Feature flags](FEATURE-FLAGS.md).                                                                         |
 | `chonk`           | object   | Optional. Pet weight graph options (history or statistics graph). See [Pet weight graph](#pet-weight-graph) below.                                                                             |
 | `visits`          | object   | Optional. Pet visits graph options (daily litter box visits per cat). See [Pet visits graph](#pet-visits-graph) below.                                                                         |
+
+### Mini layout
+
+![mini](../assets/mini.png)
+
+Set `mini: true` for a compact, low-profile card built for wall-mount and small dashboards:
+
+```yaml
+type: custom:whisker-card
+device_id: YOUR_DEVICE_ID
+mini: true
+```
+
+The mini card keeps the **title row** — device name, status text and icon, plus the [cleaning](CLEANING-REMINDER.md) and LitterHopper badges when configured — and the **litter and waste gauges**, which stretch to the full card width.
+
+Omitted in mini: the robot artwork, quick actions, controls menu, both pet graphs, and the footer. Because those do nothing here, the visual editor hides their options while `mini` is on.
+
+Still supported in mini: `title`, `cleaning_entity`, and the `percentage` [feature flag](FEATURE-FLAGS.md) for gauge percentages. The cycling and needs-cleaning card glows work as usual.
 
 ### Footer items
 

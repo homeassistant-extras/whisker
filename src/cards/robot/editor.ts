@@ -260,8 +260,42 @@ const getSchema = (config?: Config): HaFormSchema[] => {
             },
           },
         },
+        {
+          name: 'mini',
+          label: 'Mini layout',
+          selector: { boolean: {} },
+        },
       ],
     },
+    // the mini layout renders neither graphs nor a footer, so offering their
+    // options would imply an effect they cannot have
+    ...(config?.mini ? [] : miniHiddenSchema(weightGraphType, visitsGraphType)),
+    // gauges render in both layouts, so `percentage` always applies
+    {
+      name: 'features',
+      label: 'Features',
+      selector: {
+        select: {
+          options: [{ value: 'percentage', label: 'Show gauge percentages' }],
+          multiple: true,
+        },
+      },
+    },
+  ];
+};
+
+/**
+ * Schema entries that only apply to the full layout: both pet graph sections
+ * and the footer picker.
+ * @param {GraphType} weightGraphType - Currently selected weight graph type
+ * @param {GraphType} visitsGraphType - Currently selected visits graph type
+ * @returns {HaFormSchema[]} The full-layout-only schema entries
+ */
+const miniHiddenSchema = (
+  weightGraphType: GraphType,
+  visitsGraphType: GraphType,
+): HaFormSchema[] => {
+  return [
     graphSectionSchema({
       name: 'chonk',
       label: 'Pet weight chonk',
@@ -305,16 +339,6 @@ const getSchema = (config?: Config): HaFormSchema[] => {
             { value: 'hopper_status', label: 'Hopper status' },
             { value: 'hopper_connected', label: 'Hopper connected' },
           ],
-          multiple: true,
-        },
-      },
-    },
-    {
-      name: 'features',
-      label: 'Features',
-      selector: {
-        select: {
-          options: [{ value: 'percentage', label: 'Show gauge percentages' }],
           multiple: true,
         },
       },
@@ -452,6 +476,11 @@ export class WhiskerCardEditor extends LitElement {
     // handle color
     if (!config.color || config.color === DEFAULT_COLOR) {
       delete config.color;
+    }
+
+    // handle mini
+    if (!config.mini) {
+      delete config.mini;
     }
 
     fireEvent(this, 'config-changed', { config });

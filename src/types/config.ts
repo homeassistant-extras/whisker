@@ -163,6 +163,13 @@ export interface Config {
    */
   cleaning_entity?: string;
 
+  /**
+   * Render a compact, low-profile layout: title row (name, status, badges) and
+   * the litter/waste gauges only. Robot artwork, status panel, controls, graphs
+   * and footer are omitted. Suited to wall-mount dashboards.
+   */
+  mini?: boolean;
+
   /** Options to enable or disable features **/
   features?: Features[];
 

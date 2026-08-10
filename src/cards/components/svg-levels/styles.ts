@@ -21,22 +21,27 @@ export const svgLevelsStyles = css`
     max-height: min(320px, 55vh);
   }
 
+  /*
+   * Each shell is outlined in the opposite tone so the silhouette keeps its
+   * edge: the white shell takes a dark outline, the black shell a light one.
+   * On a dark theme the near-black shell would otherwise vanish into the card.
+   */
   .body {
     pointer-events: none;
+    stroke-width: 0.35;
+    paint-order: stroke fill;
   }
 
   /* Matches config color: black artwork. */
   .body.body-black {
     fill: #1a1a1a;
-    stroke: none;
+    stroke: #f5f5f5;
   }
 
-  /* Matches config color: white artwork — light shell with dark outline. */
+  /* Matches config color: white artwork. */
   .body.body-white {
     fill: #f5f5f5;
     stroke: #1a1a1a;
-    stroke-width: 0.35;
-    paint-order: stroke fill;
   }
 
   /*

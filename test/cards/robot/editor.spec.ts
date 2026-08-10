@@ -11,6 +11,13 @@ import { expect } from 'chai';
 import { nothing, type TemplateResult } from 'lit';
 import { stub } from 'sinon';
 
+/** Collects schema names, descending into nested (expandable) sections. */
+const schemaNames = (schema: HaFormSchema[] = []): string[] =>
+  schema.flatMap((entry) => {
+    const nested = (entry as { schema?: HaFormSchema[] }).schema;
+    return [entry.name, ...(nested ? schemaNames(nested) : [])];
+  });
+
 describe('editor.ts', () => {
   let editor: WhiskerCardEditor;
   let hass: HomeAssistant;
@@ -78,16 +85,33 @@ describe('editor.ts', () => {
     it('should hide graph and footer options when mini is enabled', async () => {
       editor.setConfig({ device_id: 'lr-1', mini: true });
       const el = await fixture(editor.render() as TemplateResult);
-      const names = (
-        (el as HTMLElement & { schema: { name: string }[] }).schema ?? []
-      ).map((s) => s.name);
+      const names = schemaNames(
+        (el as HTMLElement & { schema: HaFormSchema[] }).schema,
+      );
 
       expect(names).to.not.include('chonk');
       expect(names).to.not.include('visits');
       expect(names).to.not.include('footer');
+      // mini drops the robot photo, so the color picker has nothing to act on
+      expect(names).to.not.include('color');
       // gauges still render in mini, so their percentage flag stays
       expect(names).to.include('features');
       expect(names).to.include('device_id');
+    });
+
+    it('should keep the color option in mini when illustrated levels are on', async () => {
+      editor.setConfig({
+        device_id: 'lr-1',
+        mini: true,
+        features: ['illustrated'],
+      });
+      const el = await fixture(editor.render() as TemplateResult);
+      const names = schemaNames(
+        (el as HTMLElement & { schema: HaFormSchema[] }).schema,
+      );
+
+      // the illustrated body is tinted by color, so the picker still applies
+      expect(names).to.include('color');
     });
 
     it('should pass correct props to ha-form', async () => {

@@ -1,3 +1,4 @@
+import { hasFeature } from '@homeassistant-extras/hass/common/config/feature';
 import { fireEvent } from '@homeassistant-extras/hass/common/dom/fire_event';
 import type { HaFormSchema } from '@homeassistant-extras/hass/components/ha-form/types';
 import type { EntitySelectorFilter } from '@homeassistant-extras/hass/data/selector';
@@ -200,6 +201,20 @@ const graphSectionSchema = (opts: GraphSectionSchemaOptions): HaFormSchema => ({
   ],
 });
 
+/** Robot color picker, shown whenever the photo or illustrated body renders. */
+const colorSchema: HaFormSchema = {
+  name: 'color',
+  label: 'Robot color',
+  selector: {
+    select: {
+      options: [
+        { value: 'white', label: 'White' },
+        { value: 'black', label: 'Black' },
+      ],
+    },
+  },
+};
+
 /**
  * Builds the editor schema, swapping the graph-specific fields based on each
  * section's currently selected `graph_type`.
@@ -248,18 +263,12 @@ const getSchema = (config?: Config): HaFormSchema[] => {
             },
           },
         },
-        {
-          name: 'color',
-          label: 'Robot color',
-          selector: {
-            select: {
-              options: [
-                { value: 'white', label: 'White' },
-                { value: 'black', label: 'Black' },
-              ],
-            },
-          },
-        },
+        // color drives the robot photo and the illustrated body fill. The mini
+        // layout drops the photo, so the picker only has something to act on
+        // there once illustrated levels are turned on.
+        ...(config?.mini && !hasFeature(config, 'illustrated')
+          ? []
+          : [colorSchema]),
         {
           name: 'mini',
           label: 'Mini layout',

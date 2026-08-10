@@ -34,6 +34,20 @@ features:
   - percentage
 ```
 
+## Illustrated levels
+
+Use the opt-in illustration (colored litter/waste zones) instead of the marketing image and thin bars:
+
+![Illustrated levels](../assets/illustrated.png)
+
+```yaml
+type: custom:whisker-card
+device_id: YOUR_DEVICE_ID
+features:
+  - illustrated
+  - percentage
+```
+
 ## Mini layout
 
 ![mini](../assets/mini.png)

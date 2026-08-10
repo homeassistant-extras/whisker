@@ -1,3 +1,4 @@
+import '@cards/components/svg-levels/svg-levels';
 import '@cards/components/toilet-levels/gauge';
 import '@cards/components/toilet-levels/levels';
 import { WhiskerCard } from '@cards/robot/card';

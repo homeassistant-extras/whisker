@@ -405,6 +405,10 @@ describe('editor.ts', () => {
             select: {
               options: [
                 { value: 'percentage', label: 'Show gauge percentages' },
+                {
+                  value: 'illustrated',
+                  label: 'Illustrated levels (instead of photo & bars)',
+                },
               ],
               multiple: true,
             },

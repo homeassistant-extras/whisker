@@ -270,13 +270,19 @@ const getSchema = (config?: Config): HaFormSchema[] => {
     // the mini layout renders neither graphs nor a footer, so offering their
     // options would imply an effect they cannot have
     ...(config?.mini ? [] : miniHiddenSchema(weightGraphType, visitsGraphType)),
-    // gauges render in both layouts, so `percentage` always applies
+    // gauges / illustrated levels render in both layouts, so these flags always apply
     {
       name: 'features',
       label: 'Features',
       selector: {
         select: {
-          options: [{ value: 'percentage', label: 'Show gauge percentages' }],
+          options: [
+            { value: 'percentage', label: 'Show gauge percentages' },
+            {
+              value: 'illustrated',
+              label: 'Illustrated levels (instead of photo & bars)',
+            },
+          ],
           multiple: true,
         },
       },

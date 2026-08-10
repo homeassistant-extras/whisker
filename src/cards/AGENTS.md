@@ -11,7 +11,7 @@ This folder contains Lit-based card UI, editors, mixins, and card-specific compo
 ## Layout
 
 - **`robot/`** — main card (`card.ts`), visual editor (`editor.ts`), shared `styles.ts`, bundled artwork (`assets.ts`), and model detection (`detect-model.ts`).
-- **`components/`** — focused sub-components: `status`, `status-panel`, `controls`, `footer`, `toilet-levels`, `pet-graph`. Weight and visits both render via `pet-graph` (header / entities / options / defaults props). Each graph always sits in `collapsible-section.ts` (HA's `ha-expansion-panel`); `collapsed` only sets the initial open/closed state. Shared styles live in `graph-styles.ts`; wrapped-card config is built with `buildGraphConfig()` from `@delegates/utils/graph-config`.
+- **`components/`** — focused sub-components: `status`, `status-panel`, `controls`, `footer`, `toilet-levels`, `svg-levels`, `pet-graph`. Weight and visits both render via `pet-graph` (header / entities / options / defaults props). Each graph always sits in `collapsible-section.ts` (HA's `ha-expansion-panel`); `collapsed` only sets the initial open/closed state. Shared styles live in `graph-styles.ts`; wrapped-card config is built with `buildGraphConfig()` from `@delegates/utils/graph-config`.
 - **`mixins/`** — shared Lit mixins; see [mixins/AGENTS.md](./mixins/AGENTS.md).
 
 ## Robot artwork

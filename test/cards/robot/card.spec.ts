@@ -155,6 +155,24 @@ describe('card.ts', () => {
       expect(el.querySelector('whisker-card-footer')).to.not.be.null;
     });
 
+    it('should replace artwork and bars with illustrated levels when feature is set', async () => {
+      card.setConfig({
+        ...mockConfig,
+        features: ['illustrated'],
+      });
+      card.hass = mockHass;
+
+      const el = await fixture(card.render() as TemplateResult);
+
+      expect(el.querySelector('.robot-image-stack img')).to.be.null;
+      expect(el.querySelectorAll('whisker-robot-levels')).to.have.length(0);
+      expect(
+        el.querySelectorAll('.robot-image-stack whisker-svg-levels'),
+      ).to.have.length(1);
+      // only one svg levels instance (hero slot, not a second under the image)
+      expect(el.querySelectorAll('whisker-svg-levels')).to.have.length(1);
+    });
+
     it('should render only the title row and gauges when mini is set', async () => {
       scoopStub.returns({
         ...mockDuty,

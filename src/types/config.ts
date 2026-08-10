@@ -184,4 +184,4 @@ export interface Config {
 }
 
 /** Features to enable or disable functionality */
-export type Features = 'percentage';
+export type Features = 'percentage' | 'illustrated';

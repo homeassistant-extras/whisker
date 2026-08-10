@@ -34,7 +34,10 @@ Tap the badge to open the hopper status more-info dialog (or the connected entit
 
 ![hopper](assets/hopper.png)
 
-- **Litter and waste gauges** — Visual fill levels; waste styling reflects severity as the drawer fills. Optionally show fill **percentages** on the gauge labels ([Feature flags](configuration/FEATURE-FLAGS.md)).
+- **Litter and waste gauges** — Visual fill levels; waste styling reflects severity as the drawer fills. Optionally show fill **percentages**, or switch to **illustrated levels** that replace the marketing image and bars with colored litter/waste zones ([Feature flags](configuration/FEATURE-FLAGS.md)).
+
+![Illustrated levels](assets/illustrated.png)
+
 - **Customizable footer** — Choose which device metrics appear in the card footer ([Footer configuration](configuration/FOOTER.md)). Defaults to total cycles, status last changed, and last seen.
 
 ![Controls](assets/control.png)

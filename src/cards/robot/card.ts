@@ -12,6 +12,7 @@ import {
   WEIGHT_GRAPH_DEFAULTS,
 } from '@delegates/utils/graph-config';
 import { scoopDroppings } from '@delegates/utils/scoop-droppings';
+import { hasFeature } from '@homeassistant-extras/hass/common/config/feature';
 import {
   resolvePoatCardHelpers,
   type CardHelpers,
@@ -168,25 +169,30 @@ export class WhiskerCard extends LitElement {
       this._duty.hopper_status || this._duty.hopper_connected
     );
 
+    // The illustrated graphic carries the levels itself, so it takes the
+    // artwork slot and replaces the separate bar gauges.
+    const illustrated = hasFeature(this._config, 'illustrated');
+    const levels = illustrated
+      ? html`<whisker-svg-levels
+          .hass=${this._hass}
+          .config=${this._config}
+          .litter_level=${this._duty.litter_level}
+          .waste_drawer=${this._duty.waste_drawer}
+        ></whisker-svg-levels>`
+      : html`<whisker-robot-levels
+          .hass=${this._hass}
+          .config=${this._config}
+          .litter_level=${this._duty.litter_level}
+          .waste_drawer=${this._duty.waste_drawer}
+        ></whisker-robot-levels>`;
+
     if (this._config?.mini) {
       return html`
         <ha-card class="mini">
-          ${this._renderHeader(this._duty, title, hasHopper)}
-          <whisker-robot-levels
-            .hass=${this._hass}
-            .config=${this._config}
-            .litter_level=${this._duty.litter_level}
-            .waste_drawer=${this._duty.waste_drawer}
-          ></whisker-robot-levels>
+          ${this._renderHeader(this._duty, title, hasHopper)} ${levels}
         </ha-card>
       `;
     }
-
-    const robotImage = resolveRobotImage(
-      this._duty.model,
-      this._duty.serial_number,
-      this._config?.color,
-    );
 
     return html`
       <ha-card>
@@ -210,14 +216,19 @@ export class WhiskerCard extends LitElement {
               .panelLockoutEntity=${this._duty.panel_lockout}
             ></whisker-controls-entity>
           </div>
-          <img src=${robotImage} alt="Litter Robot" loading="lazy" />
+          ${illustrated
+            ? levels
+            : html`<img
+                src=${resolveRobotImage(
+                  this._duty.model,
+                  this._duty.serial_number,
+                  this._config?.color,
+                )}
+                alt="Litter Robot"
+                loading="lazy"
+              />`}
         </div>
-        <whisker-robot-levels
-          .hass=${this._hass}
-          .config=${this._config}
-          .litter_level=${this._duty.litter_level}
-          .waste_drawer=${this._duty.waste_drawer}
-        ></whisker-robot-levels>
+        ${illustrated ? nothing : levels}
         ${this._config.chonk?.hide
           ? nothing
           : html`<whisker-pet-graph

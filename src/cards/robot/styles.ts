@@ -72,6 +72,16 @@ export const styles = css`
     --whisker-levels-padding: 0px 16px 10px;
   }
 
+  ha-card.mini whisker-svg-levels {
+    display: block;
+    --whisker-svg-levels-padding: 0px 16px 10px;
+  }
+
+  .robot-image-stack whisker-svg-levels {
+    display: block;
+    --whisker-svg-levels-padding: 4px 12% 8px;
+  }
+
   /**
    * :host(:has()) only sees light-DOM descendants, not shadow content.
    * ha-card:has() matches within this shadow tree; the custom property

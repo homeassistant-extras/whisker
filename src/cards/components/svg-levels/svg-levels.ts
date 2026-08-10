@@ -7,7 +7,14 @@ import { SubscribeEntityStateMixin } from '@homeassistant-extras/hass/mixins/sub
 import { stateDisplay } from '@homeassistant-extras/hass/render/state-display';
 import { html, LitElement, nothing, type TemplateResult } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { LITTER_ZONE_D, ROBOT_BODY_D, WASTE_ZONE_D } from './paths';
+import { fillClipRect } from './fill';
+import {
+  LITTER_ZONE_BOUNDS,
+  LITTER_ZONE_D,
+  ROBOT_BODY_D,
+  WASTE_ZONE_BOUNDS,
+  WASTE_ZONE_D,
+} from './paths';
 import { litterSeverityClass, wasteZoneSeverityClass } from './severity';
 import { svgLevelsStyles as styles } from './styles';
 
@@ -62,12 +69,16 @@ export class WhiskerSvgLevels extends SubscribeEntityStateMixin(
       ? this.states[this.waste_drawer]
       : undefined;
 
-    const litterSeverity = litterSeverityClass(
-      numericLevelFromEntityState(litterState),
-    );
-    const wasteSeverity = wasteZoneSeverityClass(
-      numericLevelFromEntityState(wasteState),
-    );
+    const litterLevel = numericLevelFromEntityState(litterState);
+    const wasteLevel = numericLevelFromEntityState(wasteState);
+    const litterSeverity = litterSeverityClass(litterLevel);
+    const wasteSeverity = wasteZoneSeverityClass(wasteLevel);
+
+    // Fills rise from the bottom of each zone in proportion to its level, so
+    // the drawn amount always matches the reported percentage. Color continues
+    // to carry good/bad, which is inverted between the two zones.
+    const litterFill = fillClipRect(litterLevel, LITTER_ZONE_BOUNDS);
+    const wasteFill = fillClipRect(wasteLevel, WASTE_ZONE_BOUNDS);
     const bodyClass = `body body-${this.config?.color ?? DEFAULT_COLOR}`;
 
     // Keep every <path> in this same template so Lit creates SVG-namespace nodes.
@@ -79,16 +90,48 @@ export class WhiskerSvgLevels extends SubscribeEntityStateMixin(
           role="img"
           aria-label="Litter and waste levels"
         >
+          <defs>
+            <clipPath id="litter-fill">
+              <rect
+                x="0"
+                width="24"
+                y=${litterFill.y}
+                height=${litterFill.height}
+              ></rect>
+            </clipPath>
+            <clipPath id="waste-fill">
+              <rect
+                x="0"
+                width="24"
+                y=${wasteFill.y}
+                height=${wasteFill.height}
+              ></rect>
+            </clipPath>
+          </defs>
           <path class=${bodyClass} fill-rule="evenodd" d=${ROBOT_BODY_D}></path>
           <path
-            class="zone litter ${litterSeverity}"
+            class="zone-empty litter"
             d=${LITTER_ZONE_D}
             ?hidden=${!this.litter_level}
             @click=${this._openLitter}
           ></path>
           <path
+            class="zone litter ${litterSeverity}"
+            d=${LITTER_ZONE_D}
+            clip-path="url(#litter-fill)"
+            ?hidden=${!this.litter_level}
+            @click=${this._openLitter}
+          ></path>
+          <path
+            class="zone-empty waste"
+            d=${WASTE_ZONE_D}
+            ?hidden=${!this.waste_drawer}
+            @click=${this._openWaste}
+          ></path>
+          <path
             class="zone waste ${wasteSeverity}"
             d=${WASTE_ZONE_D}
+            clip-path="url(#waste-fill)"
             ?hidden=${!this.waste_drawer}
             @click=${this._openWaste}
           ></path>

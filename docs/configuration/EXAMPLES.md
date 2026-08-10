@@ -36,7 +36,7 @@ features:
 
 ## Illustrated levels
 
-Use the opt-in illustration (colored litter/waste zones) instead of the marketing image and thin bars:
+Use the opt-in illustration (litter/waste zones that fill in proportion to their level) instead of the marketing image and thin bars:
 
 ![Illustrated levels](../assets/illustrated.png)
 

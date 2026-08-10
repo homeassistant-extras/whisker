@@ -15,7 +15,7 @@ features:
 
 ## Illustrated levels
 
-Replace the marketing robot image and thin litter/waste bars with an opt-in illustration. Litter (globe bed) and waste (drawer panel) zones color by level — green / yellow / red — while the rest of the robot stays neutral. Tap a zone to open that entity's more-info dialog.
+Replace the marketing robot image and thin litter/waste bars with an opt-in illustration. Litter (globe bed) and waste (drawer panel) zones fill from the bottom in proportion to their level — a drawer at 90% draws nearly full — and color by level, green / yellow / red, while the rest of the robot stays neutral. Tap a zone to open that entity's more-info dialog.
 
 ![Illustrated levels](../assets/illustrated.png)
 

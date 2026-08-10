@@ -55,6 +55,18 @@ export const svgLevelsStyles = css`
     transition: fill 0.25s ease;
   }
 
+  /*
+   * The unfilled remainder of each vessel, drawn under the clipped fill so a
+   * part-full zone still reads as a container rather than a floating sliver.
+   * Tinted from the surrounding text color so it works on light and dark.
+   */
+  .zone-empty {
+    fill: var(--secondary-text-color, #727272);
+    opacity: 0.25;
+    cursor: pointer;
+    pointer-events: auto;
+  }
+
   .zone.zone-warn {
     fill: var(--warning-color, #ff9800);
   }
@@ -64,7 +76,8 @@ export const svgLevelsStyles = css`
   }
 
   /* the hidden attribute is not honored on SVG elements by default */
-  .zone[hidden] {
+  .zone[hidden],
+  .zone-empty[hidden] {
     display: none;
   }
 

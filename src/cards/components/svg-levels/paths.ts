@@ -14,3 +14,16 @@ export const LITTER_ZONE_D =
 /** Waste drawer level zone. */
 export const WASTE_ZONE_D =
   'M12.334 17.768H11.643A13 13 0 0 1 8.532 17.414A11 11 0 0 1 7.855 17.276L7.873 17.669A2.85 2.85 0 0 0 8.661 19.536C9 19.861 9.427 20.072 12.118 20.044C14.206 20.022 14.94 19.933 15.391 19.644A2.61 2.61 0 0 0 16.284 17.431A0.6 0.6 0 0 0 16.255 17.221A24 24 0 0 1 12.334 17.768';
+
+/*
+ * Rendered vertical extents of the zone paths above, used to clip proportional
+ * fills. These are each path's exact `getBBox()` y/height — do not pad them.
+ * Both zones are thin crescents, so a rect taller than the shape lets a full
+ * fill bleed past the rim it should stop at. Re-measure if the paths change.
+ */
+
+/** Litter zone extent (bed surface up to the globe rim). */
+export const LITTER_ZONE_BOUNDS = { top: 11.53, height: 3.243 };
+
+/** Waste zone extent (drawer interior). */
+export const WASTE_ZONE_BOUNDS = { top: 17.221, height: 2.825 };

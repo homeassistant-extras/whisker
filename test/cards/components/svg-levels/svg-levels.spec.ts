@@ -1,3 +1,7 @@
+import {
+  LITTER_ZONE_BOUNDS,
+  WASTE_ZONE_BOUNDS,
+} from '@cards/components/svg-levels/paths';
 import { WhiskerSvgLevels } from '@cards/components/svg-levels/svg-levels';
 import type { HassEntity } from '@homeassistant-extras/hass/ws/types';
 import { fixture } from '@open-wc/testing-helpers';
@@ -50,6 +54,25 @@ describe('svg-levels.ts', () => {
     // fills come from CSS classes (not presentation attrs — var() is unreliable there)
     expect(litter?.hasAttribute('fill')).to.be.false;
     expect(waste?.hasAttribute('fill')).to.be.false;
+
+    // Each zone is clipped to its level over an unfilled backdrop. jsdom does
+    // not lay out SVG, so assert the wiring and the rect geometry; the
+    // arithmetic itself is covered in fill.spec.ts.
+    expect(el.querySelector('.zone-empty.litter')).to.exist;
+    expect(el.querySelector('.zone-empty.waste')).to.exist;
+    expect(litter?.getAttribute('clip-path')).to.equal('url(#litter-fill)');
+    expect(waste?.getAttribute('clip-path')).to.equal('url(#waste-fill)');
+
+    const litterRect = el.querySelector('#litter-fill rect');
+    const wasteRect = el.querySelector('#waste-fill rect');
+    expect(Number(litterRect?.getAttribute('height'))).to.be.closeTo(
+      LITTER_ZONE_BOUNDS.height * 0.35,
+      1e-6,
+    );
+    expect(Number(wasteRect?.getAttribute('height'))).to.be.closeTo(
+      WASTE_ZONE_BOUNDS.height * 0.6,
+      1e-6,
+    );
     expect(el.querySelector('.body-white')).to.exist;
     expect(el.querySelector('.label-row')).to.be.null;
 

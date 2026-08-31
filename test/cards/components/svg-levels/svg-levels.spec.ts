@@ -76,6 +76,14 @@ describe('svg-levels.ts', () => {
     expect(el.querySelector('.body-white')).to.exist;
     expect(el.querySelector('.label-row')).to.be.null;
 
+    // Glass sheen overlays the vessel (Andy-style left highlight + diagonal band).
+    expect(el.querySelector('#zone-sheen')).to.exist;
+    expect(el.querySelector('#zone-band')).to.exist;
+    expect(el.querySelector('.zone-glass.litter')).to.exist;
+    expect(el.querySelector('.zone-glass.waste')).to.exist;
+    expect(el.querySelector('.zone-glass-band.litter')).to.exist;
+    expect(el.querySelector('.zone-glass-band.waste')).to.exist;
+
     row.config = { device_id: 'dev', color: 'black' };
     const blackBody = await fixture(row.render() as TemplateResult);
     expect(blackBody.querySelector('.body-black')).to.exist;

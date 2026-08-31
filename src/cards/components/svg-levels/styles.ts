@@ -47,6 +47,10 @@ export const svgLevelsStyles = css`
   /*
    * Zone fills must live in CSS — SVG presentation attributes do not reliably
    * resolve CSS variables, which left the litter/waste holes blank in HA.
+   *
+   * Critical uses a dedicated vivid red rather than theme --error-color, which
+   * reads as maroon on dark dashboards (#68). Themes can override
+   * --whisker-level-error.
    */
   .zone {
     fill: var(--success-color, #4caf50);
@@ -59,12 +63,23 @@ export const svgLevelsStyles = css`
    * The unfilled remainder of each vessel, drawn under the clipped fill so a
    * part-full zone still reads as a container rather than a floating sliver.
    * Tinted from the surrounding text color so it works on light and dark.
+   * fill-opacity (not opacity) keeps the glass rim stroke visible.
    */
   .zone-empty {
     fill: var(--secondary-text-color, #727272);
-    opacity: 0.25;
+    fill-opacity: 0.25;
+    stroke-width: 0.8;
+    vector-effect: non-scaling-stroke;
     cursor: pointer;
     pointer-events: auto;
+  }
+
+  .body-black ~ .zone-empty {
+    stroke: rgba(255, 255, 255, 0.4);
+  }
+
+  .body-white ~ .zone-empty {
+    stroke: rgba(0, 0, 0, 0.22);
   }
 
   .zone.zone-warn {
@@ -72,12 +87,24 @@ export const svgLevelsStyles = css`
   }
 
   .zone.zone-error {
-    fill: var(--error-color, #f44336);
+    fill: var(--whisker-level-error, #ff5252);
+  }
+
+  /*
+   * Glass overlays (Andy Sensor Card tank sheen): a left-edge highlight plus a
+   * diagonal band, clipped to the zone path. pointer-events stay off so taps
+   * still hit the fill/empty paths underneath.
+   */
+  .zone-glass,
+  .zone-glass-band {
+    pointer-events: none;
   }
 
   /* the hidden attribute is not honored on SVG elements by default */
   .zone[hidden],
-  .zone-empty[hidden] {
+  .zone-empty[hidden],
+  .zone-glass[hidden],
+  .zone-glass-band[hidden] {
     display: none;
   }
 

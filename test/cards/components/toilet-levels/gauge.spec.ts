@@ -79,6 +79,18 @@ describe('gauge.ts', () => {
     const bar = el.querySelector('.bar.waste');
 
     expect(bar?.classList.contains('gauge-warn')).to.be.true;
+
+    setGaugeState(row, 'sensor.waste', {
+      entity_id: 'sensor.waste',
+      state: '85',
+      attributes: {},
+      last_changed: '1970-01-01T00:00:00.000Z',
+      last_updated: '1970-01-01T00:00:00.000Z',
+    });
+    const errorEl = await fixture(row.render() as TemplateResult);
+    expect(
+      errorEl.querySelector('.bar.waste')?.classList.contains('gauge-error'),
+    ).to.be.true;
   });
 
   it('should cap level at 100% for bar fill', async () => {

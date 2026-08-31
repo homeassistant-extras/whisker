@@ -21,6 +21,7 @@ import { svgLevelsStyles as styles } from './styles';
 /**
  * Opt-in SVG robot silhouette with litter/waste zones colored from live levels.
  * Replaces both the marketing artwork and the thin bar gauges when enabled.
+ * Zones pick up a glass sheen overlay so the fill reads as a vessel.
  *
  * Zone `<path>`s must live in the same `html` template as the parent `<svg>`.
  * Nested `html\`\`` fragments create HTML-namespace nodes that do not paint.
@@ -107,6 +108,23 @@ export class WhiskerSvgLevels extends SubscribeEntityStateMixin(
                 height=${wasteFill.height}
               ></rect>
             </clipPath>
+            <!--
+              Glass sheen modeled on Andy Sensor Card tanks: a left-edge
+              highlight plus a diagonal band so the fill reads as a vessel.
+              https://github.com/maglerod/andy-sensor-card
+            -->
+            <linearGradient id="zone-sheen" x1="0" x2="1" y1="0" y2="0">
+              <stop offset="0%" stop-color="rgba(255,255,255,0.80)"></stop>
+              <stop offset="35%" stop-color="rgba(255,255,255,0.18)"></stop>
+              <stop offset="78%" stop-color="rgba(255,255,255,0.05)"></stop>
+              <stop offset="100%" stop-color="rgba(255,255,255,0.38)"></stop>
+            </linearGradient>
+            <linearGradient id="zone-band" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0%" stop-color="rgba(255,255,255,0)"></stop>
+              <stop offset="35%" stop-color="rgba(255,255,255,0.22)"></stop>
+              <stop offset="55%" stop-color="rgba(255,255,255,0.08)"></stop>
+              <stop offset="100%" stop-color="rgba(255,255,255,0)"></stop>
+            </linearGradient>
           </defs>
           <path class=${bodyClass} fill-rule="evenodd" d=${ROBOT_BODY_D}></path>
           <path
@@ -123,6 +141,22 @@ export class WhiskerSvgLevels extends SubscribeEntityStateMixin(
             @click=${this._openLitter}
           ></path>
           <path
+            class="zone-glass litter"
+            d=${LITTER_ZONE_D}
+            fill="url(#zone-sheen)"
+            opacity="0.55"
+            aria-hidden="true"
+            ?hidden=${!this.litter_level}
+          ></path>
+          <path
+            class="zone-glass-band litter"
+            d=${LITTER_ZONE_D}
+            fill="url(#zone-band)"
+            opacity="0.3"
+            aria-hidden="true"
+            ?hidden=${!this.litter_level}
+          ></path>
+          <path
             class="zone-empty waste"
             d=${WASTE_ZONE_D}
             ?hidden=${!this.waste_drawer}
@@ -134,6 +168,22 @@ export class WhiskerSvgLevels extends SubscribeEntityStateMixin(
             clip-path="url(#waste-fill)"
             ?hidden=${!this.waste_drawer}
             @click=${this._openWaste}
+          ></path>
+          <path
+            class="zone-glass waste"
+            d=${WASTE_ZONE_D}
+            fill="url(#zone-sheen)"
+            opacity="0.55"
+            aria-hidden="true"
+            ?hidden=${!this.waste_drawer}
+          ></path>
+          <path
+            class="zone-glass-band waste"
+            d=${WASTE_ZONE_D}
+            fill="url(#zone-band)"
+            opacity="0.3"
+            aria-hidden="true"
+            ?hidden=${!this.waste_drawer}
           ></path>
         </svg>
         ${hasFeature(this.config, 'percentage') && this.hass

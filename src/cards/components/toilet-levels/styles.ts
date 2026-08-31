@@ -81,19 +81,29 @@ export const gaugeStyles = css`
     top: 0;
     bottom: 0;
     width: var(--fill, 0%);
-    background: var(--success-color);
+    /* Color plus Andy-style left-to-right glass sheen. Use longhands so the
+     * gradient is not wiped by the background shorthand. */
+    background-color: var(--success-color);
+    background-image: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.45) 0%,
+      rgba(255, 255, 255, 0.08) 35%,
+      rgba(255, 255, 255, 0.02) 78%,
+      rgba(255, 255, 255, 0.22) 100%
+    );
     transition: width 0.3s ease;
   }
 
   .bar.waste::after {
-    background: var(--success-color);
+    background-color: var(--success-color);
   }
 
   .bar.waste.gauge-warn::after {
-    background: var(--warning-color);
+    background-color: var(--warning-color);
   }
 
   .bar.waste.gauge-error::after {
-    background: var(--error-color);
+    /* Theme --error-color reads as maroon on dark cards; pin a vivid red. */
+    background-color: var(--whisker-level-error, #ff5252);
   }
 `;

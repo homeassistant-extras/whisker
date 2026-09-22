@@ -1,6 +1,6 @@
 # Features
 
-- **Model-aware artwork** — The card shows an image matching your robot, detected from the device's model and serial number (Litter-Robot 4, 5, 5 Pro, or Evo). A `color` option picks white or black artwork ([Configuration options](configuration/OPTIONS.md)).
+- **Model-aware artwork** — The card shows an image matching your robot, detected from the device's model and serial number (Litter-Robot 3, 4, 5, 5 Pro, or Evo). A `color` option picks white or black artwork — on the LR3, Beige and Grey ([Configuration options](configuration/OPTIONS.md)).
 - **Status header** — Friendly title (device name or optional override), human-readable status text, and a colored **status icon** derived from the `status_code` sensor.
 - **Cycle styling** — While the robot reports an active cycle (`ccp`, `ec`, `cst`), the card reflects **cycling** state for subtle visual emphasis.
 - **Quick actions** — Picture-style controls for the litter box **vacuum** and **reset** (see [Interactions](configuration/INTERACTIONS.md)).

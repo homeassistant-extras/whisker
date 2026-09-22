@@ -49,17 +49,21 @@ describe('index.ts', () => {
 
   it('should register all custom elements', () => {
     require('@/index.ts');
-    expect(customElementsStub.callCount).to.equal(2);
-    expect(customElementsStub.firstCall.args[0]).to.equal('whisker-card');
-    expect(customElementsStub.secondCall.args[0]).to.equal(
+    expect(customElementsStub.callCount).to.equal(4);
+    expect(
+      customElementsStub.getCalls().map((call) => call.args[0]),
+    ).to.deep.equal([
+      'whisker-card',
       'whisker-card-editor',
-    );
+      'whisker-pet-card',
+      'whisker-pet-card-editor',
+    ]);
   });
 
   it('should add card configuration with all fields to window.customCards', () => {
     require('@/index.ts');
 
-    expect(globalThis.customCards).to.have.lengthOf(1);
+    expect(globalThis.customCards).to.have.lengthOf(2);
     expect(globalThis.customCards[0]).to.deep.equal({
       type: 'whisker-card',
       name: 'Whisker Card',
@@ -68,6 +72,13 @@ describe('index.ts', () => {
       preview: true,
       documentationURL: 'https://github.com/homeassistant-extras/whisker',
       getEntitySuggestion,
+    });
+    expect(globalThis.customCards[1]).to.deep.equal({
+      type: 'whisker-pet-card',
+      name: 'Whisker Pet Card',
+      description: 'A card for the cats using your Litter Robots.',
+      preview: true,
+      documentationURL: 'https://github.com/homeassistant-extras/whisker',
     });
   });
 
@@ -84,7 +95,7 @@ describe('index.ts', () => {
 
     require('@/index.ts');
 
-    expect(globalThis.customCards).to.have.lengthOf(2);
+    expect(globalThis.customCards).to.have.lengthOf(3);
     expect(globalThis.customCards[0]).to.deep.equal({
       type: 'existing-card',
       name: 'Existing Card',
@@ -98,8 +109,8 @@ describe('index.ts', () => {
     require('@/index.ts');
     require('@/index.ts');
 
-    expect(globalThis.customCards).to.have.lengthOf(1);
-    expect(customElementsStub.callCount).to.equal(2);
+    expect(globalThis.customCards).to.have.lengthOf(2);
+    expect(customElementsStub.callCount).to.equal(4);
   });
 
   it('should log the version with proper formatting', () => {

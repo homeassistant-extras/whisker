@@ -147,6 +147,37 @@ export interface GraphSectionConfig {
   hide_names?: boolean;
 }
 
+/** What the pet card renders. Defaults to {@link DEFAULT_PET_DISPLAY}. */
+export type PetDisplay = 'states' | 'graphs' | 'both';
+
+/** Display used when the pet card's `display` is omitted — compact by default. */
+export const DEFAULT_PET_DISPLAY: PetDisplay = 'states';
+
+/**
+ * Config for the standalone pet card (`whisker-pet-card`), which shows the
+ * household's cats rather than a robot. Pet metrics are reported per pet, not
+ * per robot, so this card stands apart from the device card.
+ */
+export interface PetConfig {
+  /** Optional display title. Defaults to "Pets". */
+  title?: string;
+
+  /**
+   * Pet device ids to show. When omitted, the card shows every pet the
+   * integration reports.
+   */
+  pets?: string[];
+
+  /** Whether to show pet states, the graphs, or both. */
+  display?: PetDisplay;
+
+  /** Options for the pet weight chonk */
+  chonk?: GraphSectionConfig;
+
+  /** Options for the pet visits graph (daily litter box visits per cat) */
+  visits?: GraphSectionConfig;
+}
+
 export interface Config {
   /** Unique identifier for the device */
   device_id: string;

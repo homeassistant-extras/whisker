@@ -31,6 +31,7 @@ Replace `YOUR_DEVICE_ID` with the id from the device page in Home Assistant, or 
 - Pet weight graph — history or long-term statistics (auto-detects multiple cats)
 - **LitterHopper status badge** on LR4 when a LitterHopper is attached (optional hopper footer items too)
 - Optional gauge percentages and customizable footer
+- A separate **pet card** for per-cat weight and visits, so the data isn't repeated per robot
 
 ## Next steps
 

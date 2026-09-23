@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-**Whisker Card** is a Home Assistant custom Lovelace card that surfaces Litter-Robot status and controls. It depends on the official Home Assistant `litterrobot` integration and is configured with a `device_id` plus optional `title`, `color`, `footer`, and `features`. Supports LR4, LR5, LR5 Pro, and Litter-Robot Evo artwork (auto-detected from device serial/model). Developed and tested against a Litter-Robot 5 (LR5).
+**Whisker Card** is a Home Assistant custom Lovelace card that surfaces Litter-Robot status and controls. It depends on the official Home Assistant `litterrobot` integration and is configured with a `device_id` plus optional `title`, `color`, `footer`, and `features`. Supports LR3, LR4, LR5, LR5 Pro, and Litter-Robot Evo artwork (auto-detected from device serial/model). Developed and tested against a Litter-Robot 5 (LR5).
 
 The bundled output is a single ES module at `dist/whisker.js`, intended to be loaded as a Lovelace resource.
 

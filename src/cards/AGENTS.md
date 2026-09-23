@@ -16,9 +16,9 @@ This folder contains Lit-based card UI, editors, mixins, and card-specific compo
 
 ## Robot artwork
 
-- **`detect-model.ts`** — maps device `serial_number` (authoritative prefix: `LR4`, `LR5`, `LRE`) and `model` string (LR5 Pro) to a `ModelKey` (`lr4`, `lr5`, `lr5-pro`, `lre`). Defaults to `lr5`.
+- **`detect-model.ts`** — maps device `serial_number` (authoritative prefix: `LR3`, `LR4`, `LR5`, `LRE`) and `model` string (LR5 Pro) to a `ModelKey` (`lr3`, `lr4`, `lr5`, `lr5-pro`, `lre`). Defaults to `lr5`.
 - **`assets.ts`** — resolves the bundled AVIF URL from model key + config `color` (`white` | `black`). Each `new URL(...)` **must** use a string literal path; Parcel only inlines literal `new URL('…', import.meta.url)` calls.
-- **`src/assets/`** — source AVIF files keyed `${modelKey}-${color}` (e.g. `lr5-pro-black.avif`).
+- **`src/assets/`** — source AVIF files keyed `${modelKey}-${color}` (e.g. `lr5-pro-black.avif`). The LR3 only shipped in Beige and Grey, so those are its `white` / `black` artwork.
 - Tests stub `./assets` via `test/helpers/card-assets-stub.cjs` so `import.meta.url` is not evaluated under the CommonJS test tsconfig.
 
 When adding a new robot family or color, update `detect-model.ts`, add AVIF assets, extend the `ROBOT_IMAGES` map in `assets.ts`, and add tests in `test/cards/robot/`.

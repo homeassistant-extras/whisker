@@ -19,6 +19,12 @@ describe('detect-model.ts', () => {
       expect(detectModelKey('Litter-Robot 4', 'LR4-12-34')).to.equal('lr4');
     });
 
+    it('maps LR3 serial to lr3', () => {
+      expect(detectModelKey('Litter-Robot 3 Connect', 'LR3C012345')).to.equal(
+        'lr3',
+      );
+    });
+
     it('maps LRE serial to lre (Litter-Robot Evo)', () => {
       expect(detectModelKey(null, 'LRE-99-00')).to.equal('lre');
     });
@@ -47,6 +53,10 @@ describe('detect-model.ts', () => {
 
     it('detects 4 from the model name', () => {
       expect(detectModelKey('Litter-Robot 4', null)).to.equal('lr4');
+    });
+
+    it('detects 3 from the model name', () => {
+      expect(detectModelKey('Litter-Robot 3 Connect', null)).to.equal('lr3');
     });
   });
 

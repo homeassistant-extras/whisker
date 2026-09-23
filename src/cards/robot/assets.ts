@@ -16,6 +16,10 @@ import { DEFAULT_MODEL, detectModelKey, type ModelKey } from './detect-model';
 /* eslint-disable @typescript-eslint/ban-ts-comment -- Parcel/ESNext; test tsconfig is CommonJS (card-assets-stub.cjs) */
 const ROBOT_IMAGES: Record<`${ModelKey}-${RobotColor}`, string> = {
   // @ts-ignore
+  'lr3-white': new URL('../../assets/lr3-white.avif', import.meta.url).href,
+  // @ts-ignore
+  'lr3-black': new URL('../../assets/lr3-black.avif', import.meta.url).href,
+  // @ts-ignore
   'lr4-white': new URL('../../assets/lr4-white.avif', import.meta.url).href,
   // @ts-ignore
   'lr4-black': new URL('../../assets/lr4-black.avif', import.meta.url).href,

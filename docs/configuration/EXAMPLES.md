@@ -17,7 +17,7 @@ title: Cat HQ
 
 ## Robot color
 
-The model (Litter-Robot 4 / 5 / 5 Pro / Evo) is auto-detected; pick the color to match your unit (`white` is the default).
+The model (Litter-Robot 3, 4, 5, 5 Pro, or Evo) is auto-detected; pick the color to match your unit (`white` is the default; on the LR3 it selects Beige, and `black` selects Grey).
 
 ```yaml
 type: custom:whisker-card

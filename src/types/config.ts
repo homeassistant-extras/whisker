@@ -35,12 +35,7 @@ export type GraphType = 'history' | 'statistics';
 
 /** Aggregation period for a statistics graph. `auto` lets HA pick. */
 export type StatisticPeriod =
-  | 'auto'
-  | '5minute'
-  | 'hour'
-  | 'day'
-  | 'week'
-  | 'month';
+  'auto' | '5minute' | 'hour' | 'day' | 'week' | 'month';
 
 /** Statistic series plotted by a statistics graph. */
 export type StatisticType = 'change' | 'state' | 'sum' | 'min' | 'max' | 'mean';

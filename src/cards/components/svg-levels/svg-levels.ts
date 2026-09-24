@@ -186,26 +186,28 @@ export class WhiskerSvgLevels extends SubscribeEntityStateMixin(
             ?hidden=${!this.waste_drawer}
           ></path>
         </svg>
-        ${hasFeature(this.config, 'percentage') && this.hass
-          ? html`<div class="label-row">
-              <span
-                >Litter
-                <span class="pct"
-                  >${litterState
-                    ? stateDisplay(this.hass, litterState)
-                    : '—'}</span
-                ></span
-              >
-              <span
-                >Waste
-                <span class="pct"
-                  >${wasteState
-                    ? stateDisplay(this.hass, wasteState)
-                    : '—'}</span
-                ></span
-              >
-            </div>`
-          : nothing}
+        ${
+          hasFeature(this.config, 'percentage') && this.hass
+            ? html`<div class="label-row">
+                <span
+                  >Litter
+                  <span class="pct"
+                    >${
+                      litterState ? stateDisplay(this.hass, litterState) : '—'
+                    }</span
+                  ></span
+                >
+                <span
+                  >Waste
+                  <span class="pct"
+                    >${
+                      wasteState ? stateDisplay(this.hass, wasteState) : '—'
+                    }</span
+                  ></span
+                >
+              </div>`
+            : nothing
+        }
       </div>
     `;
   }

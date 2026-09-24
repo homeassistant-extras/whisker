@@ -113,24 +113,28 @@ export class WhiskerCard extends LitElement {
       <div class="card-title-row">
         <h2 class="card-title">${title}</h2>
         <div class="card-title-status">
-          ${this._config?.cleaning_entity
-            ? html`<whisker-cleaning
-                .hass=${this._hass}
-                .entity=${this._config.cleaning_entity}
-              ></whisker-cleaning>`
-            : nothing}
+          ${
+            this._config?.cleaning_entity
+              ? html`<whisker-cleaning
+                  .hass=${this._hass}
+                  .entity=${this._config.cleaning_entity}
+                ></whisker-cleaning>`
+              : nothing
+          }
           <whisker-litter-status
             .hass=${this._hass}
             .entity=${duty.status}
           ></whisker-litter-status>
-          ${hasHopper
-            ? html`<whisker-hopper
-                .hass=${this._hass}
-                .config=${this._config}
-                .statusEntity=${duty.hopper_status}
-                .connectedEntity=${duty.hopper_connected}
-              ></whisker-hopper>`
-            : nothing}
+          ${
+            hasHopper
+              ? html`<whisker-hopper
+                  .hass=${this._hass}
+                  .config=${this._config}
+                  .statusEntity=${duty.hopper_status}
+                  .connectedEntity=${duty.hopper_connected}
+                ></whisker-hopper>`
+              : nothing
+          }
         </div>
       </div>
     `;
@@ -197,37 +201,43 @@ export class WhiskerCard extends LitElement {
               .panelLockoutEntity=${this._duty.panel_lockout}
             ></whisker-controls-entity>
           </div>
-          ${illustrated
-            ? levels
-            : html`<img
-                src=${resolveRobotImage(
-                  this._duty.model,
-                  this._duty.serial_number,
-                  this._config?.color,
-                )}
-                alt="Litter Robot"
-                loading="lazy"
-              />`}
+          ${
+            illustrated
+              ? levels
+              : html`<img
+                  src=${resolveRobotImage(
+                    this._duty.model,
+                    this._duty.serial_number,
+                    this._config?.color,
+                  )}
+                  alt="Litter Robot"
+                  loading="lazy"
+                />`
+          }
         </div>
         ${illustrated ? nothing : levels}
-        ${this._config.chonk?.hide
-          ? nothing
-          : html`<whisker-pet-graph
-              .hass=${this._hass}
-              .header=${'Pet weight'}
-              .kitties=${this._duty.kitties}
-              .options=${this._config.chonk}
-              .defaults=${WEIGHT_GRAPH_DEFAULTS}
-            ></whisker-pet-graph>`}
-        ${this._config.visits?.hide
-          ? nothing
-          : html`<whisker-pet-graph
-              .hass=${this._hass}
-              .header=${'Pet visits'}
-              .kitties=${this._duty.visits}
-              .options=${this._config.visits}
-              .defaults=${VISITS_GRAPH_DEFAULTS}
-            ></whisker-pet-graph>`}
+        ${
+          this._config.chonk?.hide
+            ? nothing
+            : html`<whisker-pet-graph
+                .hass=${this._hass}
+                .header=${'Pet weight'}
+                .kitties=${this._duty.kitties}
+                .options=${this._config.chonk}
+                .defaults=${WEIGHT_GRAPH_DEFAULTS}
+              ></whisker-pet-graph>`
+        }
+        ${
+          this._config.visits?.hide
+            ? nothing
+            : html`<whisker-pet-graph
+                .hass=${this._hass}
+                .header=${'Pet visits'}
+                .kitties=${this._duty.visits}
+                .options=${this._config.visits}
+                .defaults=${VISITS_GRAPH_DEFAULTS}
+              ></whisker-pet-graph>`
+        }
         <whisker-card-footer
           .hass=${this._hass}
           .config=${this._config}

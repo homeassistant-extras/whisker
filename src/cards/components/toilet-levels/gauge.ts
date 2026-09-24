@@ -39,12 +39,14 @@ export class WhiskerGauge extends SubscribeEntityStateMixin(
 
     return html`
       <div class="hit" @click=${this._openMoreInfo}>
-        ${hasFeature(this.config, 'percentage')
-          ? html`<div class="label-row">
-              <span class="label">${label}</span>
-              <span class="pct">${value}</span>
-            </div>`
-          : html`<span class="label">${label}</span>`}
+        ${
+          hasFeature(this.config, 'percentage')
+            ? html`<div class="label-row">
+                <span class="label">${label}</span>
+                <span class="pct">${value}</span>
+              </div>`
+            : html`<span class="label">${label}</span>`
+        }
         <div class=${barClass} style=${styleMap({ '--fill': `${pct}%` })}></div>
         <span class="tooltip">${label}: ${value}</span>
       </div>

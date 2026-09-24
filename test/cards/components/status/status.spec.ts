@@ -73,8 +73,7 @@ describe('status.ts (WhiskerLitterStatus)', () => {
     await el.updateComplete;
 
     const display = el.shadowRoot?.querySelector('state-display') as
-      | (HTMLElement & { hass?: HomeAssistant; stateObj?: HassEntity })
-      | null;
+      (HTMLElement & { hass?: HomeAssistant; stateObj?: HassEntity }) | null;
     expect(display).to.exist;
     expect(display?.hass).to.equal(mockHass);
     expect(display?.stateObj).to.deep.equal(stateObj);

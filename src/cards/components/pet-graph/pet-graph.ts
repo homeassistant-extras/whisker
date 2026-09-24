@@ -68,14 +68,16 @@ export class WhiskerPetGraph extends HassConfigMixin<typeof LitElement, Config>(
       .collapsed=${!!this.options?.collapsed}
       @expanded-will-change=${this._onExpandedWillChange}
     >
-      ${revealed
-        ? html`<div class="graph">
-            ${createCardElement(
-              this.hass,
-              buildGraphConfig(this.kitties, this.options, this.defaults),
-            )}
-          </div>`
-        : nothing}
+      ${
+        revealed
+          ? html`<div class="graph">
+              ${createCardElement(
+                this.hass,
+                buildGraphConfig(this.kitties, this.options, this.defaults),
+              )}
+            </div>`
+          : nothing
+      }
     </whisker-collapsible-section>`;
   }
 

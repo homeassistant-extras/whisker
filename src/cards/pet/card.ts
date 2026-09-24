@@ -131,26 +131,30 @@ export class WhiskerPetCard extends LitElement {
     return html`
       <ha-card>
         <h2 class="card-title">${this._config?.title ?? 'Pets'}</h2>
-        ${display === 'graphs'
-          ? nothing
-          : html`<whisker-pet-states
-              .hass=${this._hass}
-              .pets=${this._pets}
-            ></whisker-pet-states>`}
-        ${display === 'states'
-          ? nothing
-          : html`${this._renderGraph(
-              'Pet weight',
-              weights,
-              this._config?.chonk,
-              WEIGHT_GRAPH_DEFAULTS,
-            )}
-            ${this._renderGraph(
-              'Pet visits',
-              visits,
-              this._config?.visits,
-              VISITS_GRAPH_DEFAULTS,
-            )}`}
+        ${
+          display === 'graphs'
+            ? nothing
+            : html`<whisker-pet-states
+                .hass=${this._hass}
+                .pets=${this._pets}
+              ></whisker-pet-states>`
+        }
+        ${
+          display === 'states'
+            ? nothing
+            : html`${this._renderGraph(
+                'Pet weight',
+                weights,
+                this._config?.chonk,
+                WEIGHT_GRAPH_DEFAULTS,
+              )}
+              ${this._renderGraph(
+                'Pet visits',
+                visits,
+                this._config?.visits,
+                VISITS_GRAPH_DEFAULTS,
+              )}`
+        }
       </ha-card>
     `;
   }

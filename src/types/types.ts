@@ -68,3 +68,21 @@ export interface DutyReport {
   /** Pet `visits_today` sensor entity ids (configured, else auto-detected) */
   visits?: string[];
 }
+
+/**
+ * One pet as the pet card sees it. The integration gives each pet its own
+ * device, so a pet is a device id plus whichever of its sensors exist.
+ */
+export interface PetReport {
+  /** Device id of the pet */
+  id: string;
+
+  /** Pet name, from the device registry */
+  name: string;
+
+  /** Weight sensor entity id, when present */
+  weight?: string;
+
+  /** `visits_today` sensor entity id, when present */
+  visits?: string;
+}

@@ -50,15 +50,15 @@ Fix the type errors first, then rerun `yarn test`. Do not investigate path alias
 
 ### Entry point and registration
 
-[src/index.ts](src/index.ts) imports the `WhiskerCard` and `WhiskerCardEditor` components, registers them as the `whisker-card` and `whisker-card-editor` custom elements, and pushes a `customCards` descriptor onto `globalThis` so Home Assistant discovers the card. It also eagerly imports the toilet-level gauge/levels components so they are defined before first render.
+[src/index.ts](src/index.ts) imports the `WhiskerCard` / `WhiskerCardEditor` and `WhiskerPetCard` / `WhiskerPetCardEditor` components, registers them as the `whisker-card`, `whisker-card-editor`, `whisker-pet-card`, and `whisker-pet-card-editor` custom elements, and pushes a `customCards` descriptor per card onto `globalThis` so Home Assistant discovers them. It also eagerly imports the toilet-level gauge/levels components so they are defined before first render.
 
 ### Layered structure under `src/`
 
-- **`cards/`** — Lit components. `cards/robot/` holds the main card ([card.ts](src/cards/robot/card.ts)), visual editor ([editor.ts](src/cards/robot/editor.ts)), shared `styles.ts`, bundled artwork ([assets.ts](src/cards/robot/assets.ts)), and model detection ([detect-model.ts](src/cards/robot/detect-model.ts)). `cards/components/` contains focused sub-components (`status`, `status-panel`, `controls`, `footer`, `toilet-levels`, `pet-graph`). `cards/mixins/` holds Lit mixins shared across components.
+- **`cards/`** — Lit components. `cards/robot/` holds the main card ([card.ts](src/cards/robot/card.ts)), visual editor ([editor.ts](src/cards/robot/editor.ts)), shared `styles.ts`, bundled artwork ([assets.ts](src/cards/robot/assets.ts)), and model detection ([detect-model.ts](src/cards/robot/detect-model.ts)). `cards/pet/` holds the standalone pet card and its editor. `cards/editors/` holds editor schema shared by both. `cards/components/` contains focused sub-components (`status`, `status-panel`, `controls`, `footer`, `toilet-levels`, `pet-graph`, `pet-states`). `cards/mixins/` holds Lit mixins shared across components.
 - **`delegates/`** — Business logic, kept independent of Lit rendering: `retrievers/` for reading HASS state/entities, `entities/` for entity selection/mapping, `utils/` for pure transforms and action handlers. Cards call into delegates; delegates do not import from cards.
 - **`hass/`** — Vendored / adapted Home Assistant frontend types and helpers (`common`, `components`, `data`, `dialogs`, `panels`, `state`, `ws`, plus `types.ts`). Treat these as upstream code; keep them matching upstream unless a divergence is documented.
 - **`html/`** — Small, side-effect-free helpers that return Lit templates (state displays, icons, sections, rows). No business logic.
-- **`common/`** — Cross-cutting utilities ([litterrobot-status.ts](src/common/litterrobot-status.ts), [map-entities.ts](src/common/map-entities.ts), [open-entity-more-info.ts](src/common/open-entity-more-info.ts)). Must not import from `cards/` (avoid cycles).
+- **`common/`** — Cross-cutting utilities ([litterrobot-status.ts](src/common/litterrobot-status.ts), [map-entities.ts](src/common/map-entities.ts), [pet-entities.ts](src/common/pet-entities.ts), [open-entity-more-info.ts](src/common/open-entity-more-info.ts)). Must not import from `cards/` (avoid cycles).
 - **`types/`** — TypeScript contracts: `config.ts` (user config / public card API), `entity.ts`, `types.ts`, `assets.d.ts`. Reuse HASS types from `hass` instead of duplicating them.
 
 ### Data flow

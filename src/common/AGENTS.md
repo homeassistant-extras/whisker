@@ -12,3 +12,4 @@ This folder contains shared utilities used across cards, delegates, and helpers.
 - **`map-entities.ts`** — maps Whisker integration `translation_key` values onto `DutyReport` fields.
 - **`resolve-footer-items.ts`** — resolves configured footer slots from `DutyReport` entity ids.
 - **`litterrobot-status.ts`** — status code → presentation (icon, color, cycling detection).
+- **`pet-entities.ts`** — how a pet's weight / visits sensors are recognized, shared by the duty report and the pet card.

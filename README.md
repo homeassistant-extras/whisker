@@ -92,3 +92,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file.
 - [x] **Pet visits graph** — auto-detected per-cat daily litter box visit counts - thanks @alicia86
 - [x] **Mini layout** — compact low-profile card for wall-mount dashboards - thanks @davidcoulson
 - [x] **`SVG level graphic`**: Opt-in silhouette with colored litter/waste zones instead of bars - thanks @timb320tg
+- [x] **Pet card** — standalone `whisker-pet-card` for per-cat weight and visits - thanks @christasich

@@ -19,7 +19,11 @@ Pet sensors live on **other** devices than the configured robot, so they are aut
 - **weight** (`kitties`) — no `translation_key`, matched on `device_class: weight`.
 - **visits** (`visits`) — no device class, matched on `translation_key: visits_today`.
 
-Either list is skipped when the user configures `chonk.kitties` / `visits.kitties` explicitly.
+Either list is skipped when the user configures `chonk.kitties` / `visits.kitties` explicitly. Both heuristics live in `src/common/pet-entities.ts` so the duty report and the pet card agree on what counts as a pet sensor.
+
+## Pets
+
+`utils/herd-kitties.ts` exposes `herdKitties(hass, pets?)` for the pet card. Each pet is its own device, so pet sensors are grouped by `device_id` and the device name is the pet's name; passing device ids narrows the result. Returns `PetReport[]`, sorted by name.
 
 ## Graph config
 

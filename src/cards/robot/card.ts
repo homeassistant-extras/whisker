@@ -13,10 +13,6 @@ import {
 } from '@delegates/utils/graph-config';
 import { scoopDroppings } from '@delegates/utils/scoop-droppings';
 import { hasFeature } from '@homeassistant-extras/hass/common/config/feature';
-import {
-  resolvePoatCardHelpers,
-  type CardHelpers,
-} from '@homeassistant-extras/hass/helpers/card-helpers';
 import type { HomeAssistant } from '@homeassistant-extras/hass/types';
 import type { Config } from '@type/config';
 import equal from 'fast-deep-equal';
@@ -41,12 +37,6 @@ export class WhiskerCard extends LitElement {
    */
   @state()
   private _duty: DutyReport | undefined;
-
-  /**
-   * Resolved once from {@link globalThis.loadCardHelpers}; used via global helper accessor.
-   */
-  @state()
-  private _cardHelpers?: CardHelpers;
 
   /**
    * Home Assistant instance
@@ -76,6 +66,7 @@ export class WhiskerCard extends LitElement {
    */
   set hass(hass: HomeAssistant) {
     this._hass = hass;
+    // todo - don't check every entity in set hass?
     const scoopedDuty = scoopDroppings(hass, this._config);
 
     if (!equal(scoopedDuty, this._duty)) {
@@ -103,16 +94,6 @@ export class WhiskerCard extends LitElement {
     return {
       device_id: bot?.id ?? '',
     };
-  }
-
-  /**
-   * Resolves the card helpers once for every sub element
-   */
-  override connectedCallback(): void {
-    super.connectedCallback();
-    void resolvePoatCardHelpers(globalThis.loadCardHelpers).then((helpers) => {
-      this._cardHelpers = helpers;
-    });
   }
 
   /**
@@ -160,7 +141,7 @@ export class WhiskerCard extends LitElement {
    * @returns {TemplateResult} The rendered HTML template
    */
   override render(): TemplateResult | typeof nothing {
-    if (!this._duty || !this._cardHelpers) {
+    if (!this._duty) {
       return nothing;
     }
 

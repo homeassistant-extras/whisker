@@ -10,7 +10,7 @@ This folder contains TypeScript contracts for configs, entities, locale data, an
 ## Key contracts
 
 - **`config.ts`** — public card config: `device_id`, optional `title`, `color` (`RobotColor`), `footer` (`FooterItem[]`), `features`, and shared `GraphSectionConfig` for `chonk` / `visits`. Defaults live here (`DEFAULT_FOOTER`, `DEFAULT_COLOR`, weight/visits graph defaults).
-- **`types.ts`** — `DutyReport`, the resolved device/entity snapshot passed to the card. Includes `model` and `serial_number` from the device registry for robot artwork selection.
+- **`types.ts`** — `DutyReport`, the resolved device/entity snapshot passed to the card. Includes `model` and `serial_number` from the device registry for robot artwork selection. `PetReport` is the equivalent snapshot for one pet, used by the pet card.
 - **`entity.ts`**, **`lovelace.ts`**, **`assets.d.ts`** — entity shapes, Lovelace types, and Parcel asset module declarations.
 
 When adding user-facing config, update `config.ts`, the editor schema in `src/cards/robot/editor.ts`, and relevant tests.

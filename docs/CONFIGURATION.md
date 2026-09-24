@@ -7,12 +7,15 @@ Configure Whisker Card from the dashboard visual editor or in YAML.
 - [Visual editor](#visual-editor)
 - [YAML basics](#yaml-basics)
 - [Configuration options](configuration/OPTIONS.md)
+- [Pet card](configuration/PET-CARD.md)
 - [Interactions](configuration/INTERACTIONS.md)
 - [Footer](configuration/FOOTER.md)
 - [Feature flags](configuration/FEATURE-FLAGS.md)
 - [Examples](configuration/EXAMPLES.md)
 
 ## Visual editor
+
+This page covers the main `whisker-card`. For the separate pet card, see [Pet card](configuration/PET-CARD.md).
 
 Add the card from the dashboard editor and choose **Litter Robot Device** (filtered to the `litterrobot` integration). Optionally set **Card Title** to override the device name shown in the header, and **Robot color** to match your hardware. The robot model (Litter-Robot 3, 4, 5, 5 Pro, or Evo) is detected automatically from the device; only the color (white or black) is a manual choice. On the LR3 — which only shipped in Beige and Grey — `white` shows the Beige unit and `black` the Grey one.
 

@@ -107,34 +107,10 @@ describe('card.ts', () => {
     });
   });
 
-  describe('connectedCallback', () => {
-    it('should resolve and store card helpers', async () => {
-      (card as any)._cardHelpers = undefined;
-      const helpers = {} as CardHelpers;
-      resolvePoatCardHelpersStub.resolves(helpers);
-      (globalThis as any).loadCardHelpers = () => Promise.resolve(helpers);
-
-      // Avoid Lit style adoption in jsdom; test only helper resolution.
-      (card as any).createRenderRoot = () => document.createElement('div');
-      card.connectedCallback();
-      await Promise.resolve();
-
-      expect(resolvePoatCardHelpersStub.calledOnce).to.be.true;
-      expect((card as any)._cardHelpers).to.equal(helpers);
-    });
-  });
-
   describe('rendering', () => {
     beforeEach(() => {
       (card as unknown as { _cardHelpers: CardHelpers })._cardHelpers =
         {} as CardHelpers;
-    });
-
-    it('should render nothing when card helpers are not resolved yet', () => {
-      (
-        card as unknown as { _cardHelpers: CardHelpers | undefined }
-      )._cardHelpers = undefined;
-      expect(card.render()).to.equal(nothing);
     });
 
     it('should render nothing when there is no duty report', () => {

@@ -14,7 +14,7 @@
 
 ### Mini layout
 
-![mini](../assets/mini.png)
+![mini](../assets/mini.webp)
 
 Set `mini: true` for a compact, low-profile card built for wall-mount and small dashboards:
 
@@ -71,7 +71,7 @@ Configure it with the `chonk` object:
 
 #### History graph
 
-![Pet weight history graph](../assets/history.png)
+![Pet weight history graph](../assets/history.webp)
 
 ```yaml
 type: custom:whisker-card
@@ -88,7 +88,7 @@ chonk:
 
 Plots long-term statistics, which is ideal for spotting weight trends over weeks or months.
 
-![Pet weight statistics graph](../assets/statistics.png)
+![Pet weight statistics graph](../assets/statistics.webp)
 
 ```yaml
 type: custom:whisker-card
@@ -109,7 +109,7 @@ chonk:
 
 Use a stacked chart (`line-stack` or `bar-stack`) to compare combined weight across cats:
 
-![Stacked line statistics graph](../assets/line-stack.png)
+![Stacked line statistics graph](../assets/line-stack.webp)
 
 ```yaml
 type: custom:whisker-card

@@ -10,7 +10,7 @@ That's the whole config. The card picks up every pet the integration reports and
 
 The screenshot shows the three `display` values, left to right: `states`, `graphs`, and `both`.
 
-![Pet card in states, graphs, and both layouts](../assets/pet-card.png)
+![Pet card in states, graphs, and both layouts](../assets/pet-card.webp)
 
 ## Options
 

@@ -33,8 +33,8 @@ theme:
     - content.code.copy
   icon:
     repo: fontawesome/brands/github
-  logo: assets/robot.png
-  favicon: assets/robot.png
+  logo: assets/robot.webp
+  favicon: assets/robot.webp
 
 plugins:
   - search

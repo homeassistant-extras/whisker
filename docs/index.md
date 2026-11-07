@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/robot.png" alt="Whisker Card" width="640">
+  <img src="assets/robot.webp" alt="Whisker Card" width="640">
 </p>
 
 # Whisker Card
@@ -10,7 +10,7 @@ Litter-Robot status and controls in a single Lovelace card.
 
 Whisker Card is a custom Lovelace card for Home Assistant that shows your **Litter-Robot** at a glance. It uses the official **[Litter-Robot integration](https://www.home-assistant.io/integrations/litterrobot/)** (`litterrobot`).
 
-![Litter-Robot robots](assets/robots.png)
+![Litter-Robot robots](assets/robots.webp)
 
 ## Quick start
 
@@ -33,7 +33,7 @@ Replace `YOUR_DEVICE_ID` with the id from the device page in Home Assistant, or 
 - Optional gauge percentages and customizable footer
 - A separate **pet card** that shows each cat's weight and visits once, however many robots you have
 
-![Pet card in states, graphs, and both layouts](assets/pet-card.png)
+![Pet card in states, graphs, and both layouts](assets/pet-card.webp)
 
 ## Next steps
 

@@ -29,3 +29,9 @@ yarn pass
 ```
 
 This runs format, typecheck, lint, and the full test suite. All steps must pass.
+
+## Docs images (WebP)
+
+Marketing/docs screenshots live under `assets/` and `docs/assets/`. Store them as **`.webp` only** (animated WebP for former GIFs). Do not add `.png` / `.gif` / `.jpg` there. Runtime card art under `src/assets/` is exempt (e.g. Whisker AVIF).
+
+If you only have a PNG/GIF, run `./scripts/convert-docs-images.sh` from the repo root (needs `cwebp` / `gif2webp` from `brew install webp`). See `.claude/skills/convert-docs-images/SKILL.md` and `.cursor/skills/convert-docs-images/SKILL.md`.

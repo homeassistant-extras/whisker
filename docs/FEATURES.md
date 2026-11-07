@@ -10,14 +10,14 @@
 - **Pet visits graph** — A per-cat **visits today** graph below the weight graph, built from the integration's `visits_today` sensors (auto-detected). Because that sensor is a daily-resetting total, it defaults to a **statistics graph** plotting the **total per period** as **stacked bars** over a daily period — one bar per day, split by cat. Use the `visits` option to choose sensors, switch to a history graph, adjust the window and chart style, or hide it ([Pet visits graph](configuration/OPTIONS.md#pet-visits-graph)).
 - **Pet card** — A separate `whisker-pet-card` for your cats. It lists each pet's weight and visits today and can show the same weight and visits graphs as the robot card. With several Litter-Robots, you see each cat's numbers once instead of on every robot card ([Pet card](configuration/PET-CARD.md)).
 
-  ![Pet card in states, graphs, and both layouts](assets/pet-card.png)
+  ![Pet card in states, graphs, and both layouts](assets/pet-card.webp)
 
 - **Collapsible graphs** — Each graph sits in its own titled, collapsible section, so you can fold either one away while browsing the card. Set `collapsed: true` to have a section start closed, keeping the card compact with the data one tap away ([Collapsible sections](configuration/OPTIONS.md#collapsible-sections)).
 - **Mini layout** — Set `mini: true` for a compact, low-profile card showing just the name, status, and full-width litter/waste gauges — no artwork, controls, graphs, or footer. Built for wall-mount and small dashboards ([Mini layout](configuration/OPTIONS.md#mini-layout)).
 - **LitterHopper status** — On **Litter-Robot 4** with a **LitterHopper** attached, a **header badge** appears next to the robot status icon when the integration exposes hopper entities. You can also add **Hopper status** and **Hopper connected** to the footer ([Footer configuration](configuration/FOOTER.md)). Badge icons match the official [`litterrobot` integration](https://github.com/home-assistant/core/blob/dev/homeassistant/components/litterrobot/icons.json); colors follow your Home Assistant theme.
 - **Cleaning reminder** — Point the card at any on/off-style entity with `cleaning_entity`; when it's active, a `mdi:broom` **header badge** and a warning-colored **card glow** (tinted background + border) appear, signalling the unit needs cleaning. Tap the badge for more-info. Great for a calendar-driven "needs cleaned" loop ([Cleaning reminder](configuration/CLEANING-REMINDER.md)).
 
-![Card showing the needs-cleaning badge and warning glow](assets/cleaning.png)
+![Card showing the needs-cleaning badge and warning glow](assets/cleaning.webp)
 
 ### LitterHopper header badge
 
@@ -36,12 +36,12 @@ The badge combines `hopper_connected` and `hopper_status`. When the hopper is di
 
 Tap the badge to open the hopper status more-info dialog (or the connected entity when status is missing).
 
-![hopper](assets/hopper.png)
+![hopper](assets/hopper.webp)
 
 - **Litter and waste gauges** — Visual fill levels; waste styling reflects severity as the drawer fills. Optionally show fill **percentages**, or switch to **illustrated levels** that replace the marketing image and bars with litter/waste zones that fill in proportion to their level and color by severity. Or hide the robot photo entirely and keep the rest of the card ([Feature flags](configuration/FEATURE-FLAGS.md)).
 
-![Illustrated levels](assets/illustrated.png)
+![Illustrated levels](assets/illustrated.webp)
 
 - **Customizable footer** — Choose which device metrics appear in the card footer ([Footer configuration](configuration/FOOTER.md)). Defaults to total cycles, status last changed, and last seen.
 
-![Controls](assets/control.png)
+![Controls](assets/control.webp)

@@ -1,11 +1,10 @@
-# Whisker Card layout test dashboard — issue #86 / discussion #93
+# Whisker Card layout test dashboard — issue #86
 #
 # Exercises the new `hide_image` feature flag next to the options that also
 # change how much of the card renders:
 #   - hide_image vs the default card vs mini
 #   - hide_image combined with illustrated / mini / color / percentage
 #   - cleaning reminder glow with a shorter card
-#   - pet visits graph y-axis: current default vs a whole-number preview (#93)
 #   - the standalone pet card in all three `display` modes
 #
 # Each card's title says what it tests and what SHOULD render.
@@ -14,9 +13,6 @@
 #   - Pink Eye    3ac374b8219b337705bfdfb7f1c2348e  (most cards)
 #   - Puss Bidet  59879713413a5ca5a75f9453eee8e75e  (color / regression cards)
 #   - Pets: Ellie, Gnar, Lagertha, Marbles, Murderbot, The Punisher
-#
-# The #93 preview graphs use the default `sensor.<pet>_visits_today` entity
-# ids — rename them if yours differ.
 #
 # Before loading: build this branch (`yarn build`) and copy dist/whisker.js
 # over the Lovelace resource (e.g. www/community/whisker/whisker.js), then
@@ -216,71 +212,6 @@ views:
             cleaning_entity: binary_sensor.test_always_on
             features:
               - percentage
-
-      #################################################
-      # #93 — visits graph y-axis
-      #################################################
-      - type: grid
-        column_span: 3
-        cards:
-          - type: heading
-            heading: '#93 — visits y-axis whole numbers'
-            heading_style: title
-
-          - type: markdown
-            content: >-
-              **Left:** the card's visits graph today. Expect `x.5` ticks when
-              the busiest day is under 5 visits. **Middle:** the same
-              statistics graph with `min_y_axis: 0`, `max_y_axis: 5` and
-              `fit_y_data: true`. It should only show whole-number ticks, and
-              the axis grows past 5 on busy days. **Right:** the history
-              variant with the same settings.
-
-      - type: grid
-        cards:
-          - type: custom:whisker-card
-            device_id: 3ac374b8219b337705bfdfb7f1c2348e
-            title: 'CURRENT: visits default (x.5 ticks?)'
-            features:
-              - hide_image
-            chonk:
-              hide: true
-
-      - type: grid
-        cards:
-          - type: statistics-graph
-            title: 'PROPOSED: statistics, whole-number axis'
-            entities:
-              - sensor.ellie_visits_today
-              - sensor.gnar_visits_today
-              - sensor.lagertha_visits_today
-              - sensor.marbles_visits_today
-              - sensor.murderbot_visits_today
-              - sensor.the_punisher_visits_today
-            days_to_show: 30
-            period: day
-            stat_types:
-              - change
-            chart_type: bar-stack
-            min_y_axis: 0
-            max_y_axis: 5
-            fit_y_data: true
-
-      - type: grid
-        cards:
-          - type: history-graph
-            title: 'PROPOSED: history, whole-number axis'
-            entities:
-              - sensor.ellie_visits_today
-              - sensor.gnar_visits_today
-              - sensor.lagertha_visits_today
-              - sensor.marbles_visits_today
-              - sensor.murderbot_visits_today
-              - sensor.the_punisher_visits_today
-            hours_to_show: 168
-            min_y_axis: 0
-            max_y_axis: 5
-            fit_y_data: true
 
       #################################################
       # Pet card (regression check)

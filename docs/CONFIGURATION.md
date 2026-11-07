@@ -27,7 +27,7 @@ The **Pet visits** section configures the daily visits graph — pick the graph 
 
 Each graph renders in its own collapsible section on the card. Both editor sections have a **Start collapsed** toggle to have that graph begin closed. See [Collapsible sections](configuration/OPTIONS.md#collapsible-sections).
 
-![Card editor](assets/editor.png)
+![Card editor](assets/editor.webp)
 
 ## YAML basics
 
@@ -54,6 +54,6 @@ device_id: YOUR_DEVICE_ID
 color: black
 ```
 
-![offline](assets/offline.png)
+![offline](assets/offline.webp)
 
 See [Examples](configuration/EXAMPLES.md) for footer and feature-flag YAML.

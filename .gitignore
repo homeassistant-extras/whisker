@@ -27,6 +27,18 @@
 !mkdocs.yml
 !*.avif
 
+!scripts/
+!scripts/**
+!*.sh
+!*.mdc
+!.cursor/hooks.json
+!.cursor/rules/**
+!.cursor/skills/**
+!.cursor/hooks/**
+!.claude/skills/**
+
+!.claude/hooks/**
+!.claude/settings.json
 # Ignore folders.
 node_modules
 dist

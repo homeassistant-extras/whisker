@@ -11,7 +11,7 @@ device_id: YOUR_DEVICE_ID
 cleaning_entity: input_boolean.litter_robots_needs_cleaned
 ```
 
-![Card showing the needs-cleaning badge and warning glow](../assets/cleaning.png)
+![Card showing the needs-cleaning badge and warning glow](../assets/cleaning.webp)
 
 ## What counts as "active"
 

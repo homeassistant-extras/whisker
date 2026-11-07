@@ -2,7 +2,7 @@
 
 _Litter-Robot status and controls in a single Lovelace card_
 
-![Whisker Card preview](docs/assets/robot.png)
+![Whisker Card preview](docs/assets/robot.webp)
 
 ![Home Assistant](https://img.shields.io/badge/home%20assistant-%2341BDF5.svg?style=for-the-badge&logo=home-assistant&logoColor=white)
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge)](https://github.com/hacs/integration)
@@ -36,7 +36,7 @@ Replace `YOUR_DEVICE_ID` with the id from the device page in Home Assistant, or 
 
 Want a shorter card? The `hide_image` [feature flag](https://homeassistant-extras.github.io/whisker/configuration/FEATURE-FLAGS/#hide-robot-image) drops the robot photo and keeps everything else:
 
-![Default card, hide_image, and hide_image with a cleaning reminder](https://github.com/homeassistant-extras/whisker/blob/main/docs/assets/hide-image.png?raw=true)
+![Default card, hide_image, and hide_image with a cleaning reminder](https://github.com/homeassistant-extras/whisker/blob/main/docs/assets/hide-image.webp?raw=true)
 
 ## Installation
 

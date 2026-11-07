@@ -4,7 +4,7 @@
 
 Show fill **percentages** on litter and waste gauge labels (and on the SVG level graphic when that feature is on):
 
-![Gauge percentages](../assets/percentages.png)
+![Gauge percentages](../assets/percentages.webp)
 
 ```yaml
 type: custom:whisker-card
@@ -17,7 +17,7 @@ features:
 
 Replace the marketing robot image and thin litter/waste bars with an opt-in illustration. Litter (globe bed) and waste (drawer panel) zones fill from the bottom in proportion to their level — a drawer at 90% draws nearly full — and color by level, green / yellow / red, while the rest of the robot stays neutral. Tap a zone to open that entity's more-info dialog.
 
-![Illustrated levels](../assets/illustrated.png)
+![Illustrated levels](../assets/illustrated.webp)
 
 ```yaml
 type: custom:whisker-card
@@ -36,7 +36,7 @@ Drop the robot photo but keep everything else on the full card — status, quick
 
 Left to right: the default card, `hide_image`, and `hide_image` with gauge percentages and a [cleaning reminder](CLEANING-REMINDER.md) glowing.
 
-![Default card, hide_image, and hide_image with a cleaning reminder](../assets/hide-image.png)
+![Default card, hide_image, and hide_image with a cleaning reminder](../assets/hide-image.webp)
 
 ```yaml
 type: custom:whisker-card

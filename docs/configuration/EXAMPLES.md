@@ -38,7 +38,7 @@ features:
 
 Use the opt-in illustration (litter/waste zones that fill in proportion to their level) instead of the marketing image and thin bars:
 
-![Illustrated levels](../assets/illustrated.png)
+![Illustrated levels](../assets/illustrated.webp)
 
 ```yaml
 type: custom:whisker-card
@@ -52,7 +52,7 @@ features:
 
 The full card without the robot photo — a shorter card for overview dashboards:
 
-![Default card, hide_image, and hide_image with a cleaning reminder](../assets/hide-image.png)
+![Default card, hide_image, and hide_image with a cleaning reminder](../assets/hide-image.webp)
 
 ```yaml
 type: custom:whisker-card
@@ -64,7 +64,7 @@ features:
 
 ## Mini layout
 
-![mini](../assets/mini.png)
+![mini](../assets/mini.webp)
 
 A compact card for wall-mount dashboards — name, status, and the two gauges.
 

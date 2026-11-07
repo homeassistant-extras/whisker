@@ -141,6 +141,24 @@ export class WhiskerCard extends LitElement {
   }
 
   /**
+   * Renders the robot photo, or nothing when the `hide_image` feature is on.
+   * Leaving the slot empty lets the stack collapse to the status panel row.
+   * @param {DutyReport} duty - The resolved duty report
+   * @returns {TemplateResult | typeof nothing} The photo, or nothing
+   */
+  private _renderPhoto(duty: DutyReport): TemplateResult | typeof nothing {
+    if (hasFeature(this._config, 'hide_image')) {
+      return nothing;
+    }
+
+    return html`<img
+      src=${resolveRobotImage(duty.model, duty.serial_number, this._config?.color)}
+      alt="Litter Robot"
+      loading="lazy"
+    />`;
+  }
+
+  /**
    * renders the lit element card
    * @returns {TemplateResult} The rendered HTML template
    */
@@ -201,19 +219,7 @@ export class WhiskerCard extends LitElement {
               .panelLockoutEntity=${this._duty.panel_lockout}
             ></whisker-controls-entity>
           </div>
-          ${
-            illustrated
-              ? levels
-              : html`<img
-                  src=${resolveRobotImage(
-                    this._duty.model,
-                    this._duty.serial_number,
-                    this._config?.color,
-                  )}
-                  alt="Litter Robot"
-                  loading="lazy"
-                />`
-          }
+          ${illustrated ? levels : this._renderPhoto(this._duty)}
         </div>
         ${illustrated ? nothing : levels}
         ${

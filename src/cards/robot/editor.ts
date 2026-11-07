@@ -85,10 +85,11 @@ const getSchema = (config?: Config): HaFormSchema[] => {
             },
           },
         },
-        // color drives the robot photo and the illustrated body fill. The mini
-        // layout drops the photo, so the picker only has something to act on
-        // there once illustrated levels are turned on.
-        ...(config?.mini && !hasFeature(config, 'illustrated')
+        // color drives the robot photo and the illustrated body fill. Mini and
+        // hide_image both drop the photo, so the picker only has something to
+        // act on there once illustrated levels are turned on.
+        ...((config?.mini || hasFeature(config, 'hide_image')) &&
+        !hasFeature(config, 'illustrated')
           ? []
           : [colorSchema]),
         {
@@ -112,6 +113,10 @@ const getSchema = (config?: Config): HaFormSchema[] => {
             {
               value: 'illustrated',
               label: 'Illustrated levels (instead of photo & bars)',
+            },
+            {
+              value: 'hide_image',
+              label: 'Hide robot image (keep full card)',
             },
           ],
           multiple: true,

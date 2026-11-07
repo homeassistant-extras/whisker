@@ -23,6 +23,7 @@
 !sonar-project.properties
 !yarn.lock
 !docs/**
+!examples/**
 !mkdocs.yml
 !*.avif
 

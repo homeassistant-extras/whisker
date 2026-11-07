@@ -38,7 +38,7 @@ Tap the badge to open the hopper status more-info dialog (or the connected entit
 
 ![hopper](assets/hopper.png)
 
-- **Litter and waste gauges** — Visual fill levels; waste styling reflects severity as the drawer fills. Optionally show fill **percentages**, or switch to **illustrated levels** that replace the marketing image and bars with litter/waste zones that fill in proportion to their level and color by severity ([Feature flags](configuration/FEATURE-FLAGS.md)).
+- **Litter and waste gauges** — Visual fill levels; waste styling reflects severity as the drawer fills. Optionally show fill **percentages**, or switch to **illustrated levels** that replace the marketing image and bars with litter/waste zones that fill in proportion to their level and color by severity. Or hide the robot photo entirely and keep the rest of the card ([Feature flags](configuration/FEATURE-FLAGS.md)).
 
 ![Illustrated levels](assets/illustrated.png)
 

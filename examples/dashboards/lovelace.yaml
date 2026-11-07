@@ -1,0 +1,17 @@
+#####
+# Configures the lovelace dashboards via YAML
+#
+# Copy the dashboard files to <config>/dashboards/whisker/ and merge this
+# into configuration.yaml (or a package) to load them in YAML mode.
+#####
+
+lovelace:
+  mode: storage
+  dashboards:
+    # whisker-card
+    whisker-hide-image-test:
+      mode: yaml
+      title: Whisker Card - Hide Image Test
+      icon: mdi:cat
+      show_in_sidebar: false
+      filename: dashboards/whisker/hide-image-test.yaml

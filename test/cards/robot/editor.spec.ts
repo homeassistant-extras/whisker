@@ -114,6 +114,18 @@ describe('editor.ts', () => {
       expect(names).to.include('color');
     });
 
+    it('should hide the color option when hide_image drops the photo', async () => {
+      editor.setConfig({ device_id: 'lr-1', features: ['hide_image'] });
+      const el = await fixture(editor.render() as TemplateResult);
+      const names = schemaNames(
+        (el as HTMLElement & { schema: HaFormSchema[] }).schema,
+      );
+
+      expect(names).to.not.include('color');
+      // full layout options are still offered
+      expect(names).to.include('footer');
+    });
+
     it('should pass correct props to ha-form', async () => {
       const testConfig: Config = { device_id: 'lr-1', title: 'T' };
       editor.setConfig(testConfig);
@@ -432,6 +444,10 @@ describe('editor.ts', () => {
                 {
                   value: 'illustrated',
                   label: 'Illustrated levels (instead of photo & bars)',
+                },
+                {
+                  value: 'hide_image',
+                  label: 'Hide robot image (keep full card)',
                 },
               ],
               multiple: true,

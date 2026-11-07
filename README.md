@@ -34,6 +34,10 @@ device_id: YOUR_DEVICE_ID
 
 Replace `YOUR_DEVICE_ID` with the id from the device page in Home Assistant, or use the UI editor to pick the device.
 
+Want a shorter card? The `hide_image` [feature flag](https://homeassistant-extras.github.io/whisker/configuration/FEATURE-FLAGS/#hide-robot-image) drops the robot photo and keeps everything else:
+
+![Default card, hide_image, and hide_image with a cleaning reminder](https://github.com/homeassistant-extras/whisker/blob/main/docs/assets/hide-image.png?raw=true)
+
 ## Installation
 
 ### HACS (recommended)
@@ -93,3 +97,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file.
 - [x] **Mini layout** — compact low-profile card for wall-mount dashboards - thanks @davidcoulson
 - [x] **`SVG level graphic`**: Opt-in silhouette with colored litter/waste zones instead of bars - thanks @timb320tg
 - [x] **Pet card** — standalone `whisker-pet-card` for per-cat weight and visits - thanks @christasich
+- [x] **Hide robot image** — `hide_image` drops the photo but keeps the full card - thanks @GeekStreetSolutions

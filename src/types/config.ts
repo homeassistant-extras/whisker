@@ -209,5 +209,11 @@ export interface Config {
   visits?: GraphSectionConfig;
 }
 
-/** Features to enable or disable functionality */
-export type Features = 'percentage' | 'illustrated';
+/**
+ * Features to enable or disable functionality.
+ * - `percentage` — show fill % on the litter/waste gauges
+ * - `illustrated` — illustrated levels instead of the robot photo and bars
+ * - `hide_image` — drop the robot photo but keep the full layout (no effect
+ *   with `illustrated`, whose drawing is the gauge itself)
+ */
+export type Features = 'percentage' | 'illustrated' | 'hide_image';

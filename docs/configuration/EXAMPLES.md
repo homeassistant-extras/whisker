@@ -48,6 +48,20 @@ features:
   - percentage
 ```
 
+## Hide robot image
+
+The full card without the robot photo — a shorter card for overview dashboards:
+
+![Default card, hide_image, and hide_image with a cleaning reminder](../assets/hide-image.png)
+
+```yaml
+type: custom:whisker-card
+device_id: YOUR_DEVICE_ID
+features:
+  - hide_image
+  - percentage
+```
+
 ## Mini layout
 
 ![mini](../assets/mini.png)

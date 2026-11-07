@@ -149,6 +149,31 @@ describe('card.ts', () => {
       expect(el.querySelectorAll('whisker-svg-levels')).to.have.length(1);
     });
 
+    it('should drop only the robot photo when hide_image is set', async () => {
+      card.setConfig({ ...mockConfig, features: ['hide_image'] });
+      card.hass = mockHass;
+
+      const el = await fixture(card.render() as TemplateResult);
+
+      expect(el.querySelector('.robot-image-stack img')).to.be.null;
+      // the rest of the full layout stays
+      expect(el.querySelector('whisker-status-panel')).to.not.be.null;
+      expect(el.querySelector('whisker-controls-entity')).to.not.be.null;
+      expect(el.querySelectorAll('whisker-robot-levels')).to.have.length(1);
+      expect(el.querySelector('whisker-card-footer')).to.not.be.null;
+
+      // illustrated levels are the gauge itself, so hide_image leaves them be
+      card.setConfig({
+        ...mockConfig,
+        features: ['hide_image', 'illustrated'],
+      });
+      card.hass = mockHass;
+      const illustrated = await fixture(card.render() as TemplateResult);
+      expect(
+        illustrated.querySelectorAll('.robot-image-stack whisker-svg-levels'),
+      ).to.have.length(1);
+    });
+
     it('should render only the title row and gauges when mini is set', async () => {
       scoopStub.returns({
         ...mockDuty,

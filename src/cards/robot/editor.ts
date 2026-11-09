@@ -159,6 +159,7 @@ const miniHiddenSchema = (
       prefix: 'Visits graph',
       graphType: visitsGraphType,
       statOptions: VISITS_STAT_OPTIONS,
+      wholeNumbers: true,
     }),
     {
       name: 'footer',

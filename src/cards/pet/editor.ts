@@ -85,6 +85,7 @@ const getSchema = (config?: PetConfig): HaFormSchema[] => {
             prefix: 'Visits graph',
             graphType: config?.visits?.graph_type ?? DEFAULT_VISITS_GRAPH_TYPE,
             statOptions: VISITS_STAT_OPTIONS,
+            wholeNumbers: true,
           }),
         ]),
   ];

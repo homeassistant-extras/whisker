@@ -121,6 +121,29 @@ describe('graph-config.ts', () => {
       expect(result.show_names).to.equal(false);
     });
 
+    it('should pin a whole-number y-axis on both graph types when enabled', () => {
+      const axis = { min_y_axis: 0, max_y_axis: 4, fit_y_data: true };
+
+      expect(
+        buildGraphConfig(
+          entities,
+          { graph_type: 'history', whole_numbers: true },
+          defaults,
+        ),
+      ).to.include(axis);
+      expect(
+        buildGraphConfig(
+          entities,
+          { graph_type: 'statistics', whole_numbers: true },
+          defaults,
+        ),
+      ).to.include(axis);
+      // off by default: HA keeps auto-scaling the axis
+      expect(
+        buildGraphConfig(entities, undefined, defaults),
+      ).to.not.have.any.keys('min_y_axis', 'max_y_axis', 'fit_y_data');
+    });
+
     it('should default to history when the defaults say so', () => {
       const result = buildGraphConfig(entities, undefined, {
         ...defaults,

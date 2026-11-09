@@ -154,6 +154,7 @@ export interface GraphSectionSchemaOptions {
   prefix: string;
   graphType: GraphType;
   statOptions: { value: string; label: string }[];
+  wholeNumbers?: boolean;
 }
 
 /**
@@ -216,6 +217,15 @@ export const graphSectionSchema = (
         boolean: {},
       },
     },
+    ...(opts.wholeNumbers
+      ? [
+          {
+            name: 'whole_numbers',
+            label: 'Whole-number axis',
+            selector: { boolean: {} },
+          },
+        ]
+      : []),
   ],
 });
 
@@ -282,6 +292,7 @@ export const cleanGraphSection = (
     hide: !section.hide,
     collapsed: !section.collapsed,
     hide_names: !section.hide_names,
+    whole_numbers: !section.whole_numbers,
     kitties: !section.kitties?.length,
     graph_type:
       !section.graph_type || section.graph_type === defaults.graph_type,

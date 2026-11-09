@@ -12,6 +12,7 @@ import {
   DEFAULT_WEIGHT_HOURS_TO_SHOW,
   DEFAULT_WEIGHT_PERIOD,
   DEFAULT_WEIGHT_STAT_TYPES,
+  WHOLE_NUMBER_AXIS_MIN_MAX,
   type ChartType,
   type GraphSectionConfig,
   type GraphType,
@@ -34,6 +35,7 @@ export type GraphOptions = Pick<
   | 'chart_type'
   | 'hide_names'
   | 'collapsed'
+  | 'whole_numbers'
 >;
 
 /** Fallbacks applied when the matching {@link GraphOptions} key is unset. */
@@ -80,6 +82,12 @@ export const buildGraphConfig = (
   options: GraphOptions | undefined,
   defaults: GraphDefaults,
 ): LovelaceCardConfig => {
+  // both graph cards take the same y-axis bounds; fit_y_data lets the axis
+  // grow past the minimum on busier days
+  const axis = options?.whole_numbers
+    ? { min_y_axis: 0, max_y_axis: WHOLE_NUMBER_AXIS_MIN_MAX, fit_y_data: true }
+    : {};
+
   if ((options?.graph_type ?? defaults.graph_type) === 'statistics') {
     return {
       type: 'statistics-graph',
@@ -91,6 +99,7 @@ export const buildGraphConfig = (
       chart_type: options?.chart_type ?? defaults.chart_type,
       hide_legend: !!options?.hide_names,
       period: options?.period ?? defaults.period,
+      ...axis,
     };
   }
 
@@ -99,5 +108,6 @@ export const buildGraphConfig = (
     entities,
     hours_to_show: options?.hours_to_show ?? defaults.hours_to_show,
     show_names: !options?.hide_names,
+    ...axis,
   };
 };

@@ -9,9 +9,9 @@ lovelace:
   mode: storage
   dashboards:
     # whisker-card
-    whisker-hide-image-test:
+    whisker-layout-test:
       mode: yaml
-      title: Whisker Card - Hide Image Test
+      title: Whisker Card - Layout Test
       icon: mdi:cat
       show_in_sidebar: false
-      filename: dashboards/whisker/hide-image-test.yaml
+      filename: dashboards/whisker/layout-test.yaml

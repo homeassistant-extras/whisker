@@ -140,7 +140,23 @@ export interface GraphSectionConfig {
    * Defaults to `false`.
    */
   hide_names?: boolean;
+
+  /**
+   * (visits) Keep the y-axis on whole numbers. Visit counts are integers, but
+   * HA's graph cards pick fractional ticks (0.5, 1.5…) when the busiest day is
+   * low. Turning this on pins the axis to start at 0 and reach at least
+   * {@link WHOLE_NUMBER_AXIS_MIN_MAX}, still growing to fit busier days.
+   * Defaults to `false`.
+   */
+  whole_numbers?: boolean;
 }
+
+/**
+ * Smallest axis top used by `whole_numbers`. HA's charts aim for ~5 ticks and
+ * round the step to 1/2/3/5×10ⁿ, so any 0-based range of 4 or more lands on a
+ * whole-number step; anything shorter can round down to 0.5 or 0.2.
+ */
+export const WHOLE_NUMBER_AXIS_MIN_MAX = 4;
 
 /** What the pet card renders. Defaults to {@link DEFAULT_PET_DISPLAY}. */
 export type PetDisplay = 'states' | 'graphs' | 'both';

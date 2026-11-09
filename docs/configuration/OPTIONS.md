@@ -129,18 +129,19 @@ That sensor is a running daily total that resets at midnight, so the defaults di
 
 Configure it with the `visits` object:
 
-| Key             | Type     | Graph      | Description                                                                                                        |
-| --------------- | -------- | ---------- | ------------------------------------------------------------------------------------------------------------------ |
-| `kitties`       | string[] | both       | Optional. `visits_today` sensor entity ids to plot. When omitted, the card auto-detects them from the integration. |
-| `graph_type`    | string   | both       | Optional. `statistics` (default) or `history`.                                                                     |
-| `hide`          | boolean  | both       | Optional. Hide the visits graph entirely. Defaults to `false`.                                                     |
-| `collapsed`     | boolean  | both       | Optional. Start the titled collapsible section closed. Defaults to `false` (starts open).                          |
-| `hide_names`    | boolean  | both       | Optional. History graph: hide entity names. Statistics graph: hide the legend. Defaults to `false`.                |
-| `hours_to_show` | number   | history    | Optional. Hours of history to show. Defaults to `168` (7 days).                                                    |
-| `days_to_show`  | number   | statistics | Optional. Days of statistics to show. Defaults to `30`.                                                            |
-| `period`        | string   | statistics | Optional. Aggregation period: `day` (default), `auto`, `5minute`, `hour`, `week`, or `month`.                      |
-| `stat_types`    | string[] | statistics | Optional. Statistic series to plot: `change` (default) or `sum`.                                                   |
-| `chart_type`    | string   | statistics | Optional. Chart style: `bar-stack` (default), `bar`, `line`, or `line-stack`.                                      |
+| Key             | Type     | Graph      | Description                                                                                                                    |
+| --------------- | -------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `kitties`       | string[] | both       | Optional. `visits_today` sensor entity ids to plot. When omitted, the card auto-detects them from the integration.             |
+| `graph_type`    | string   | both       | Optional. `statistics` (default) or `history`.                                                                                 |
+| `hide`          | boolean  | both       | Optional. Hide the visits graph entirely. Defaults to `false`.                                                                 |
+| `collapsed`     | boolean  | both       | Optional. Start the titled collapsible section closed. Defaults to `false` (starts open).                                      |
+| `hide_names`    | boolean  | both       | Optional. History graph: hide entity names. Statistics graph: hide the legend. Defaults to `false`.                            |
+| `whole_numbers` | boolean  | both       | Optional. Keep the y-axis on whole numbers (no `0.5` ticks). See [Whole-number axis](#whole-number-axis). Defaults to `false`. |
+| `hours_to_show` | number   | history    | Optional. Hours of history to show. Defaults to `168` (7 days).                                                                |
+| `days_to_show`  | number   | statistics | Optional. Days of statistics to show. Defaults to `30`.                                                                        |
+| `period`        | string   | statistics | Optional. Aggregation period: `day` (default), `auto`, `5minute`, `hour`, `week`, or `month`.                                  |
+| `stat_types`    | string[] | statistics | Optional. Statistic series to plot: `change` (default) or `sum`.                                                               |
+| `chart_type`    | string   | statistics | Optional. Chart style: `bar-stack` (default), `bar`, `line`, or `line-stack`.                                                  |
 
 Nothing is required — with the integration set up, the graph appears on its own:
 
@@ -172,6 +173,19 @@ device_id: YOUR_DEVICE_ID
 visits:
   hide: true
 ```
+
+#### Whole-number axis
+
+Visits are whole numbers, but when your busiest day is only 1–3 visits, Home Assistant's graph can label the axis `0.5`, `1.5` and so on. Turn on `whole_numbers` to keep the labels on whole numbers:
+
+```yaml
+type: custom:whisker-card
+device_id: YOUR_DEVICE_ID
+visits:
+  whole_numbers: true
+```
+
+The axis then starts at 0 and always goes up to at least 4, growing taller on busier days. Low-visit cats get shorter bars in exchange for cleaner labels. It works on the [pet card](PET-CARD.md) too, and you can turn it on in the visual editor under **Pet visits** → **Whole-number axis**.
 
 #### Collapsible sections
 

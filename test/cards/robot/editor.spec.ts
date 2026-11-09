@@ -412,6 +412,11 @@ describe('editor.ts', () => {
                 boolean: {},
               },
             },
+            {
+              name: 'whole_numbers',
+              label: 'Whole-number axis',
+              selector: { boolean: {} },
+            },
           ],
         },
         {
@@ -502,6 +507,7 @@ describe('editor.ts', () => {
       'hide',
       'collapsed',
       'hide_names',
+      'whole_numbers',
     ]);
   });
 
@@ -523,6 +529,7 @@ describe('editor.ts', () => {
       'hide',
       'collapsed',
       'hide_names',
+      'whole_numbers',
     ]);
   });
 
@@ -581,22 +588,26 @@ describe('editor.ts', () => {
       });
     });
 
-    it('should drop hide_names when false', () => {
+    it('should drop hide_names and whole_numbers when false', () => {
       editor.setConfig({ device_id: 'lr-1' });
       const config = fireValueChanged({
         device_id: 'lr-1',
         chonk: { hours_to_show: 48, hide_names: false },
+        visits: { whole_numbers: false },
       } as Config);
       expect(config.chonk).to.deep.equal({ hours_to_show: 48 });
+      expect(config.visits).to.be.undefined;
     });
 
-    it('should keep hide_names when true', () => {
+    it('should keep hide_names and whole_numbers when true', () => {
       editor.setConfig({ device_id: 'lr-1' });
       const config = fireValueChanged({
         device_id: 'lr-1',
         chonk: { hide_names: true },
+        visits: { whole_numbers: true },
       });
       expect(config.chonk).to.deep.equal({ hide_names: true });
+      expect(config.visits).to.deep.equal({ whole_numbers: true });
     });
 
     it('should keep a non-default hours_to_show', () => {
